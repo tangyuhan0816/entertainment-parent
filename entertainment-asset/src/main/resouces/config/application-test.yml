@@ -18,9 +18,9 @@ spring:
     testOnBorrow: true
     validationQuery: "SELECT 1"
     testOnReturn: false
-#  jpa:
-#    hibernate.ddl-auto: update
-#    show-sql: true
+  jpa:
+    hibernate.ddl-auto: update
+    show-sql: true
 #  redis:
 #    host: ttom1
 #    port: 6379

@@ -1,4 +1,4 @@
-package com.entertainment.trade.config;
+package com.entertainment.common;
 
 /**
  * Hello world!

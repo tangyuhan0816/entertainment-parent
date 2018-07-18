@@ -2,6 +2,7 @@ package com.entertainment.asset;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  *  @Author: Yuhan.Tang
@@ -11,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:
  */
+
+@ComponentScan(value="com.entertainment.common.*")
 @SpringBootApplication
 public class Application {
 

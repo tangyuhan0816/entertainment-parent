@@ -67,6 +67,8 @@ LOG_HOME_IS_UNDEFINED/
 .gitignore
 entertainment-parent.iml
 entertainment-asset/entertainment-asset.iml
+entertainment-asset/asset-core/asset-core.iml
+entertainment-asset/asset-common/asset-common.iml
 entertainment-common/entertainment-common.iml
 entertainment-trade/entertainment-trade.iml
 .DS_Store

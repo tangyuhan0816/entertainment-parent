@@ -1,4 +1,4 @@
-package com.entertainment;
+package com.entertainment.common.constant;
 
 /**
  * Hello world!
