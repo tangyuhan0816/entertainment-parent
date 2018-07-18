@@ -1,8 +1,8 @@
-#spring:
-#  profiles: test
+spring:
+  profiles: test
 #  datasource:
 #    driverClassName: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://rm-bp18bi606h3x2s2e95o.mysql.rds.aliyuncs.com/mw_merculet_platform?useUnicode=true&autoReconnect=true
+#    url: jdbc:mysql://rm-bp18bi606h3x2s2e95o.mysql.rds.aliyuncs.com/mw_merculet_platform_cn?useUnicode=true&autoReconnect=true
 #    username: devdba
 #    password: B9hPs4vby2VYD45T
 #    jmx-enabled: true
@@ -58,7 +58,7 @@
 #        database: 13
 #        expiry-time: 86400000       # redis的过期时间，默认 1 day
 #        pre-load-time: 86400000     # redis的重新加载时间，默认 1 day
-#server.port: 15062
+server.port: 15062
 #
 #jwt:
 #  sign_key: 783546576b45c9f2c8f41cb99d195d3e

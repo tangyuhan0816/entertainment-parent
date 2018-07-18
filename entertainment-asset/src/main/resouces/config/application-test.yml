@@ -1,5 +1,5 @@
-#spring:
-#  profiles: test
+spring:
+  profiles: test
 #  datasource:
 #    driverClassName: com.mysql.jdbc.Driver
 #    url: jdbc:mysql://rm-bp18bi606h3x2s2e95o.mysql.rds.aliyuncs.com/mw_merculet_platform?useUnicode=true&autoReconnect=true
@@ -18,9 +18,9 @@
 #    testOnBorrow: true
 #    validationQuery: "SELECT 1"
 #    testOnReturn: false
-##  jpa:
-##    hibernate.ddl-auto: update
-##    show-sql: true
+#  jpa:
+#    hibernate.ddl-auto: update
+#    show-sql: true
 #  redis:
 #    host: ttom1
 #    port: 6379
@@ -58,7 +58,7 @@
 #        database: 13
 #        expiry-time: 86400000       # redis的过期时间，默认 1 day
 #        pre-load-time: 86400000     # redis的重新加载时间，默认 1 day
-#server.port: 15062
+server.port: 15062
 #
 #jwt:
 #  sign_key: 783546576b45c9f2c8f41cb99d195d3e
@@ -76,60 +76,4 @@
 #  score:
 #    topicName: test.mw_score_content_1
 #  partitionCount: 1
-#
-#score:
-#  core: http://score-core-mw:19100/
-#
-#qiniu:
-#  access_key: SLJheNy1FAqTDr6D38F3GTY07eo_o_EtNEEKuTma
-#  secret_key: q2O3kvLqpxdZRt1fCdeAMnj3lVUx-r_j0Kd7eByq
-#  bucket:
-#    name: mw-image-test
-#    domain: https://og3jro9lh.qnssl.com/
-#
-#email:
-#  sendcloud:
-#    service:
-#      sendApiUrl : "http://api.sendcloud.net/apiv2/mail/sendtemplate"
-#      apiUser : "magicwindow_ondemand_mail"
-#      apiSecret: "kdwfOMS4TKPmhpgr"
-#      from : "support@mail.magicwindow.cn"
-#      fromName : "Merculet"
-#      replyTo : "support@magicwindow.cn"
-#    template:
-#      registerActivate: "merculet_saas_register_active_mail_en"
-#      forgetPassword: "merculet_saas_forgot_password_mail_en"
-#      uatApplyPassed: "merculet_saas_uat_apply_passed_en"
-#      uatSupplementPassed: "merculet_saas_uat_supplement_passed_en"
-#      cusOrder: "merculet_saas_custom_order_cn"
-#      promotion: "merculet_saas_bulk_test"
-#      resetPassword: "merculet_saas_bulk_reset_password"
-#      activateAccount: "merculet_saas_bulk_activate_account"
-#  cusOrder:
-#    receiver: annie.situ@magicwindow.cn
-#
-#sms:
-#  yunpian:
-#    apiKey: dfb3613a982c344f8e0d7bf52cf32220
-#  text:
-#    registerSaveInfo: "【Merculet】Verification code: {0}, Merculet users, you are registering the open platform [Please do not disclose the verification code or tell it to others]"
-#
-#sensitive:
-#  uatName: BTC,ETH,USDT,BCH,EOS,XRP,TRX,LTC,ADA,XLM,NEO,习近平,胡锦涛,比特币,以太坊,泰达币,比特现金,柚子,瑞波币,波场,莱特币,艾达币,恒星币,小蚁,私募,公募集资,TOKEN,币
-#
-##hosts
-#hosts:
-#  saas: http://merculet-saas.liaoyantech.cn
-#  mwManagement: http://merculet-mgnt.liaoyantech.cn
-#  behaviour: http://behaviour-tracking.liaoyantech.cn
-#  mwAdmin: http://merculet-admin.liaoyantech.cn
-#  walletUrl: http://wallet-h5.liaoyantech.cn
-#
-#fabric:
-#  host: http://47.52.21.195:13000/api/
-#
-## 暴露监控
-#management.endpoints.web.exposure.include: "info,health"
-#
-#
-#
+
