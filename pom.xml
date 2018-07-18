@@ -7,6 +7,10 @@
     <groupId>com.entertainment</groupId>
     <artifactId>entertainment-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
-
+    <modules>
+        <module>entertainment-common</module>
+        <module>entertainment-asset</module>
+        <module>entertainment-trade</module>
+    </modules>
 
 </project>
