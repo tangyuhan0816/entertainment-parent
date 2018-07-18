@@ -64,7 +64,7 @@ crashlytics-build.properties
 fabric.properties
 .idea
 LOG_HOME_IS_UNDEFINED/
-
+.gitignore
 entertainment-parent.iml
 entertainment-asset/entertainment-asset.iml
 entertainment-common/entertainment-common.iml
