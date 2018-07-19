@@ -19,6 +19,7 @@
     <shiro.redis.version>3.0.0</shiro.redis.version>
     <springfox.swagger.version>2.6.0</springfox.swagger.version>
     <mail.version>1.4.7</mail.version>
+    <dubbo-spring-boot-starter.version>0.1.0</dubbo-spring-boot-starter.version>
   </properties>
 
   <dependencies>
@@ -193,6 +194,7 @@
       <artifactId>springfox-swagger-ui</artifactId>
       <version>${springfox.swagger.version}</version>
     </dependency>
+
   </dependencies>
 
   <build>
