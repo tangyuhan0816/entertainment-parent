@@ -1,7 +1,7 @@
-package com.entertainment.common.entity;
+package com.entertainment.asset.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.entertainment.common.entity.base.BaseEntity;
+import com.entertainment.common.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
