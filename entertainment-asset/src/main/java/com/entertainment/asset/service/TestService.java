@@ -1,7 +1,7 @@
 package com.entertainment.asset.service;
 
 import com.entertainment.asset.dao.TestRepository;
-import com.entertainment.common.entity.Test;
+import com.entertainment.asset.entity.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

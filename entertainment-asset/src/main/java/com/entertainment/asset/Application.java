@@ -2,6 +2,7 @@ package com.entertainment.asset;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -13,7 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
  *  @Description:
  */
 
-@ComponentScan(value="com.entertainment.common.*")
+//@ComponentScan(value="com.entertainment.common.*")
+@EntityScan(value = {"com.entertainment.common.*",})
 @SpringBootApplication
 public class Application {
 

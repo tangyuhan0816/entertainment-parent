@@ -1,4 +1,4 @@
-package com.entertainment.common.entity.base;
+package com.entertainment.common.base;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonIgnore;
