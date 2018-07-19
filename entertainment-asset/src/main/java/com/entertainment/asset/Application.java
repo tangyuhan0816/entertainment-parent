@@ -15,7 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 
 //@ComponentScan(value="com.entertainment.common.*")
-@EntityScan(value = "com.entertainment.common.*")
+@EntityScan(value = {"com.entertainment.common.*",})
 @SpringBootApplication
 public class Application {
 
