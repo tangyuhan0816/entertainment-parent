@@ -67,13 +67,14 @@ public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
      * 重写密码验证的方法
      * @param credentialsMatcher
      */
-    @Override
-    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-        // 重写 setCredentialsMatcher 方法为自定义的 Realm 设置 hash 验证方法
-        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-        hashedCredentialsMatcher.setHashIterations(10); //加密次数
-        super.setCredentialsMatcher(hashedCredentialsMatcher);
-    }
+    //TODO: 加盐串
+//    @Override
+//    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+//        // 重写 setCredentialsMatcher 方法为自定义的 Realm 设置 hash 验证方法
+//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+//        hashedCredentialsMatcher.setHashIterations(10); //加密次数
+//        super.setCredentialsMatcher(hashedCredentialsMatcher);
+//    }
 
 }

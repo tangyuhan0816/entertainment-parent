@@ -26,8 +26,6 @@ public class LoginController {
     @RequestMapping("/login")
     public Object login(HttpServletRequest request, @RequestBody SysUser sysUser){
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
-        token.setRememberMe(true);
-        token.setHost("127.0.0.1");
         SecurityUtils.getSubject().login(token);
         SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
         return jwtService.createJwt(user);
