@@ -2,7 +2,7 @@ spring:
   profiles: test
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://139.199.156.51/entertainment?useUnicode=true&autoReconnect=true
+    url: jdbc:mysql://139.199.156.51/asset?useUnicode=true&autoReconnect=true
     username: devdba
     password: B9hPs4vby2VYD45T
     jmx-enabled: true
@@ -37,12 +37,12 @@ spring:
 
 server.port: 15062
 #
-#jwt:
-#  sign_key: 783546576b45c9f2c8f41cb99d195d3e
-#  expire_time: 1800
-#
-#shiro:
-#  credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
+jwt:
+  sign_key: 783546576b45c9f2c8f41cb99d195d3e
+  expire_time: 1800
+
+shiro:
+  credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
