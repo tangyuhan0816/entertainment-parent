@@ -21,43 +21,20 @@ spring:
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
-#  redis:
-#    host: ttom1
-#    port: 6379
-#    password: 1234
-#    lettuce:
-#      pool:
-#        min-idle: 5
-#        max-wait: 10000
-#        max-idle: 25
-#        max-active: 8
-#      shutdown-timeout: 10000
-#    timeout: 10000
-#    database: 14
-#  cache:
-#    multi:
-#      cache-null-values: true      # 是否允许将null进行缓存，默认是true
-#      use-multi-cache: true         # 是否使用二级缓存，默认true，如果false，将之后使用redis作为缓存
-#      caffeine:
-#        expire-after-access: 10000  # 本地缓存Caffeine在访问后的过期时间 默认10s
-#        expire-after-write: 10000   # 本地缓存Caffeine在写入后的过期时间 默认10s
-#        initial-capacity: 20000     # 初始化大小 2w
-#        maximum-size: -1            # 本地缓存可缓存最大数值，-1为不限制
-#      redis:
-#        host: ttom1
-#        port: 6379
-#        password: 1234
-#        lettuce:
-#          pool:
-#            min-idle: 5
-#            max-wait: 10000
-#            max-idle: 25
-#            max-active: 8
-#          shutdown-timeout: 10000
-#        timeout: 10000
-#        database: 13
-#        expiry-time: 86400000       # redis的过期时间，默认 1 day
-#        pre-load-time: 86400000     # redis的重新加载时间，默认 1 day
+  redis:
+    host: 193.112.97.60
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        min-idle: 5
+        max-wait: 10000
+        max-idle: 25
+        max-active: 8
+      shutdown-timeout: 10000
+    timeout: 10000
+    database: 0
+
 server.port: 15062
 #
 #jwt:
