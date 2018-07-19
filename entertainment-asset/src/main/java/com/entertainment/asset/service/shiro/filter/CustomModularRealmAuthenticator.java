@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.filter
- * @class UserModularRealmAuthenticator
- * @email xing.cui@magicwindow.cn
- * @date 2018/4/1 上午8:46
- * @description realm 管理器，用于处理两种登陆授权realm
- */
+ *  @Author: Yuhan.Tang
+ *  @ClassName: CustomModularRealmAuthenticator
+ *  @package: com.entertainment.asset.service.shiro.filter
+ *  @Date: Created in 2018/7/19 下午7:27
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 public class CustomModularRealmAuthenticator extends ModularRealmAuthenticator {
 
     private static final Logger logger = LoggerFactory.getLogger(CustomModularRealmAuthenticator.class);

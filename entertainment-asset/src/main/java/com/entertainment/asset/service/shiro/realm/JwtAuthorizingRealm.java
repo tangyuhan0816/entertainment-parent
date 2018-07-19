@@ -24,14 +24,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.realm
- * @class JWtAuthorizingRealm
- * @email xing.cui@magicwindow.cn
- * @date 2018/3/30 上午10:32
- * @description 处理jwt的登陆授权的realm
- */
-
+ *  @Author: Yuhan.Tang
+ *  @ClassName: JwtAuthorizingRealm
+ *  @package: com.entertainment.asset.service.shiro.realm
+ *  @Date: Created in 2018/7/19 下午7:26
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @Service("jwtAuthorizingRealm")
 public class JwtAuthorizingRealm extends AuthorizingRealm {
 

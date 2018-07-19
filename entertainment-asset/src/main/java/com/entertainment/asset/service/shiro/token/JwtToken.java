@@ -4,14 +4,13 @@ import lombok.Data;
 import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.token
- * @class JWTUsernamePasswordToken
- * @email xing.cui@magicwindow.cn
- * @date 2018/3/29 下午1:48
- * @description jwt token 用于处理jwt的登陆验证
- */
-
+ *  @Author: Yuhan.Tang
+ *  @ClassName: JwtToken
+ *  @package: com.entertainment.asset.service.shiro.token
+ *  @Date: Created in 2018/7/19 下午7:27
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @Data
 public class JwtToken implements AuthenticationToken {
 

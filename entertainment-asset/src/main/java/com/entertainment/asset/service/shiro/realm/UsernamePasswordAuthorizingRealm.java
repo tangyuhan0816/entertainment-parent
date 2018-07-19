@@ -18,13 +18,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.realm
- * @class UsernamePasswordAuthorizingRealm
- * @email xing.cui@magicwindow.cn
- * @date 2018/3/31 下午12:43
- * @description 处理默认的username和password登陆授权realm
- */
+ *  @Author: Yuhan.Tang
+ *  @ClassName: UsernamePasswordAuthorizingRealm
+ *  @package: com.entertainment.asset.service.shiro.realm
+ *  @Date: Created in 2018/7/19 下午7:26
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @Service
 public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
 

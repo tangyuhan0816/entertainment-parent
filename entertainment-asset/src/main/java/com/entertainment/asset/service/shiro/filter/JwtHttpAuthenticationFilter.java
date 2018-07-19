@@ -21,14 +21,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.filter
- * @class JWTHttpAuthenticationFilter
- * @email xing.cui@magicwindow.cn
- * @date 2018/3/29 下午1:52
- * @description
- */
-
+ *  @Author: Yuhan.Tang
+ *  @ClassName: JwtHttpAuthenticationFilter
+ *  @package: com.entertainment.asset.service.shiro.filter
+ *  @Date: Created in 2018/7/19 下午7:26
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 public class JwtHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtHttpAuthenticationFilter.class);
