@@ -61,9 +61,6 @@ public class Swagger2 {
         pars.add(tokenPar.build());
 //        //隐藏生产swagger地址
         Predicate<String> pathSelectors = PathSelectors.any();
-        if(profiles.contains("prod")){
-            pathSelectors = PathSelectors.none();
-        }
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo()).select()
                 .apis(RequestHandlerSelectors.basePackage("com.entertainment.asset.controller"))

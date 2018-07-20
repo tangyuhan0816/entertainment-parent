@@ -20,7 +20,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  *  @Author: Yuhan.Tang
  *  @ClassName: RedisConfig
  *  @package: com.entertainment.asset.config
- *  @Date: Created in 2018/7/20 下午5:49
+ *  @Date: Created in 2018/7/20 下午6:00
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 
  */    

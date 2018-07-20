@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: SysUserController
  *  @package: com.entertainment.asset.controller.sys
- *  @Date: Created in 2018/7/20 下午5:49
+ *  @Date: Created in 2018/7/20 下午6:03
  *  @email yuhan.tang@magicwindow.cn
- *  @Description: 
- */    
+ *  @Description:
+ */
 @RestController
 @RequestMapping("/sysUser")
 public class SysUserController {

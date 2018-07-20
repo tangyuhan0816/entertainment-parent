@@ -17,7 +17,7 @@ import java.util.Date;
  *  @Author: Yuhan.Tang
  *  @ClassName: BaseEntity
  *  @package: com.entertainment.common.base
- *  @Date: Created in 2018/7/20 下午5:48
+ *  @Date: Created in 2018/7/20 下午6:00
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 
  */    

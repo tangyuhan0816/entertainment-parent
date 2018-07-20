@@ -15,7 +15,17 @@ import org.springframework.data.domain.Pageable;
  */    
 public interface SysUserRepository extends BaseEntityRepository<SysUser>{
 
+    /**
+     * 根据邮箱查找用户
+     * @param email
+     * @return
+     */
     SysUser findByEmailAndDeletedIsFalse(String email);
 
+    /**
+     * 分页
+     * @param pageable
+     * @return
+     */
     Page<SysUser> findAllByDeletedIsFalse(Pageable pageable);
 }

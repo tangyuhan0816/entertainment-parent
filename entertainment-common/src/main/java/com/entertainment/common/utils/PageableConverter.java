@@ -28,10 +28,10 @@ public class PageableConverter {
                 Sort.Order order = new Sort.Order(direction, sf.getFieldName());
                 orders.add(order);
             }
-            sort = new Sort(orders);
+            sort = Sort.by(orders);
         }
         return Preconditions.isNotBlank(sort)
-                ? new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), sort)
-                : new PageRequest(pageableRequest.getPageNumber(), pageableRequest.getPageSize());
+                ? PageRequest.of(pageableRequest.getPageNumber(), pageableRequest.getPageSize(), sort)
+                : PageRequest.of(pageableRequest.getPageNumber(), pageableRequest.getPageSize());
     }
 }
