@@ -1,4 +1,4 @@
 spring:
   profiles: test
 
-server.port: 15062
+server.port: 15061
