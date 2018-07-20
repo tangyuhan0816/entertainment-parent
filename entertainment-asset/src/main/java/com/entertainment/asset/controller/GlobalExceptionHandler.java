@@ -1,4 +1,4 @@
-package com.entertainment.asset.api;
+package com.entertainment.asset.controller;
 
 import com.entertainment.common.constant.BusinessConstant;
 import com.entertainment.common.exception.BusinessException;

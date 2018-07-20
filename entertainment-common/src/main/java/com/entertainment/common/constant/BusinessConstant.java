@@ -23,5 +23,7 @@ public abstract class BusinessConstant {
     public static final String LOGIN_USER_NAME_ERROR = "username.error";
     //登陆 密码错误
     public static final String USER_LOGIN_WRONG_PASSWORD = "user.login.wrongpassword";
+    //通用验证，用户无权不能做此操作
+    public static final String COMMON_VERIFY_NOT_HAVE_THIS_PERMISSION = "common.verify.not.have.permission";
 
 }

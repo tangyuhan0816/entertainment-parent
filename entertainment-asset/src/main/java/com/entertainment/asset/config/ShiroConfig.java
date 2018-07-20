@@ -29,12 +29,12 @@ import javax.servlet.Filter;
 import java.util.*;
 
 /**
- * @author cuixing
- * @package io.merculet.management.shiro.config
- * @class ShiroConfig
- * @email xing.cui@magicwindow.cn
- * @date 2018/3/30 上午10:43
- * @description shiro config 配置
+ *  @Author: Yuhan.Tang
+ *  @ClassName: ShiroConfig
+ *  @package: com.entertainment.asset.config
+ *  @Date: Created in 2018/7/20 下午12:52
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: shiro config 配置
  */
 @Configuration
 public class ShiroConfig {
@@ -86,7 +86,7 @@ public class ShiroConfig {
 
         factoryBean.setSecurityManager(securityManager);
         factoryBean.setLoginUrl("/login");
-        factoryBean.setUnauthorizedUrl("/v1/merculetManagement/401");
+        factoryBean.setUnauthorizedUrl("/401");
 
             /*
              * 自定义url规则
@@ -95,26 +95,16 @@ public class ShiroConfig {
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 所有请求通过我们自己的JWT Filter
 
-        filterRuleMap.put("v1/merculetManagement/401", "anon");
+        filterRuleMap.put("/401", "anon");
         filterRuleMap.put("/favicon.*", "anon");
         //监控暂时全部放开TODO后面加上验证
-        filterRuleMap.put("/actuator/**", "anon");
-        filterRuleMap.put("/v1/merculetManagement/subscribe/save", "anon");
-
-        filterRuleMap.put("/v1/merculetManagement/cusOrder/**", "anon");
 
 
         // 访问401和404页面不通过我们的Filter
-        filterRuleMap.put("/v1/merculetManagement/email/**", "anon");
-        filterRuleMap.put("/v1/merculetManagement/createEncrypt", "anon");
         filterRuleMap.put("/login", "anon");
-        filterRuleMap.put("/v1/merculetManagement/register/**", "anon");
-        filterRuleMap.put("/v1/merculetManagement/activation/**", "anon");
-        filterRuleMap.put("/v1/merculetManagement/forgetPassword/**", "anon");
-
+        filterRuleMap.put("/register/**", "anon");
 
         filterRuleMap.put("/swagger-ui.html", "anon");
-        filterRuleMap.put("/v2/api-docs", "anon");
         filterRuleMap.put("/swagger*/**", "anon");
 
         filterRuleMap.put("/webjars/**", "anon");
@@ -125,8 +115,7 @@ public class ShiroConfig {
 
     @Bean
     public JwtHttpAuthenticationFilter jwtHttpAuthenticationFilter(){
-        JwtHttpAuthenticationFilter jwtHttpAuthenticationFilter = new JwtHttpAuthenticationFilter();
-        return jwtHttpAuthenticationFilter;
+        return new JwtHttpAuthenticationFilter();
     }
 
 

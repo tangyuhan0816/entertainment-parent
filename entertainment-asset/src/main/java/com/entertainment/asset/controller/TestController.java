@@ -1,4 +1,4 @@
-package com.entertainment.asset.api;
+package com.entertainment.asset.controller;
 
 import com.entertainment.asset.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
