@@ -80,7 +80,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
 
         // 添加自己的过滤器并且取名为jwt
-        Map<String, Filter> filterMap = new HashMap<>();
+        Map<String, Filter> filterMap = new HashMap<>(12);
         filterMap.put("jwtFilter", jwtHttpAuthenticationFilter());
         factoryBean.setFilters(filterMap);
 
@@ -152,7 +152,8 @@ public class ShiroConfig {
         RedisManager redisManager = new RedisManager();
         redisManager.setHost(host);
         redisManager.setPort(port);
-        redisManager.setTimeout(timeout);// 配置缓存过期时间
+        // 配置缓存过期时间
+        redisManager.setTimeout(timeout);
         redisManager.setPassword(password);
         redisManager.setDatabase(database);
         return redisManager;

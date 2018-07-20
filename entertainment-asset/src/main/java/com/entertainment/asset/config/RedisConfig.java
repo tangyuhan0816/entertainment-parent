@@ -16,6 +16,14 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: RedisConfig
+ *  @package: com.entertainment.asset.config
+ *  @Date: Created in 2018/7/20 下午5:49
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @Data
 @Configuration
 public class RedisConfig {

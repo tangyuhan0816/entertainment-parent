@@ -10,6 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: SysUserService
+ *  @package: com.entertainment.asset.service.sys
+ *  @Date: Created in 2018/7/20 下午5:49
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 @Service
 public class SysUserService extends BaseCacheService<SysUser>{
 

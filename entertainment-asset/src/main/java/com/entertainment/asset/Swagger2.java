@@ -1,6 +1,10 @@
 package com.entertainment.asset;
 
+import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.service.jwt.JwtService;
+import com.entertainment.asset.service.sys.SysUserService;
 import com.google.common.base.Predicate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,12 +37,24 @@ public class Swagger2 {
     @Value("${spring.profiles}")
     private String profiles;
 
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
+    private JwtService jwtService;
+
     @Bean
     public Docket createRestApi(){
+
+        SysUser sysUser = sysUserService.findSysUserByEmail("test@qq.com");
+        String token = "";
+        if(sysUser!=null){
+            token = jwtService.createJwt(sysUser);
+        }
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();
         tokenPar.name("Authorization").description("令牌").modelRef(new ModelRef("string")).parameterType("header")
-//        .defaultValue(token)
+        .defaultValue(token)
         .required(false);
         pars.add(tokenPar.build());
         tokenPar.name("locale").description("语言").modelRef(new ModelRef("string")).parameterType("query").defaultValue("ch").required(false);

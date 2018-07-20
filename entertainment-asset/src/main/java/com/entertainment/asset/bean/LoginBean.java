@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: LoginBean
+ *  @package: com.entertainment.asset.bean
+ *  @Date: Created in 2018/7/20 下午5:48
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 @Data
 public class LoginBean {
 

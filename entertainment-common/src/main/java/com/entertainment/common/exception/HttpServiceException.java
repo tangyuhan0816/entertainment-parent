@@ -1,5 +1,13 @@
 package com.entertainment.common.exception;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: HttpServiceException
+ *  @package: com.entertainment.common.exception
+ *  @Date: Created in 2018/7/20 下午5:48
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 public class HttpServiceException extends Exception{
 
     public HttpServiceException() {

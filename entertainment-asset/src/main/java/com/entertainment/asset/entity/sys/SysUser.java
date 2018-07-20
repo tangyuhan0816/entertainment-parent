@@ -9,6 +9,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: SysUser
+ *  @package: com.entertainment.asset.entity.sys
+ *  @Date: Created in 2018/7/20 下午5:49
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 @Data
 @Entity
 @Table(name = "sys_user")

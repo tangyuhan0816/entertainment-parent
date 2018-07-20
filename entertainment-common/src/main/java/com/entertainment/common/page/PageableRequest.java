@@ -26,7 +26,7 @@ public class PageableRequest extends BaseBean{
         this.pageSize = pageSize;
     }
 
-    // zero base
+
     @JsonProperty("page_number")
     @JSONField(name = "page_number")
     private int pageNumber;

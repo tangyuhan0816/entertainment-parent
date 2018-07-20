@@ -3,6 +3,14 @@ package com.entertainment.common.utils;
 import java.util.List;
 import java.util.Map;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: Preconditions
+ *  @package: com.entertainment.common.utils
+ *  @Date: Created in 2018/7/20 下午5:48
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 public class Preconditions {
 
     public Preconditions() {

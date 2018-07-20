@@ -22,7 +22,7 @@ public class ResponseContent<T> {
     public static final int SIGNATURE_ERROR_CODE = 3;
     public static final int INTERNAL_SERVER_ERROR_CODE = 500;
     public static final int BUSINESS_EXCEPTION_CODE = 1000;
-    public static final int NO_PERMiSSION = 961;
+    public static final int NO_PERMISSION = 961;
     /**
      * 0
      */
