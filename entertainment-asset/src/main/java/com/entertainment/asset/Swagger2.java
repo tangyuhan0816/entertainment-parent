@@ -50,7 +50,7 @@ public class Swagger2 {
         }
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.entertainment.asset.api"))
+                .apis(RequestHandlerSelectors.basePackage("com.entertainment.asset.controller"))
                 .paths(pathSelectors).build()
                 .globalOperationParameters(pars);
     }
