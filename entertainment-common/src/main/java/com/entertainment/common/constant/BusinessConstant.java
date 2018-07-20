@@ -1,5 +1,13 @@
 package com.entertainment.common.constant;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: BusinessConstant
+ *  @package: com.entertainment.common.constant
+ *  @Date: Created in 2018/7/20 下午12:06
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 public abstract class BusinessConstant {
 
     /**

@@ -1,17 +1,17 @@
-package com.entertainment.common.constant;
+package com.entertainment.common.utils;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- *  @Author: Yuhan.Tang
- *  @ClassName: ResponseContent
- *  @package: com.entertainment.common.constant
- *  @Date: Created in 2018/7/20 上午11:00
- *  @email yuhan.tang@magicwindow.cn
- *  @Description: 接口返回定义类
- */    
+ * @author cuixing
+ * @package io.merculet.management.common.bean
+ * @class ResponseContent
+ * @email xing.cui@magicwindow.cn
+ * @date 2018/4/2 下午6:15
+ * @description
+ */
 @ApiModel
 @Data
 public class ResponseContent<T> {

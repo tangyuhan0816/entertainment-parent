@@ -1,9 +1,9 @@
 package com.entertainment.asset.api.sys;
 
-import com.alibaba.fastjson.JSONObject;
 import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.sys.SysUserService;
+import com.entertainment.common.utils.ResponseContent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: LoginController
+ *  @package: com.entertainment.asset.api.sys
+ *  @Date: Created in 2018/7/20 下午12:06
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @RestController
 @RequestMapping("/")
 public class LoginController {
@@ -29,6 +37,6 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
         SecurityUtils.getSubject().login(token);
         SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
-        return jwtService.createJwt(user);
+        return ResponseContent.buildSuccess(jwtService.createJwt(user));
     }
 }
