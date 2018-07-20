@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: GlobalExceptionHandler
+ *  @package: com.entertainment.asset.controller
+ *  @Date: Created in 2018/7/20 下午2:26
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

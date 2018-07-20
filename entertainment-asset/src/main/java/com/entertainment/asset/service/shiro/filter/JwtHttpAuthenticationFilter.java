@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.shiro.token.JwtToken;
+import com.entertainment.common.exception.BusinessException;
 import com.entertainment.common.utils.Preconditions;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
@@ -72,8 +73,8 @@ public class JwtHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
         try {
             executeLogin(request, response);
         } catch (Exception e) {
-            if (e.getCause() != null && e.getCause() instanceof Exception) {
-                responseTokenError(request, response, (Exception) e.getCause());
+            if (e.getCause() != null && e.getCause() instanceof BusinessException) {
+                responseTokenError(request, response, (BusinessException) e.getCause());
             }
             return false;
         }
@@ -101,16 +102,15 @@ public class JwtHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
     /**
      * 将非法请求跳转到 /401
      */
-    private void responseTokenError(ServletRequest req, ServletResponse resp, Exception be) {
+    private void responseTokenError(ServletRequest req, ServletResponse resp, BusinessException be) {
         HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("UTF-8");
         try {
             PrintWriter pw = httpServletResponse.getWriter();
             JSONObject jsonObject = new JSONObject();
-            String message = be.getMessage();
             jsonObject.put("status", 401);
-            jsonObject.put("message", message);
+            jsonObject.put("message", be.getCode());
             pw.write(JSON.toJSONString(jsonObject));
             pw.flush();
             pw.close();
