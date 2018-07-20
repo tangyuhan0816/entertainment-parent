@@ -1,5 +1,6 @@
 package com.entertainment.asset.controller.sys;
 
+import com.entertainment.asset.bean.LoginBean;
 import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.sys.SysUserService;
@@ -35,8 +36,8 @@ public class LoginController {
     private static final String LOGIN_MESSAGE = "login_success";
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
-    public Object login(HttpServletRequest request, @RequestBody SysUser sysUser){
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
+    public Object login(HttpServletRequest request, @RequestBody LoginBean sysUser){
+        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassword());
         SecurityUtils.getSubject().login(token);
         SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
