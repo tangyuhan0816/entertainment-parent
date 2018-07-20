@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/sysUser")
 public class SysUserController {
 
-    @RequestMapping("/login")
-    public Object login(HttpServletRequest request,
-                        @RequestBody SysUser sysUser){
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
-        SecurityUtils.getSubject().login(token);
-        return null;
-    }
+//    @RequestMapping("/login")
+//    public Object login(HttpServletRequest request,
+//                        @RequestBody SysUser sysUser){
+//        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
+//        SecurityUtils.getSubject().login(token);
+//        return null;
+//    }
 }

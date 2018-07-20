@@ -9,6 +9,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class LoginController {
     @Autowired
     private JwtService jwtService;
 
-    @RequestMapping("/login")
+    @RequestMapping(path = "/login", method = {RequestMethod.POST})
     public Object login(HttpServletRequest request, @RequestBody SysUser sysUser){
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassWord());
         SecurityUtils.getSubject().login(token);

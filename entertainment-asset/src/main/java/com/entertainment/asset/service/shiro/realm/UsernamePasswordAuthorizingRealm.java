@@ -2,10 +2,10 @@ package com.entertainment.asset.service.shiro.realm;
 
 import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.service.sys.SysUserService;
+import com.entertainment.common.constant.BusinessConstant;
+import com.entertainment.common.exception.BusinessException;
 import com.entertainment.common.utils.Preconditions;
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -53,12 +53,12 @@ public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
 
         String username = usernamePasswordToken.getUsername();
         if (StringUtils.isEmpty(username)) {
-            throw new RuntimeException("not found username");
+            throw new BusinessException(BusinessConstant.USER_NAME_IS_NULL);
         }
 
         SysUser sysUser = sysUserService.findSysUserByEmail(username);
         if (Preconditions.isBlank(sysUser)) {
-            throw new RuntimeException("not found");
+            throw new BusinessException(BusinessConstant.USER_NAME_NOT_FOUND);
         }
         return new SimpleAuthenticationInfo(sysUser, sysUser.getPassWord(), ByteSource.Util.bytes(credentialsSalt), getName());
     }

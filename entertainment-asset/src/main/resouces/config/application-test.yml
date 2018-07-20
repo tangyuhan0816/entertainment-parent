@@ -35,7 +35,7 @@ spring:
     timeout: 10000
     database: 0
 
-server.port: 15062
+server.port: 15060
 #
 jwt:
   sign_key: 783546576b45c9f2c8f41cb99d195d3e

@@ -4,6 +4,7 @@ import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.shiro.token.JwtToken;
 import com.entertainment.asset.service.sys.SysUserService;
+import com.entertainment.common.exception.BusinessException;
 import com.entertainment.common.utils.Preconditions;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -76,14 +77,14 @@ public class JwtAuthorizingRealm extends AuthorizingRealm {
         //直接使用jwtToken，身份验证
         String jwtToken = jwtUsernamePasswordToken.getJwtToken();
         if (Preconditions.isBlank(jwtToken)) {
-            throw new RuntimeException("token is blank");
+            throw new BusinessException("token is blank");
         }
         String realJwtToken = jwtToken.substring(jwtToken.lastIndexOf(":") + 1, jwtToken.length());
         if (!jwtService.verifyJwt(realJwtToken)) {
-            throw new RuntimeException("invalid token");
+            throw new BusinessException("invalid token");
         }
         if(!jwtService.checkTokenValid(realJwtToken)){
-            throw new RuntimeException("token in blacklist");
+            throw new BusinessException("token in blacklist");
         }
         return new SimpleAuthenticationInfo(jwtToken, jwtToken, getName());
     }

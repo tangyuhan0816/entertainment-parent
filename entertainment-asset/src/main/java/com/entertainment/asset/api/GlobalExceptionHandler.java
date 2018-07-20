@@ -1,0 +1,47 @@
+package com.entertainment.asset.api;
+
+import com.entertainment.common.constant.BusinessConstant;
+import com.entertainment.common.constant.ResponseContent;
+import com.entertainment.common.exception.BusinessException;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ShiroException.class)
+    public ResponseContent handlShiroException(ShiroException ex) {
+        logger.error(ex.getMessage(),ex);
+        if(null != ex.getCause() && ex.getCause() instanceof BusinessException){
+            BusinessException bex = (BusinessException) ex.getCause();
+            return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,bex.getCode());
+        }else if(ex instanceof IncorrectCredentialsException){
+            return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,BusinessConstant.USER_LOGIN_WRONG_PASSWORD);
+        }
+
+        String message = ex.getMessage();
+        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseContent handlBusinessException(BusinessException ex) {
+        logger.error(ex.getMessage(),ex);
+        String message = ex.getCode();
+        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseContent globalException(HttpServletRequest request, Throwable ex) {
+        logger.error(ex.getMessage(),ex);
+        String message = BusinessConstant.SYSTEM_ERROR;
+        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+    }
+}
