@@ -17,7 +17,7 @@ public class AreaController {
     private AreaService areaService;
 
     @RequestMapping(path = "/findArea/cityId/{cityId}", method = {RequestMethod.GET})
-    public Object login(HttpServletRequest request, @PathVariable(value = "cityId") Long cityId){
-        return ResponseContent.buildSuccess(areaService.findByCityId(cityId));
+    public Object findArea(HttpServletRequest request, @PathVariable(value = "cityId") Long cityId){
+        return ResponseContent.buildSuccess(areaService.getByCityKey(cityId));
     }
 }

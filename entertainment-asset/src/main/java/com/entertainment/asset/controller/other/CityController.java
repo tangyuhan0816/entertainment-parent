@@ -17,7 +17,7 @@ public class CityController {
     private CityService cityService;
 
     @RequestMapping(path = "/findCity/provinceId/{provinceId}", method = {RequestMethod.GET})
-    public Object login(HttpServletRequest request, @PathVariable(value = "provinceId") Long provinceId){
+    public Object findCity(HttpServletRequest request, @PathVariable(value = "provinceId") Long provinceId){
         return ResponseContent.buildSuccess(cityService.findByProvinceId(provinceId));
     }
 }
