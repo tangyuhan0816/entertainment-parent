@@ -47,7 +47,9 @@ public class ResponseContent<T> {
         this.message = message;
         this.data = data;
     }
-
+    public static ResponseContent buildSuccess() {
+        return new ResponseContent(200, "操作成功");
+    }
     public static ResponseContent buildSuccess(String message) {
         return new ResponseContent(0, message);
     }
