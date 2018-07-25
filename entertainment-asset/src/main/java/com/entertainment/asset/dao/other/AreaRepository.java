@@ -8,6 +8,10 @@ import java.util.List;
 
 public interface AreaRepository extends BaseEntityRepository<Area>{
 
-
-    List<Area> findById();
+    /**
+     * 根据所在市下的所有区
+     * @param areaId
+     * @return
+     */
+    List<Area> findByCityIdAndDeletedIsFalse(Long areaId);
 }

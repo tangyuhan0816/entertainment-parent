@@ -17,11 +17,11 @@ public class Province extends BaseEntity{
     @JSONField(name = "province_id")
     @JsonProperty("province_id")
     @Column(name = "province_id")
-    private String provinceId;
+    private Long provinceId;
 
     @JSONField(name = "province")
     @JsonProperty("province")
     @Column(name = "province")
-    private String provinCe;
+    private String province;
 
 }

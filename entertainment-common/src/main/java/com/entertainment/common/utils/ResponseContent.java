@@ -52,7 +52,11 @@ public class ResponseContent<T> {
     }
 
     public static ResponseContent buildSuccess(String message) {
-        return new ResponseContent(0, message);
+        return new ResponseContent(SUCCESS_CODE, message);
+    }
+
+    public static ResponseContent buildSuccess(Object data) {
+        return new ResponseContent(SUCCESS_CODE, BusinessConstant.OPERATION_SUCCESS , data);
     }
 
     public static <T> ResponseContent buildSuccess(String message, T data) {

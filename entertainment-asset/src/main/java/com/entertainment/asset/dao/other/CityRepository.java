@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface CityRepository extends BaseEntityRepository<City>{
 
-
-     List<City> findById(String ProvnceId);
+     /**
+      * 查询所在省下的所有市
+      * @param provnceId
+      * @return
+      */
+     List<City> findByProvinceIdAndDeletedIsFalse(Long provnceId);
 }

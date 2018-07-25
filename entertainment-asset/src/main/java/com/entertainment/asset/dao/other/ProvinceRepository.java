@@ -7,5 +7,9 @@ import java.util.List;
 
 public interface ProvinceRepository extends BaseEntityRepository<Province>{
 
-    List<Province> findBy();
+    /**
+     * 查询Deleted = 0 的所有省数据
+     * @return
+     */
+    List<Province> findAllByDeletedIsFalse();
 }

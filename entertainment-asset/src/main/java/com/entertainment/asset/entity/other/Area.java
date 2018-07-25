@@ -11,24 +11,24 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table(name = "city")
+@Table(name = "area")
 public class Area extends BaseEntity{
+
+    @JSONField(name = "area_id")
+    @JsonProperty("area_id")
+    @Column(name = "area_id")
+    private Long areaId;
+
+    @JSONField(name = "area")
+    @JsonProperty("area")
+    @Column(name = "area")
+    private String area;
+
 
     @JSONField(name = "city_id")
     @JsonProperty("city_id")
     @Column(name = "city_id")
-    private String cityId;
-
-    @JSONField(name = "city")
-    @JsonProperty("city")
-    @Column(name = "city")
-    private String ciTy;
-
-
-    @JSONField(name = "parent_id")
-    @JsonProperty("parent_id")
-    @Column(name = "parent_id")
-    private String parentId;
+    private Long cityId;
 
 
 }

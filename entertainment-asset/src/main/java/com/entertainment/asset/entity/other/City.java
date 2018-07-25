@@ -17,18 +17,18 @@ public class City extends BaseEntity{
     @JSONField(name = "city_id")
     @JsonProperty("city_id")
     @Column(name = "city_id")
-    private String cityId;
+    private Long cityId;
 
     @JSONField(name = "city")
     @JsonProperty("city")
     @Column(name = "city")
-    private String ciTy;
+    private String city;
 
 
-    @JSONField(name = "parent_id")
-    @JsonProperty("parent_id")
-    @Column(name = "parent_id")
-    private String parentId;
+    @JSONField(name = "provinceId")
+    @JsonProperty("provinceId")
+    @Column(name = "provinceId")
+    private Long provinceId;
 
 
 }

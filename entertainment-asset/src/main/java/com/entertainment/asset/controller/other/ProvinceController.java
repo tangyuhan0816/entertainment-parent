@@ -1,36 +1,24 @@
 package com.entertainment.asset.controller.other;
 
 
-import com.entertainment.asset.entity.other.City;
-import com.entertainment.asset.entity.other.Province;
 import com.entertainment.asset.service.jwt.JwtService;
-import com.entertainment.asset.service.other.CityService;
 import com.entertainment.asset.service.other.ProvinceService;
+import com.entertainment.common.utils.ResponseContent;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/v1/asset/other/province")
 public class ProvinceController {
 
     @Autowired
-    private ProvinceService ProvinceService;
+    private ProvinceService provinceService;
 
-    @Autowired
-    private JwtService jwtService;
-
-    private static final String LOGIN_MESSAGE = "login_success";
-
-    @RequestMapping(path = "/getprovince", method = {RequestMethod.POST})
-    public Object login(HttpServletRequest request, @RequestBody Province Province){
-       List<Province> listProvince=ProvinceService.findBy();
-        return listProvince;
+    @RequestMapping(path = "/findProvince", method = {RequestMethod.GET})
+    public Object findProvince(HttpServletRequest request){
+        return ResponseContent.buildSuccess(provinceService.findAll());
     }
 }
