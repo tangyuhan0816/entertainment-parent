@@ -56,7 +56,7 @@ public class ResponseContent<T> {
     }
 
     public static <T> ResponseContent buildSuccess(String message, T data) {
-        return new ResponseContent(0, message, data);
+        return new ResponseContent(SUCCESS_CODE, message, data);
     }
 
     public static ResponseContent buildFail() {
