@@ -39,10 +39,10 @@ public class AreaService{
 
     @CachePutAnnotation
     public Object synAreaByCityId(Long cityId){
-        return findByCityIdFomDB(cityId);
+        return findByCityIdFromDB(cityId);
     }
 
-    public List<Area> findByCityIdFomDB(Long cityId){
+    public List<Area> findByCityIdFromDB(Long cityId){
         return  areaRepository.findByCityIdAndDeletedIsFalse(cityId);
     }
 }
