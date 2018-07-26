@@ -1,5 +1,6 @@
 package com.entertainment.asset.service.other;
 
+import com.entertainment.asset.annotation.CachePutAnnotation;
 import com.entertainment.asset.annotation.CacheReadAnnotation;
 import com.entertainment.asset.dao.other.AreaRepository;
 import com.entertainment.asset.entity.other.Area;
@@ -36,6 +37,7 @@ public class AreaService{
         return synAreaByCityId(cityId);
     }
 
+    @CachePutAnnotation
     public Object synAreaByCityId(Long cityId){
         return findByCityIdFomDB(cityId);
     }

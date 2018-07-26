@@ -32,7 +32,6 @@ public class CacheReadAop {
 
     @Around("filterMethod()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object o;
         Object [] objs = joinPoint.getArgs();
         if(Preconditions.isNotBlank(objs)){
             String iKey = objs[0].toString();
@@ -43,13 +42,8 @@ public class CacheReadAop {
                 Object obj = operations.get(CacheUtils.genCustomKey(iKey,cKey));
                 if(Preconditions.isNotBlank(obj)){
                     return obj;
-                }else{
-                    o = joinPoint.proceed();
-                    if(Preconditions.isNotBlank(o)) {
-                        operations.set(CacheUtils.genCustomKey(iKey, cKey), o);
-                    }
-                    return o;
                 }
+                return joinPoint.proceed();
             }
         }
         return null;
