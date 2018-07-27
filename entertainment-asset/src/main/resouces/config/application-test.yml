@@ -43,6 +43,9 @@ jwt:
 
 shiro:
   credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
+
+spring.jackson.serialization.write-dates-as-timestamps: true
+
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
