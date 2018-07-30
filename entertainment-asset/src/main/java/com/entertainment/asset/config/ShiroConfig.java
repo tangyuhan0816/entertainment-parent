@@ -102,6 +102,7 @@ public class ShiroConfig {
 
         // 访问401和404页面不通过我们的Filter
         filterRuleMap.put("/login", "anon");
+        filterRuleMap.put("/reg", "anon");
         filterRuleMap.put("/register/**", "anon");
         filterRuleMap.put("/v2/api-docs", "anon");
 
