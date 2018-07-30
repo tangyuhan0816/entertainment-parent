@@ -14,6 +14,7 @@ public class ProvinceService{
     private ProvinceRepository provinceRepository;
 
     public List<Province> findAll(){
+
         return  provinceRepository.findAllByDeletedIsFalse();
     }
 

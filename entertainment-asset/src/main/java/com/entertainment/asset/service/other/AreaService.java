@@ -6,7 +6,6 @@ import com.entertainment.asset.dao.other.AreaRepository;
 import com.entertainment.asset.entity.other.Area;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,12 +32,12 @@ public class AreaService{
     /**********************使用redis缓存必须使用spring 代理 start**********************/
 
     @CacheReadAnnotation
-    public Object getByCityKey(String ikey,Long cityId){
+    public List<Area> getByCityKey(String ikey,Long cityId){
         return synAreaByCityId(cityId);
     }
 
     @CachePutAnnotation
-    public Object synAreaByCityId(Long cityId){
+    public List<Area> synAreaByCityId(Long cityId){
         return findByCityIdFromDB(cityId);
     }
 

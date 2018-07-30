@@ -46,6 +46,8 @@ shiro:
 
 spring.jackson.serialization.write-dates-as-timestamps: true
 
+spring.thymeleaf.cache: false
+
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

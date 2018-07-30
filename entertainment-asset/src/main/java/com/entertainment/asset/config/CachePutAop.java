@@ -12,9 +12,13 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 /**
- * 利用AOP技术对往数据库中插入学生信息作权限验证
+ *  @Author: Yuhan.Tang
+ *  @ClassName: CachePutAop
+ *  @package: com.entertainment.asset.config
+ *  @Date: Created in 2018/7/27 下午6:39
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 缓存写入Aop
  */
- 
 @Aspect
 @Component
 public class CachePutAop {
