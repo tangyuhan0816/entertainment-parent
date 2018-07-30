@@ -20,18 +20,9 @@ public class WebAppConfig implements WebMvcConfigurer {
     @Autowired
     private CorsInterceptor corsInterceptor;
 
-    @Bean
-    public WebMvcConfigurer webMvcConfigurer() {
-        return new WebMvcConfigurer() {
-            /**
-             * 添加拦截器
-             * @param registry
-             */
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(corsInterceptor).excludePathPatterns("/**");
-            }
-        };
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(corsInterceptor);
     }
 
 }

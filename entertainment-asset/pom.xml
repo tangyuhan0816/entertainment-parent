@@ -193,6 +193,14 @@
       <version>${springfox.swagger.version}</version>
     </dependency>
 
+    <!-- 热部署模块 -->
+    <!--百度配置环境： https://blog.csdn.net/u012540337/article/details/76783338-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
   </dependencies>
 
   <build>
@@ -206,4 +214,5 @@
       </plugin>
     </plugins>
   </build>
+
 </project>

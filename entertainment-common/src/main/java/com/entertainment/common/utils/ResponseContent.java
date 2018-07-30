@@ -1,5 +1,6 @@
 package com.entertainment.common.utils;
 
+import com.entertainment.common.constant.BusinessConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,17 +17,16 @@ import lombok.Data;
 @Data
 public class ResponseContent<T> {
 
-    public static final int SUCCESS_CODE = 0;
-    public static final int FAIL_CODE = 2;
-    public static final int AUTH_FAIL_CODE = 1;
-    public static final int SIGNATURE_ERROR_CODE = 3;
+    public static final int SUCCESS_CODE = 200;
+    public static final int FAIL_CODE = 500;
     public static final int INTERNAL_SERVER_ERROR_CODE = 500;
     public static final int BUSINESS_EXCEPTION_CODE = 1000;
-    public static final int NO_PERMiSSION = 961;
+    public static final int SHIRO_EXCEPTION_CODE = 401;
+    public static final int NO_PERMISSION = 961;
     /**
      * 0
      */
-    @ApiModelProperty("状态码0成功 1用户授权失败 500 服务器内部错误")
+    @ApiModelProperty("状态码200成功 500 服务器内部错误 1000自定义错误  401shiro错误")
     private int code;
     private String message;
 
@@ -47,13 +47,24 @@ public class ResponseContent<T> {
         this.message = message;
         this.data = data;
     }
+    public static ResponseContent buildSuccess() {
+        return new ResponseContent(SUCCESS_CODE, BusinessConstant.OPERATION_SUCCESS);
+    }
 
     public static ResponseContent buildSuccess(String message) {
-        return new ResponseContent(0, message);
+        return new ResponseContent(SUCCESS_CODE, message);
+    }
+
+    public static ResponseContent buildSuccess(Object data) {
+        return new ResponseContent(SUCCESS_CODE, BusinessConstant.OPERATION_SUCCESS , data);
     }
 
     public static <T> ResponseContent buildSuccess(String message, T data) {
-        return new ResponseContent(0, message, data);
+        return new ResponseContent(SUCCESS_CODE, message, data);
+    }
+
+    public static ResponseContent buildFail() {
+        return new ResponseContent(BUSINESS_EXCEPTION_CODE, BusinessConstant.OPERATION_FAIL);
     }
 
     public static ResponseContent buildFail(int code, String message) {
@@ -69,27 +80,15 @@ public class ResponseContent<T> {
     }
 
     public static ResponseContent buildFail(String message) {
-        return new ResponseContent(2, message);
-    }
-
-    public static ResponseContent buildNoPermissionFail(String message) {
-        return new ResponseContent(961, message);
+        return new ResponseContent(FAIL_CODE, message);
     }
 
     public static ResponseContent buildFail(String message, Object data) {
-        return new ResponseContent(2, message, data);
+        return new ResponseContent(FAIL_CODE, message, data);
     }
 
     public static ResponseContent buildServerError(String message) {
-        return new ResponseContent(500, message);
-    }
-
-    public static ResponseContent buildSignatureError(String message) {
-        return new ResponseContent(3, message);
-    }
-
-    public static ResponseContent buildAuth(String msg) {
-        return new ResponseContent(1, msg);
+        return new ResponseContent(FAIL_CODE, message);
     }
 
     public static ResponseContent buildCustomizedException(int code, String message) {

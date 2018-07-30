@@ -26,17 +26,24 @@ import javax.servlet.http.HttpServletRequest;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static Logger logger = LoggerFactory.getLogger(WebSecurityConfig.class);
 
+    private static final String HTML = "swagger-ui.html";
+
     private  static  final RequestMatcher  SWAGGER_IGNORE_REQUEST_MATCHER = new RequestMatcher() {
         @Override
         public boolean matches(HttpServletRequest httpServletRequest) {
             String referer = httpServletRequest.getHeader("Referer");
-            if(Preconditions.isNotBlank(referer) && referer.endsWith("swagger-ui.html")){
+            if(Preconditions.isNotBlank(referer) && referer.endsWith(HTML)){
                 return true;
             }
             return false;
         }
     } ;
-    // 设置 HTTP 验证规则
+
+    /**
+     * 设置 HTTP 验证规则
+     * @param http
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 关闭csrf验证

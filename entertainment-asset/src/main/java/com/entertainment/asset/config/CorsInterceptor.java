@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: CorsInterceptor
- *  @package: io.merculet.management.config
- *  @Date: Created in 2018/7/19 下午6:30
+ *  @package: com.entertainment.asset.config
+ *  @Date: Created in 2018/7/25 上午10:11
  *  @email yuhan.tang@magicwindow.cn
- *  @Description:
+ *  @Description: 设置不通过JwtHttpAuthenticationFilter请求的跨域设置
  */
 @Configuration
 public class CorsInterceptor extends HandlerInterceptorAdapter {

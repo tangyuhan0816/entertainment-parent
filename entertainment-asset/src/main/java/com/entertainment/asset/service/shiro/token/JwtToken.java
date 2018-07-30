@@ -19,7 +19,9 @@ public class JwtToken implements AuthenticationToken {
      */
     private static final long serialVersionUID = 1L;
 
-    // 密钥
+    /**
+     * 密钥
+     */
     private String jwtToken;
 
     public JwtToken(String token) {

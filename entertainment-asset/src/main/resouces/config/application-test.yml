@@ -1,4 +1,10 @@
 spring:
+  mail:
+      host: smtp.163.com
+      username: 18569034402@163.com
+      password: caonimabi2
+      default-encoding: UTF-8
+      protocol: smtp
   profiles: test
   datasource:
     driverClassName: com.mysql.jdbc.Driver
@@ -43,6 +49,11 @@ jwt:
 
 shiro:
   credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
+
+spring.jackson.serialization.write-dates-as-timestamps: true
+
+spring.thymeleaf.cache: false
+
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

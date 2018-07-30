@@ -12,6 +12,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: GlobalExceptionHandler
+ *  @package: com.entertainment.asset.controller
+ *  @Date: Created in 2018/7/20 下午2:26
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -22,13 +30,13 @@ public class GlobalExceptionHandler {
         logger.error(ex.getMessage(),ex);
         if(null != ex.getCause() && ex.getCause() instanceof BusinessException){
             BusinessException bex = (BusinessException) ex.getCause();
-            return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,bex.getCode());
+            return ResponseContent.buildFail(ResponseContent.SHIRO_EXCEPTION_CODE,bex.getCode());
         }else if(ex instanceof IncorrectCredentialsException){
-            return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE, BusinessConstant.USER_LOGIN_WRONG_PASSWORD);
+            return ResponseContent.buildFail(ResponseContent.SHIRO_EXCEPTION_CODE, BusinessConstant.USER_LOGIN_WRONG_PASSWORD);
         }
 
         String message = ex.getMessage();
-        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+        return ResponseContent.buildFail(ResponseContent.SHIRO_EXCEPTION_CODE,message);
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -42,6 +50,6 @@ public class GlobalExceptionHandler {
     public ResponseContent globalException(HttpServletRequest request, Throwable ex) {
         logger.error(ex.getMessage(),ex);
         String message = BusinessConstant.SYSTEM_ERROR;
-        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+        return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE,message);
     }
 }
