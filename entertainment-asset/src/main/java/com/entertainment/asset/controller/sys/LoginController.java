@@ -8,10 +8,7 @@ import com.entertainment.common.utils.ResponseContent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,5 +38,13 @@ public class LoginController {
         SecurityUtils.getSubject().login(token);
         SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
+    }
+
+
+    @RequestMapping(path = "/reg", method = {RequestMethod.POST})
+    public ResponseContent reg(HttpServletRequest request,
+                               @RequestBody SysUser sysUser) {
+
+        return ResponseContent.buildSuccess();
     }
 }
