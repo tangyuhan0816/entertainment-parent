@@ -1,5 +1,6 @@
-package com.entertainment.asset.service.emial;
+package com.entertainment.asset.service.email;
 
+import com.entertainment.common.utils.ResponseContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.IOException;
 
 @Service
 public class MailService {
@@ -57,23 +60,24 @@ public class MailService {
      * @param title
      * @param content
      */
-    public void sendHtmlMail(String toAddr, String title, String content) {
+    public ResponseContent sendHtmlMail(String toAddr, String title, String content) {
         // html 邮件对象
         MimeMessage message = mailSender.createMimeMessage();
-
+        MimeMessageHelper helper;
         try {
             //true表示需要创建一个multipart message
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper = new MimeMessageHelper(message, true);
             helper.setFrom(from);
             helper.setTo(toAddr);
             helper.setSubject(title);
             helper.setText(content, true);
-
             mailSender.send(message);
             logger.info("html邮件发送成功");
         } catch (MessagingException e) {
             logger.error("发送html邮件时发生异常！", e);
+            return ResponseContent.buildFail("error");
         }
+        return ResponseContent.buildSuccess();
     }
 
 

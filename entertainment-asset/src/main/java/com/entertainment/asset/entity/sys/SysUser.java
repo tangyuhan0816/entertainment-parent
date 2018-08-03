@@ -2,6 +2,7 @@ package com.entertainment.asset.entity.sys;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.entertainment.common.base.BaseEntity;
+import com.entertainment.common.type.EmailSendStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -65,5 +66,5 @@ public class SysUser extends BaseEntity{
     @JSONField(name = "status")
     @JsonProperty("status")
     @Column(name = "status")
-    private Long status;
+    private EmailSendStatus status;
 }

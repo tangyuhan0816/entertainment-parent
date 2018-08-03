@@ -1,7 +1,9 @@
 package com.entertainment.asset.controller.sys;
 
+import com.entertainment.asset.service.email.EmailTemplateService;
 import com.entertainment.asset.service.sys.SysUserService;
 import com.entertainment.common.page.PageableRequest;
+import com.entertainment.common.utils.ResponseContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,9 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private EmailTemplateService emailTemplateService;
 
     @PostMapping("/findByPage")
     public Object login(@RequestBody final PageableRequest pageableRequest) {

@@ -1,10 +1,13 @@
 package com.entertainment.asset.controller.sys;
 
-import com.entertainment.asset.service.emial.MailService;
+import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.service.email.MailService;
 import com.entertainment.common.utils.ResponseContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -30,7 +33,8 @@ public class RegController {
      */
 
     @GetMapping("/reg")
-    public ResponseContent reg() {
+    public ResponseContent reg(HttpServletRequest request,
+                               @RequestBody SysUser sysUser) {
         mailService.sendTextMail(receptionMailAddr,"测试文本邮箱发送","你好你好！");
         return ResponseContent.buildSuccess();
     }
