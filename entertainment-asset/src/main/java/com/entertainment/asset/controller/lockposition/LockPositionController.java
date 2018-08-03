@@ -23,7 +23,7 @@ public class LockPositionController {
     @Autowired
     private LockPositionService lockPositionService;
 
-    @RequestMapping(path = "/findlock_position_apply_for",method = {RequestMethod.GET})
+    @RequestMapping(path = "/findLockPositionApplyFor",method = {RequestMethod.GET})
     public Object findLockPositionApplyFor(HttpServletRequest request){
         return (Object) com.entertainment.common.utils.ResponseContent.buildSuccess(lockPositionService.findAll());
     }

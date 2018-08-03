@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class LockPositionBatchController {
     @Autowired
     private LockPositionBatchService lockPositionBatchService;
-    @RequestMapping(path ="/findLockPositionBatchy/userId/{userId}",method = {RequestMethod.GET})
+    @RequestMapping(path ="/findLockPositionBatchChen/userId/{userId}",method = {RequestMethod.GET})
     public Object findLockPositionBatchy(HttpServletRequest request, @PathVariable(value = "userId") Long userId){
         return (Object) ResponseContent.buildSuccess(lockPositionBatchService.findByUserId(userId));
     }
