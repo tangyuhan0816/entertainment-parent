@@ -1,6 +1,7 @@
-package com.entertainment.asset.dao.other;
+package com.entertainment.asset.controller.lockposition;
 
 
+import com.entertainment.asset.service.lockposition.LockPositionService;
 import org.omg.CORBA.Object;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,13 +18,13 @@ import javax.servlet.http.HttpServletRequest;
  *          Date:2018/8/3 15:22 下午
  */
 @RestController
-@RequestMapping("/v1/asset/other/LockPosition")
+@RequestMapping("/v1/asset/lockposition/LockPosition")
 public class LockPositionController {
     @Autowired
     private LockPositionService lockPositionService;
 
     @RequestMapping(path = "/findlock_position_apply_for",method = {RequestMethod.GET})
-    public Object findlock_position_apply_for(HttpServletRequest request){
+    public Object findLockPositionApplyFor(HttpServletRequest request){
         return (Object) com.entertainment.common.utils.ResponseContent.buildSuccess(lockPositionService.findAll());
     }
 }
