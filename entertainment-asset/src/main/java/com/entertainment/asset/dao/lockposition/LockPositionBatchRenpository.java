@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface LockPositionBatchRenpository extends BaseEntityRepository<LockPositionBatch>{
 
-    List<LockPositionBatch> findByuserIdAndDeletedIsFalse(Long userId);
+    List<LockPositionBatch> findByUserIdAndDeletedIsFalse(Long userId);
 }

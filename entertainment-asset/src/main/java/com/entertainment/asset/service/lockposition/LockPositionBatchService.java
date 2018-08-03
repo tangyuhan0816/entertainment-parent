@@ -19,7 +19,7 @@ public class LockPositionBatchService {
     private LockPositionBatchRenpository lockPositionBatchRenpository;
 
     public List<LockPositionBatch> findByUserId(Long userId){
-        return (List<LockPositionBatch>) lockPositionBatchRenpository.findByuserIdAndDeletedIsFalse(userId);
+        return (List<LockPositionBatch>) lockPositionBatchRenpository.findByUserIdAndDeletedIsFalse(userId);
     }
 
 }

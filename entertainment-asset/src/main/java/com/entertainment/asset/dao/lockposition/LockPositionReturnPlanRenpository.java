@@ -14,5 +14,5 @@ import java.util.List;
  */
 public interface LockPositionReturnPlanRenpository extends BaseEntityRepository<LockPositionReturnPlan>{
 
-    List<LockPositionReturnPlan> findByuserIdAndDeletedIsFalse(Long userId);
+    List<LockPositionReturnPlan> findByUserIdAndDeletedIsFalse(Long userId);
 }

@@ -19,6 +19,6 @@ public class LockPositionReturnPlanService {
     private LockPositionReturnPlanRenpository lockPositionReturnPlanRenpository;
 
     public List<LockPositionReturnPlan> findByUserId(Long userId){
-        return (List<LockPositionReturnPlan>) lockPositionReturnPlanRenpository.findByuserIdAndDeletedIsFalse(userId);
+        return (List<LockPositionReturnPlan>) lockPositionReturnPlanRenpository.findByUserIdAndDeletedIsFalse(userId);
     }
 }
