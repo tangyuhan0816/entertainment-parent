@@ -8,9 +8,9 @@ spring:
   profiles: test
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://139.199.156.51/asset?useUnicode=true&autoReconnect=true
-    username: devdba
-    password: B9hPs4vby2VYD45T
+    url: jdbc:mysql://118.184.217.250:3306/advertplansys?Unicode=true&amp;characterEncoding=UTF-8
+    username: root
+    password: X315134.y
     jmx-enabled: true
     initialSize: 5
     maxActive: 100
