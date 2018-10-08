@@ -54,6 +54,11 @@ spring.jackson.serialization.write-dates-as-timestamps: true
 
 spring.thymeleaf.cache: false
 
+sms:
+  yunpian:
+    apiKey: 5e68207d03e6352fb1c97f77d60b1bc9
+  text:
+    registerSaveInfo: 【视投科技】验证码：{0}，视投用户，您正在进行平台注册操作[验证码请勿泄露或告知他人]
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

@@ -1,5 +1,8 @@
 package com.entertainment.asset.service.sys;
 
+import com.entertainment.asset.config.RedisOperation;
+import com.entertainment.asset.config.YunpianSmsSender;
+import com.entertainment.asset.constant.RedisConstant;
 import com.entertainment.asset.dao.sys.SysRegisterEmailRepository;
 import com.entertainment.asset.dao.sys.SysUserRepository;
 import com.entertainment.asset.entity.sys.EmailTemplate;
@@ -8,6 +11,7 @@ import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.service.base.BaseCacheService;
 import com.entertainment.asset.service.email.EmailTemplateService;
 import com.entertainment.asset.service.email.MailService;
+import com.entertainment.asset.utils.StringUtil;
 import com.entertainment.common.exception.BusinessException;
 import com.entertainment.common.page.PageableRequest;
 import com.entertainment.common.page.PageableResponse;
@@ -19,11 +23,12 @@ import com.entertainment.common.utils.ResponseContent;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -50,13 +55,24 @@ public class SysUserService extends BaseCacheService<SysUser>{
     @Autowired
     private SysRegisterEmailRepository sysRegisterEmailRepository;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private RedisOperation redisOperation;
+
+    @Autowired
+    private YunpianSmsSender yunpianSmsSender;
+
     private static final String TITLE = "注册邮件";
 
-    private static ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("simple-pool-%s").build();
+    /**
+     * 短信发送等待时间(单位：秒)
+     */
+    private static final Long SEND_TIME = 60L;
 
-    private static final ExecutorService threadSimple = new ThreadPoolExecutor(1, 1,
-            0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<Runnable>(),threadFactory);
+    @Value("${sms.text.registerSaveInfo}")
+    private String content;
 
     public SysUser findSysUserByEmail(String email){
         return sysUserRepository.findByEmailAndDeletedIsFalse(email);
@@ -69,6 +85,38 @@ public class SysUserService extends BaseCacheService<SysUser>{
         pageableResponse.setTotalCount(page.getSize());
         pageableResponse.setTotalPages(page.getTotalPages());
         return pageableResponse;
+    }
+
+
+    /**
+     * 发送短信验证码
+     * @param phone
+     * @param zone
+     */
+    public void send(String phone,String zone) {
+        String mobile = "+" + zone + phone;
+        checkVerifyCode(mobile);
+        String verifyCode = StringUtil.generateRandomNumStr(6);
+        redisOperation.saveAuthorizationVerifyCode(mobile, verifyCode);
+        String key = String.format("%s%s", RedisConstant.PREFIX_AUTHORIZATION_VERIFY_CODE_SEND_TIME_KEY, mobile);
+        redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
+        yunpianSmsSender.registerSmsForContent(mobile, String.format(content, verifyCode));
+    }
+
+    /**
+     * 校验短信验证码是否发送频繁
+     *
+     * @param mobile
+     */
+    public void checkVerifyCode(String mobile) {
+        String code = redisOperation.getAuthorizationVerifyCode(mobile);
+        if (Preconditions.isNotBlank(code)) {
+            String key = String.format("%s%s", RedisConstant.PREFIX_AUTHORIZATION_VERIFY_CODE_SEND_TIME_KEY, mobile);
+            Long time = redisTemplate.getExpire(key);
+            if (Preconditions.isNotBlank(time) && time > 0) {
+                throw new BusinessException(String.format("验证码发送过于频繁，请%s秒后重试", time));
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)

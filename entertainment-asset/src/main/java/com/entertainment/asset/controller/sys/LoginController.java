@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  *  @package: com.entertainment.asset.controller.sys
  *  @Date: Created in 2018/7/20 下午12:06
  *  @email yuhan.tang@magicwindow.cn
- *  @Description: 
- */    
+ *  @Description:
+ */
 @RestController
 @RequestMapping("/")
 public class LoginController {
@@ -33,17 +33,23 @@ public class LoginController {
     private static final String LOGIN_MESSAGE = "login_success";
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
-    public Object login(HttpServletRequest request, @RequestBody LoginBean sysUser){
+    public ResponseContent login(HttpServletRequest request, @RequestBody LoginBean sysUser){
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassword());
         SecurityUtils.getSubject().login(token);
         SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
     }
 
+    @RequestMapping(path = "/send", method = {RequestMethod.POST})
+    public ResponseContent send(@RequestParam("phone") String phone,
+                                @RequestParam("zone")String zone){
+        sysUserService.send(phone,zone);
+        return ResponseContent.buildSuccess();
+    }
 
-    @RequestMapping(path = "/reg", method = {RequestMethod.POST})
-    public ResponseContent reg(HttpServletRequest request,
-                               @RequestBody SysUser sysUser) {
+    @RequestMapping(path = "/register", method = {RequestMethod.POST})
+    public ResponseContent register(HttpServletRequest request,
+                                    @RequestBody SysUser sysUser) {
 
         return ResponseContent.buildSuccess();
     }
