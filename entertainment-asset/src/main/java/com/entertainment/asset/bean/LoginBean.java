@@ -15,13 +15,13 @@ import lombok.Data;
 @Data
 public class LoginBean {
 
-    @ApiModelProperty("邮件")
-    private String email;
+    @ApiModelProperty("手机号")
+    private String phone;
 
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("验证码，预留")
-    @JsonProperty("verify_code")
-    private String verifyCode;
+    @ApiModelProperty("验证码")
+    @JsonProperty("sms_code")
+    private String smsCode;
 }

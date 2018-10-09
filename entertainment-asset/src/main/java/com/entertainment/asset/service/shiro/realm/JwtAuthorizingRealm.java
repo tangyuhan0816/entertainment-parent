@@ -1,6 +1,6 @@
 package com.entertainment.asset.service.shiro.realm;
 
-import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.shiro.token.JwtToken;
 import com.entertainment.asset.service.sys.SysUserService;
@@ -20,9 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -61,7 +59,7 @@ public class JwtAuthorizingRealm extends AuthorizingRealm {
         String jwtToken = principals.toString();
         String realJwtToken = jwtToken.substring(jwtToken.lastIndexOf(":") + 1, jwtToken.length());
         String username = jwtService.getValueByParams(realJwtToken, "username");
-        SysUser sysUser = sysUserService.findSysUserByEmail(username);
+        TbUser tbUser = sysUserService.findByPhone(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         Set<String> permissions = new HashSet<>();
 //        // TODO: 2018/4/3 获取权限

@@ -1,12 +1,18 @@
 package com.entertainment.asset.controller.sys;
 
 import com.entertainment.asset.bean.LoginBean;
+import com.entertainment.asset.bean.sys.RegisterBean;
+import com.entertainment.asset.controller.GlobalExceptionHandler;
 import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.sys.SysUserService;
+import com.entertainment.common.exception.STException;
 import com.entertainment.common.utils.ResponseContent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/")
 public class LoginController {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private SysUserService sysUserService;
@@ -34,23 +41,39 @@ public class LoginController {
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
     public ResponseContent login(HttpServletRequest request, @RequestBody LoginBean sysUser){
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getEmail(),sysUser.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword());
         SecurityUtils.getSubject().login(token);
-        SysUser user = sysUserService.findSysUserByEmail(sysUser.getEmail());
+        TbUser user = sysUserService.findByPhone(sysUser.getPhone());
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
     }
 
     @RequestMapping(path = "/send", method = {RequestMethod.POST})
     public ResponseContent send(@RequestParam("phone") String phone,
                                 @RequestParam("zone")String zone){
-        sysUserService.send(phone,zone);
+        try{
+            sysUserService.send(phone,zone);
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }
         return ResponseContent.buildSuccess();
     }
 
     @RequestMapping(path = "/register", method = {RequestMethod.POST})
     public ResponseContent register(HttpServletRequest request,
-                                    @RequestBody SysUser sysUser) {
-
+                                    @RequestBody RegisterBean registerBean) {
+        try{
+            sysUserService.register(registerBean);
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }
         return ResponseContent.buildSuccess();
     }
 }

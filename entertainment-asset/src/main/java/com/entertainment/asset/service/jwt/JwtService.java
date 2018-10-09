@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.common.utils.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,19 +95,19 @@ public class JwtService {
      * @param sysUser
      * @return
      */
-    public String createJwt(SysUser sysUser) {
+    public String createJwt(TbUser sysUser) {
         try {
             Algorithm al = Algorithm.HMAC256(signKey);
             String token = JWT.create()
                     .withIssuer("asset")
                     .withSubject("custom")
-                    .withClaim("username", sysUser.getEmail())
+                    .withClaim("username", sysUser.getPhoneNum())
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + expireTime*1000))
                     .sign(al);
             return token;
         } catch (UnsupportedEncodingException e) {
-            logger.error("create jwt token error with username: {}", sysUser.getUserName());
+            logger.error("create jwt token error with username: {}", sysUser.getPhoneNum());
         }
         return null;
     }

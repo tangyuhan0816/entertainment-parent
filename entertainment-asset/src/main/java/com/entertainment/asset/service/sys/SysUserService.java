@@ -1,36 +1,32 @@
 package com.entertainment.asset.service.sys;
 
+import com.entertainment.asset.bean.sys.RegisterBean;
 import com.entertainment.asset.config.RedisOperation;
 import com.entertainment.asset.config.YunpianSmsSender;
 import com.entertainment.asset.constant.RedisConstant;
 import com.entertainment.asset.dao.sys.SysRegisterEmailRepository;
 import com.entertainment.asset.dao.sys.SysUserRepository;
-import com.entertainment.asset.entity.sys.EmailTemplate;
+import com.entertainment.asset.dao.sys.TbUserRepository;
 import com.entertainment.asset.entity.sys.SysRegisterEmail;
 import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.base.BaseCacheService;
-import com.entertainment.asset.service.email.EmailTemplateService;
-import com.entertainment.asset.service.email.MailService;
 import com.entertainment.asset.utils.StringUtil;
 import com.entertainment.common.exception.BusinessException;
+import com.entertainment.common.exception.STException;
 import com.entertainment.common.page.PageableRequest;
 import com.entertainment.common.page.PageableResponse;
 import com.entertainment.common.type.EmailSendStatus;
-import com.entertainment.common.type.EmailType;
 import com.entertainment.common.utils.PageableConverter;
 import com.entertainment.common.utils.Preconditions;
 import com.entertainment.common.utils.ResponseContent;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  *  @Author: Yuhan.Tang
@@ -41,16 +37,10 @@ import java.util.concurrent.*;
  *  @Description:
  */
 @Service
-public class SysUserService extends BaseCacheService<SysUser>{
+public class SysUserService {
 
     @Autowired
     private SysUserRepository sysUserRepository;
-
-    @Autowired
-    private EmailTemplateService emailTemplateService;
-
-    @Autowired
-    private MailService mailService;
 
     @Autowired
     private SysRegisterEmailRepository sysRegisterEmailRepository;
@@ -64,7 +54,8 @@ public class SysUserService extends BaseCacheService<SysUser>{
     @Autowired
     private YunpianSmsSender yunpianSmsSender;
 
-    private static final String TITLE = "注册邮件";
+    @Autowired
+    private TbUserRepository tbUserRepository;
 
     /**
      * 短信发送等待时间(单位：秒)
@@ -93,12 +84,18 @@ public class SysUserService extends BaseCacheService<SysUser>{
      * @param phone
      * @param zone
      */
-    public void send(String phone,String zone) {
+    public void send(String phone,String zone) throws STException{
+        if(Preconditions.isBlank(phone)){
+            throw new STException("手机号码为空");
+        }
+        if(Preconditions.isBlank(zone)){
+            throw new STException("时区为空");
+        }
         String mobile = "+" + zone + phone;
         checkVerifyCode(mobile);
         String verifyCode = StringUtil.generateRandomNumStr(6);
         redisOperation.saveAuthorizationVerifyCode(mobile, verifyCode);
-        String key = String.format("%s%s", RedisConstant.PREFIX_AUTHORIZATION_VERIFY_CODE_SEND_TIME_KEY, mobile);
+        String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY, mobile);
         redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
         yunpianSmsSender.registerSmsForContent(mobile, String.format(content, verifyCode));
     }
@@ -111,7 +108,7 @@ public class SysUserService extends BaseCacheService<SysUser>{
     public void checkVerifyCode(String mobile) {
         String code = redisOperation.getAuthorizationVerifyCode(mobile);
         if (Preconditions.isNotBlank(code)) {
-            String key = String.format("%s%s", RedisConstant.PREFIX_AUTHORIZATION_VERIFY_CODE_SEND_TIME_KEY, mobile);
+            String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY, mobile);
             Long time = redisTemplate.getExpire(key);
             if (Preconditions.isNotBlank(time) && time > 0) {
                 throw new BusinessException(String.format("验证码发送过于频繁，请%s秒后重试", time));
@@ -119,39 +116,64 @@ public class SysUserService extends BaseCacheService<SysUser>{
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseContent register(SysUser sysUser){
-        SysUser emailUser = sysUserRepository.findByEmailAndDeletedIsFalse(sysUser.getEmail());
-        if(Preconditions.isNotBlank(emailUser)){
-            return ResponseContent.buildFail("该邮箱已注册！");
+    public void register(RegisterBean registerBean) throws STException{
+        String mobile = registerBean.getPhone();
+        String code = redisOperation.getAuthorizationVerifyCode(mobile);
+        if(Preconditions.isBlank(code)){
+            throw new STException("验证码已过期");
         }
-        SysUser saveUser = new SysUser();
-        BeanUtils.copyProperties(sysUser,saveUser);
-        saveUser.setStatus(EmailSendStatus.EMAIL_VALIDATION_ING);
-        SysUser newUser = sysUserRepository.save(saveUser);
-        if(Preconditions.isBlank(newUser)){
-            //TODO 注意多语言
-            throw new BusinessException("保存用户异常");
+        if(!code.equals(registerBean.getSmsCode())){
+            //TODO 验证码输入错误次数过多处理
+            throw new STException("验证码输入错误");
         }
 
-        EmailTemplate emailTemplate = emailTemplateService.getTemplateByType(EmailType.EMAIL_REGISTERED);
-
-        String verifyCode = UUID.randomUUID().toString();
-        String content = emailTemplate.getContent().replaceAll("\\{verify_code}",verifyCode);
-        mailService.sendHtmlMail(newUser.getEmail(),TITLE,content);
-//        if(response.getCode() == ResponseContent.FAIL_CODE){
-//            Future<ResponseContent> future = threadSimple.submit(() -> mailService.sendHtmlMail(newUser.getEmail(),TITLE,content));
-//        }
-        //发邮件保存信息到数据库
-        SysRegisterEmail sysRegisterEmail = new SysRegisterEmail();
-        sysRegisterEmail.setContent(content);
-        sysRegisterEmail.setStatus(EmailSendStatus.EMAIL_VALIDATION_ING);
-        sysRegisterEmail.setSysUserId(newUser.getId());
-        sysRegisterEmail.setTitle(TITLE);
-        sysRegisterEmail.setVerifyCode(verifyCode);
-        sysRegisterEmailRepository.save(sysRegisterEmail);
-        return ResponseContent.buildSuccess();
+        TbUser tbUser = findByPhone(registerBean.getPhone());
+        if(Preconditions.isNotBlank(tbUser)){
+            throw new STException("手机号码已被注册");
+        }
+        tbUser = new TbUser();
+        tbUser.setPhoneNum(registerBean.getPhone());
+        tbUser.setPassword(registerBean.getPassword());
+        tbUserRepository.save(tbUser);
     }
+
+    public TbUser findByPhone(String phone){
+        return tbUserRepository.findByDeletedIsFalseAndPhoneNum(phone);
+    }
+
+//    @Transactional(rollbackFor = Exception.class)
+//    public ResponseContent register(SysUser sysUser){
+//        SysUser emailUser = sysUserRepository.findByEmailAndDeletedIsFalse(sysUser.getEmail());
+//        if(Preconditions.isNotBlank(emailUser)){
+//            return ResponseContent.buildFail("该邮箱已注册！");
+//        }
+//        SysUser saveUser = new SysUser();
+//        BeanUtils.copyProperties(sysUser,saveUser);
+//        saveUser.setStatus(EmailSendStatus.EMAIL_VALIDATION_ING);
+//        SysUser newUser = sysUserRepository.save(saveUser);
+//        if(Preconditions.isBlank(newUser)){
+//            //TODO 注意多语言
+//            throw new BusinessException("保存用户异常");
+//        }
+//
+//        EmailTemplate emailTemplate = emailTemplateService.getTemplateByType(EmailType.EMAIL_REGISTERED);
+//
+//        String verifyCode = UUID.randomUUID().toString();
+//        String content = emailTemplate.getContent().replaceAll("\\{verify_code}",verifyCode);
+//        mailService.sendHtmlMail(newUser.getEmail(),TITLE,content);
+////        if(response.getCode() == ResponseContent.FAIL_CODE){
+////            Future<ResponseContent> future = threadSimple.submit(() -> mailService.sendHtmlMail(newUser.getEmail(),TITLE,content));
+////        }
+//        //发邮件保存信息到数据库
+//        SysRegisterEmail sysRegisterEmail = new SysRegisterEmail();
+//        sysRegisterEmail.setContent(content);
+//        sysRegisterEmail.setStatus(EmailSendStatus.EMAIL_VALIDATION_ING);
+//        sysRegisterEmail.setSysUserId(newUser.getId());
+//        sysRegisterEmail.setTitle(TITLE);
+//        sysRegisterEmail.setVerifyCode(verifyCode);
+//        sysRegisterEmailRepository.save(sysRegisterEmail);
+//        return ResponseContent.buildSuccess();
+//    }
 
     public ResponseContent activation(String verifyCode){
         SysRegisterEmail sysRegisterEmail = sysRegisterEmailRepository.findByVerifyCodeAndDeletedIsFalse(verifyCode);
