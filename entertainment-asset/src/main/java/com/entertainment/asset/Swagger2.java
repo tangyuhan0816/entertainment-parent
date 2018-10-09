@@ -1,6 +1,7 @@
 package com.entertainment.asset;
 
 import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.sys.SysUserService;
 import com.google.common.base.Predicate;
@@ -46,7 +47,7 @@ public class Swagger2 {
     @Bean
     public Docket createRestApi(){
 
-        SysUser sysUser = sysUserService.findSysUserByEmail("test@qq.com");
+        TbUser sysUser = sysUserService.findByPhone("188888888");
         String token = "";
         if(sysUser!=null){
             token = jwtService.createJwt(sysUser);
