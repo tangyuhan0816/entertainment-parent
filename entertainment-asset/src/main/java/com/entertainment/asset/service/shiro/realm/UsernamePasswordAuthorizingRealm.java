@@ -1,6 +1,7 @@
 package com.entertainment.asset.service.shiro.realm;
 
 import com.entertainment.asset.entity.sys.SysUser;
+import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.sys.SysUserService;
 import com.entertainment.common.constant.BusinessConstant;
 import com.entertainment.common.exception.BusinessException;
@@ -56,7 +57,7 @@ public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
             throw new BusinessException(BusinessConstant.USER_NAME_IS_NULL);
         }
 
-        SysUser sysUser = sysUserService.findSysUserByEmail(username);
+        TbUser sysUser = sysUserService.findByPhone(username);
         if (Preconditions.isBlank(sysUser)) {
             throw new BusinessException(BusinessConstant.USER_NAME_NOT_FOUND);
         }
