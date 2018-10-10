@@ -61,6 +61,9 @@ public class SysUserService {
     @Value("${shiro.credentialsSalt}")
     private String credentialsSalt;
 
+    @Value("${test.smscode}")
+    private String testCode;
+
     /**
      * 短信发送等待时间(单位：秒)
      */
@@ -121,19 +124,21 @@ public class SysUserService {
     }
 
     public void register(RegisterBean registerBean) throws STException{
-        String mobile = "+" + registerBean.getZoneCode() + registerBean.getPhone();
-        String code = redisOperation.getAuthorizationVerifyCode(mobile);
-        if(Preconditions.isBlank(registerBean.getSmsCode())){
-            throw new STException("验证码为空");
-        }
-        if(Preconditions.isBlank(code)){
-            throw new STException("验证码已过期");
-        }
-        if(!code.equals(registerBean.getSmsCode())){
-            //TODO 验证码输入错误次数过多处理
-            throw new STException("验证码输入错误");
-        }
 
+        if(!testCode.equals(registerBean.getSmsCode())) {
+            String mobile = "+" + registerBean.getZoneCode() + registerBean.getPhone();
+            String code = redisOperation.getAuthorizationVerifyCode(mobile);
+            if (Preconditions.isBlank(registerBean.getSmsCode())) {
+                throw new STException("验证码为空");
+            }
+            if (Preconditions.isBlank(code)) {
+                throw new STException("验证码已过期");
+            }
+            if (!code.equals(registerBean.getSmsCode())) {
+                //TODO 验证码输入错误次数过多处理
+                throw new STException("验证码输入错误");
+            }
+        }
         TbUser tbUser = findByPhone(registerBean.getPhone());
         if(Preconditions.isNotBlank(tbUser)){
             throw new STException("手机号码已被注册");
