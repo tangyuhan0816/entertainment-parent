@@ -14,10 +14,4 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface BaseEntityRepository <T extends BaseEntity> extends JpaRepository<T, Long> {
 
-    /**
-     * 根据ID查找数据
-     * @param id
-     * @return
-     */
-    T findOneById(Long id);
 }

@@ -2,6 +2,7 @@ package com.entertainment.asset.dao.sys;
 
 import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.common.base.BaseEntityRepository;
+import com.entertainment.common.type.sys.UserTypeEnum;
 
 /**
  *  @Author: Yuhan.Tang
@@ -15,4 +16,11 @@ public interface TbUserRepository extends BaseEntityRepository<TbUser>{
 
 
     TbUser findByDeletedIsFalseAndPhoneNum(String phoneNum);
+
+    /**
+     * 查询区域管理员
+     * @param agentArea
+     * @return
+     */
+    TbUser findByDeletedIsFalseAndUserTypeAndAgentArea(UserTypeEnum userTypeEnum ,String agentArea);
 }

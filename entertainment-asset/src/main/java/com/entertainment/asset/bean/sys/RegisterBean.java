@@ -32,4 +32,8 @@ public class RegisterBean implements Serializable{
     @ApiModelProperty("时区")
     @JsonProperty("zone_code")
     private String zoneCode;
+
+    @ApiModelProperty("代理商区域编号")
+    @JsonProperty("agent_area")
+    private String agentArea;
 }

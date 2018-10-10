@@ -2,10 +2,13 @@ package com.entertainment.asset.entity.sys;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.entertainment.common.base.BaseEntity;
+import com.entertainment.common.type.sys.UserStatus;
+import com.entertainment.common.type.sys.UserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -17,149 +20,129 @@ import java.util.Date;
  *  @Description:
  */
 @Data
+@Entity
+@Table(name = "tb_user")
 public class TbUser extends BaseEntity{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
     @JSONField(name = "user_id")
     @JsonProperty("user_id")
     @Column(name = "user_id")
     private Long userId;
 
+    @ApiModelProperty(value = "权限ID", required = true)
     @JSONField(name = "role_id")
     @JsonProperty("role_id")
     @Column(name = "role_id")
     private Long roleId;
 
-    @JSONField(name = "username")
-    @JsonProperty("username")
-    @Column(name = "username")
-    private String username;
+    @ApiModelProperty(value = "用户名", required = true)
+    @JSONField(name = "user_name")
+    @JsonProperty("user_name")
+    @Column(name = "user_name")
+    private String userName;
 
-    @JSONField(name = "password")
-    @JsonProperty("password")
-    @Column(name = "password")
-    private String password;
+    @ApiModelProperty(value = "密码", required = true)
+    @JSONField(name = "pass_word")
+    @JsonProperty("pass_word")
+    @Column(name = "pass_word")
+    private String passWord;
 
-    @JSONField(name = "user_pwd")
-    @JsonProperty("user_pwd")
-    @Column(name = "user_pwd")
-    private String userPwd;
+    @ApiModelProperty(value = "昵称", required = true)
+    @JSONField(name = "nick")
+    @JsonProperty("nick")
+    @Column(name = "nick")
+    private String nick;
 
-
-    @JSONField(name = "user_nickname")
-    @JsonProperty("user_nickname")
-    @Column(name = "user_nickname")
-    private String userNickname;
-
+    @ApiModelProperty(value = "姓名", required = true)
     @JSONField(name = "name")
     @JsonProperty("name")
     @Column(name = "name")
     private String name;
 
+    @ApiModelProperty(value = "管理员ID", required = true)
     @JSONField(name = "parent_id")
     @JsonProperty("parent_id")
     @Column(name = "parent_id")
-    private Integer parentId;
+    private Long parentId;
 
+    @ApiModelProperty(value = "邮箱地址", required = true)
     @JSONField(name = "email")
     @JsonProperty("email")
     @Column(name = "email")
     private String email;
 
+    @ApiModelProperty(value = "状态", required = true)
     @JSONField(name = "status")
     @JsonProperty("status")
     @Column(name = "status")
-    private String status;
+    private UserStatus status;
 
+    @ApiModelProperty(value = "用户类型", required = true)
     @JSONField(name = "user_type")
     @JsonProperty("user_type")
     @Column(name = "user_type")
-    private String userType;
+    private UserTypeEnum userType;
 
+    @ApiModelProperty(value = "手机号码", required = true)
     @JSONField(name = "phone_num")
     @JsonProperty("phone_num")
     @Column(name = "phone_num")
     private String phoneNum;
 
+    @ApiModelProperty(value = "区域编号", required = true)
     @JSONField(name = "agent_area")
     @JsonProperty("agent_area")
     @Column(name = "agent_area")
     private String agentArea;
 
+    @ApiModelProperty(value = "代理商公司名称", required = true)
     @JSONField(name = "agent_company_name")
     @JsonProperty("agent_company_name")
     @Column(name = "agent_company_name")
     private String agentCompanyName;
 
+    @ApiModelProperty(value = "代理商公司法人名称", required = true)
     @JSONField(name = "agent_legal_name")
     @JsonProperty("agent_legal_name")
     @Column(name = "agent_legal_name")
     private String agentLegalName;
 
+    @ApiModelProperty(value = "代理商负责人电话", required = true)
     @JSONField(name = "agent_custom_phone")
     @JsonProperty("agent_custom_phone")
     @Column(name = "agent_custom_phone")
     private String agentCustomPhone;
 
-
-    @JSONField(name = "register_time")
-    @JsonProperty("register_time")
-    @Column(name = "register_time")
-    private Date registerTime;
-
-    @JSONField(name = "login_address_recently")
-    @JsonProperty("login_address_recently")
-    @Column(name = "login_address_recently")
-    private String loginAddressRecently;
-
-    @JSONField(name = "login_time_recently")
-    @JsonProperty("login_time_recently")
-    @Column(name = "login_time_recently")
-    private Date loginTimeRecently;
-
-    @JSONField(name = "created_by")
-    @JsonProperty("created_by")
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @JSONField(name = "updated_time")
-    @JsonProperty("updated_time")
-    @Column(name = "updated_time")
-    private Date updatedTime;
-
-    @JSONField(name = "updated_by")
-    @JsonProperty("updated_by")
-    @Column(name = "updated_by")
-    private String updatedBy;
-
-    @JSONField(name = "loginname")
-    @JsonProperty("loginname")
-    @Column(name = "loginname")
-    private String loginname;
-
-
+    @ApiModelProperty(value = "权利", required = true)
     @JSONField(name = "rights")
     @JsonProperty("rights")
     @Column(name = "rights")
     private String rights;
 
-
-    @JSONField(name = "last_login")
-    @JsonProperty("last_login")
-    @Column(name = "last_login")
-    private Date lastLogin;
-
-    @JSONField(name = "last_login_start")
-    @JsonProperty("last_login_start")
-    @Column(name = "last_login_start")
-    private Date lastLoginStart;
-
-    @JSONField(name = "last_login_end")
-    @JsonProperty("last_login_end")
-    @Column(name = "last_login_end")
-    private Date lastLoginEnd;
-
+    @ApiModelProperty(value = "性别", required = true)
     @JSONField(name = "sex")
     @JsonProperty("sex")
     @Column(name = "sex")
-    private String sex;
+    private Integer sex;
+
+    @ApiModelProperty(value = "图标", required = true)
+    @JSONField(name = "auto_graph")
+    @JsonProperty("auto_graph")
+    @Column(name = "auto_graph")
+    private String autoGraph;
+
+    @ApiModelProperty(value = "头像地址", required = true)
+    @JSONField(name = "header_icon")
+    @JsonProperty("header_icon")
+    @Column(name = "header_icon")
+    private String headerIcon;
+
+    @ApiModelProperty(value = "地址", required = true)
+    @JSONField(name = "address")
+    @JsonProperty("address")
+    @Column(name = "address")
+    private Date address;
 }

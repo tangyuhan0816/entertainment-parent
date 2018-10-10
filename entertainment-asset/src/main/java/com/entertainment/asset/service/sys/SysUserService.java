@@ -10,13 +10,14 @@ import com.entertainment.asset.dao.sys.TbUserRepository;
 import com.entertainment.asset.entity.sys.SysRegisterEmail;
 import com.entertainment.asset.entity.sys.SysUser;
 import com.entertainment.asset.entity.sys.TbUser;
-import com.entertainment.asset.service.base.BaseCacheService;
 import com.entertainment.asset.utils.StringUtil;
 import com.entertainment.common.exception.BusinessException;
 import com.entertainment.common.exception.STException;
 import com.entertainment.common.page.PageableRequest;
 import com.entertainment.common.page.PageableResponse;
 import com.entertainment.common.type.EmailSendStatus;
+import com.entertainment.common.type.sys.UserStatus;
+import com.entertainment.common.type.sys.UserTypeEnum;
 import com.entertainment.common.utils.PageableConverter;
 import com.entertainment.common.utils.Preconditions;
 import com.entertainment.common.utils.ResponseContent;
@@ -57,10 +58,13 @@ public class SysUserService {
     @Autowired
     private TbUserRepository tbUserRepository;
 
+    @Value("${shiro.credentialsSalt}")
+    private String credentialsSalt;
+
     /**
      * 短信发送等待时间(单位：秒)
      */
-    private static final Long SEND_TIME = 60L;
+    private static final Long SEND_TIME = 600L;
 
     @Value("${sms.text.registerSaveInfo}")
     private String content;
@@ -95,7 +99,7 @@ public class SysUserService {
         checkVerifyCode(mobile);
         String verifyCode = StringUtil.generateRandomNumStr(6);
         redisOperation.saveAuthorizationVerifyCode(mobile, verifyCode);
-        String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY, mobile);
+        String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY, mobile);
         redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
         yunpianSmsSender.registerSmsForContent(mobile, String.format(content, verifyCode));
     }
@@ -111,14 +115,17 @@ public class SysUserService {
             String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY, mobile);
             Long time = redisTemplate.getExpire(key);
             if (Preconditions.isNotBlank(time) && time > 0) {
-                throw new BusinessException(String.format("验证码发送过于频繁，请%s秒后重试", time));
+                throw new STException(String.format("验证码发送过于频繁，请%s秒后重试", time));
             }
         }
     }
 
     public void register(RegisterBean registerBean) throws STException{
-        String mobile = registerBean.getPhone();
+        String mobile = "+" + registerBean.getZoneCode() + registerBean.getPhone();
         String code = redisOperation.getAuthorizationVerifyCode(mobile);
+        if(Preconditions.isBlank(registerBean.getSmsCode())){
+            throw new STException("验证码为空");
+        }
         if(Preconditions.isBlank(code)){
             throw new STException("验证码已过期");
         }
@@ -132,8 +139,24 @@ public class SysUserService {
             throw new STException("手机号码已被注册");
         }
         tbUser = new TbUser();
+        TbUser adminUser = null;
+        if(Preconditions.isNotBlank(registerBean.getAgentArea())){
+            //查询管理员
+            adminUser = tbUserRepository.findByDeletedIsFalseAndUserTypeAndAgentArea(UserTypeEnum.ADMIN_USER, registerBean.getAgentArea());
+            if(Preconditions.isNotBlank(adminUser)){
+                tbUser.setParentId(adminUser.getUserId());
+            }
+        }
+//        String password = (new SimpleHash("MD5", registerBean.getPassword(), ByteSource.Util.bytes(credentialsSalt), 10)).toString();
         tbUser.setPhoneNum(registerBean.getPhone());
-        tbUser.setPassword(registerBean.getPassword());
+        tbUser.setUserName(registerBean.getPhone());
+        tbUser.setPassWord(registerBean.getPassword());
+        tbUser.setRoleId(2L);
+        //0 普通用户 1管理员 2公司老总
+        tbUser.setUserType(UserTypeEnum.GENERAL_USER);
+        tbUser.setStatus(UserStatus.NORMAL);
+        tbUser.setSex(0);
+        tbUser.setAgentArea(registerBean.getAgentArea());
         tbUserRepository.save(tbUser);
     }
 

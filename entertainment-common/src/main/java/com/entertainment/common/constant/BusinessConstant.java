@@ -16,8 +16,8 @@ public class BusinessConstant {
     public static final String SYSTEM_ERROR = "system.error";
     public static final String NOT_FOUBND = "not.found";
     public static final String FIELD_ERROR = "field.error";
-    public static final String OPERATION_SUCCESS = "operation.success";
-    public static final String OPERATION_FAIL = "operation.fail";
+    public static final String OPERATION_SUCCESS = "success";
+    public static final String OPERATION_FAIL = "fail";
 
     /**************************************LoginError*************************************/
     public static final String USER_NAME_NOT_FOUND = "username.not.found";

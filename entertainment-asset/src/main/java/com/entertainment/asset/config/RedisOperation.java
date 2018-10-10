@@ -38,7 +38,7 @@ public class RedisOperation {
      * @param mobile
      */
     public String getAuthorizationVerifyCode(String mobile){
-        BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY + mobile);
+        BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY + mobile);
         Object obj = valueOperations.get();
         if(null != obj){
             return (String)obj;

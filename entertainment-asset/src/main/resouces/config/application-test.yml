@@ -58,7 +58,8 @@ sms:
   yunpian:
     apiKey: 5e68207d03e6352fb1c97f77d60b1bc9
   text:
-    registerSaveInfo: 【视投科技】验证码：{0}，视投用户，您正在进行平台注册操作[验证码请勿泄露或告知他人]
+    registerSaveInfo: 【唐裕涵】验证码%s，视投用户，您正在进行APP注册操作[验证码请勿泄露或告知他人]
+    loginSaveInfo: 【唐裕涵】您的验证码是%s，十分钟内有效，请勿告知他人以免泄漏。
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

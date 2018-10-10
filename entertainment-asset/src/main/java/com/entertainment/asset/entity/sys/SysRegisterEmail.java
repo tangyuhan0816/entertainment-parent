@@ -4,11 +4,10 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.entertainment.common.base.BaseEntity;
 import com.entertainment.common.type.EmailSendStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *  @Author: Yuhan.Tang
@@ -22,6 +21,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sys_register_email")
 public class SysRegisterEmail extends BaseEntity{
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
+    private Long id;
 
     @JSONField(name = "content")
     @JsonProperty("content")
