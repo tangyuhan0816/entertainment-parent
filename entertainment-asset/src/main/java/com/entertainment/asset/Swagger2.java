@@ -47,7 +47,7 @@ public class Swagger2 {
     @Bean
     public Docket createRestApi(){
 
-        TbUser sysUser = sysUserService.findByPhone("188888888");
+        TbUser sysUser = sysUserService.findByPhone("1888888888");
         String token = "";
         if(sysUser!=null){
             token = jwtService.createJwt(sysUser);
