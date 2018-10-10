@@ -67,7 +67,7 @@ public class SysUserService {
     /**
      * 短信发送等待时间(单位：秒)
      */
-    private static final Long SEND_TIME = 600L;
+    private static final Long SEND_TIME = 120L;
 
     @Value("${sms.text.registerSaveInfo}")
     private String content;
