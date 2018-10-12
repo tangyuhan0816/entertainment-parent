@@ -1,5 +1,6 @@
 package com.entertainment.asset.controller.sys;
 
+import com.alibaba.fastjson.JSONObject;
 import com.entertainment.asset.bean.LoginBean;
 import com.entertainment.asset.bean.sys.RegisterBean;
 import com.entertainment.asset.controller.GlobalExceptionHandler;
@@ -41,6 +42,7 @@ public class LoginController {
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
     public ResponseContent login(HttpServletRequest request, @RequestBody LoginBean sysUser){
+        logger.info("login 请求参数:{}", JSONObject.toJSONString(sysUser));
         UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword());
         SecurityUtils.getSubject().login(token);
         TbUser user = sysUserService.findByPhone(sysUser.getPhone());
@@ -51,6 +53,7 @@ public class LoginController {
     public ResponseContent send(@RequestParam("phone") String phone,
                                 @RequestParam("zone")String zone){
         try{
+            logger.info("send 请求参数:{},{}", phone,zone);
             sysUserService.send(phone,zone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -66,6 +69,7 @@ public class LoginController {
     public ResponseContent register(HttpServletRequest request,
                                     @RequestBody RegisterBean registerBean) {
         try{
+            logger.info("register 请求参数:{}", registerBean);
             sysUserService.register(registerBean);
         }catch(STException e){
             logger.error(e.getMessage(),e);
