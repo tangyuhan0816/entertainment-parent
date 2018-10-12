@@ -207,7 +207,7 @@
 
     <resources>
       <resource>
-        <directory>src/main/java</directory>
+        <directory>src/main/resouces</directory>
         <includes>
           <include>**/*.xml</include>
           <include>**/*.yml</include>
