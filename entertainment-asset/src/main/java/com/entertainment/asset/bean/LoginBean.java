@@ -24,4 +24,8 @@ public class LoginBean {
     @ApiModelProperty("验证码")
     @JsonProperty("sms_code")
     private String smsCode;
+
+    @ApiModelProperty("时区")
+    @JsonProperty("zone_code")
+    private String zoneCode;
 }

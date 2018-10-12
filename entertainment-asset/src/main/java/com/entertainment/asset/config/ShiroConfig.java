@@ -104,6 +104,7 @@ public class ShiroConfig {
         filterRuleMap.put("/login", "anon");
         filterRuleMap.put("/regregister", "anon");
         filterRuleMap.put("/send", "anon");
+        filterRuleMap.put("/sendLogin", "anon");
         filterRuleMap.put("/register/**", "anon");
         filterRuleMap.put("/v2/api-docs", "anon");
 

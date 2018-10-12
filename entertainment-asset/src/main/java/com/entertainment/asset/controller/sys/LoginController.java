@@ -9,12 +9,14 @@ import com.entertainment.asset.entity.sys.TbUser;
 import com.entertainment.asset.service.jwt.JwtService;
 import com.entertainment.asset.service.sys.SysUserService;
 import com.entertainment.common.exception.STException;
+import com.entertainment.common.utils.Preconditions;
 import com.entertainment.common.utils.ResponseContent;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,9 +43,16 @@ public class LoginController {
     private static final String LOGIN_MESSAGE = "login_success";
 
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
-    public ResponseContent login(HttpServletRequest request, @RequestBody LoginBean sysUser){
+    public ResponseContent login(HttpServletRequest request, @RequestBody RegisterBean sysUser){
         logger.info("login 请求参数:{}", JSONObject.toJSONString(sysUser));
-        UsernamePasswordToken token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword());
+        UsernamePasswordToken token = null;
+        if(Preconditions.isNotBlank(sysUser.getSmsCode())){
+            sysUserService.checkLoginCode(sysUser);
+            TbUser tbUser = sysUserService.findByPhone(sysUser.getPhone());
+            token = new UsernamePasswordToken(sysUser.getPhone(), tbUser.getPassWord());
+        }else {
+            token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword());
+        }
         SecurityUtils.getSubject().login(token);
         TbUser user = sysUserService.findByPhone(sysUser.getPhone());
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
@@ -64,6 +73,24 @@ public class LoginController {
         }
         return ResponseContent.buildSuccess();
     }
+
+    @RequestMapping(path = "/sendLogin", method = {RequestMethod.POST})
+    public ResponseContent sendLogin(@RequestParam("phone") String phone,
+                                @RequestParam("zone")String zone){
+        try{
+            logger.info("sendLogin 请求参数:{},{}", phone,zone);
+            sysUserService.sendLogin(phone,zone);
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }
+        return ResponseContent.buildSuccess();
+    }
+
+
 
     @RequestMapping(path = "/register", method = {RequestMethod.POST})
     public ResponseContent register(HttpServletRequest request,

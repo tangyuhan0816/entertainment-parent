@@ -1,5 +1,6 @@
 package com.entertainment.asset.service.sys;
 
+import com.entertainment.asset.bean.LoginBean;
 import com.entertainment.asset.bean.sys.RegisterBean;
 import com.entertainment.asset.config.RedisOperation;
 import com.entertainment.asset.config.YunpianSmsSender;
@@ -70,7 +71,10 @@ public class SysUserService {
     private static final Long SEND_TIME = 120L;
 
     @Value("${sms.text.registerSaveInfo}")
-    private String content;
+    private String registerContent;
+
+    @Value("${sms.text.loginSaveInfo}")
+    private String loginContent;
 
     public SysUser findSysUserByEmail(String email){
         return sysUserRepository.findByEmailAndDeletedIsFalse(email);
@@ -87,7 +91,7 @@ public class SysUserService {
 
 
     /**
-     * 发送短信验证码
+     * 发送注册短信验证码
      * @param phone
      * @param zone
      */
@@ -101,11 +105,54 @@ public class SysUserService {
         String mobile = "+" + zone + phone;
         checkVerifyCode(mobile);
         String verifyCode = StringUtil.generateRandomNumStr(6);
-        redisOperation.saveAuthorizationVerifyCode(mobile, verifyCode);
+        redisOperation.saveRegisterVerifyCode(mobile, verifyCode);
         String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY, mobile);
         redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
-        yunpianSmsSender.registerSmsForContent(mobile, String.format(content, verifyCode));
+        yunpianSmsSender.registerSmsForContent(mobile, String.format(registerContent, verifyCode));
     }
+
+    /**
+     * 发送登陆短信验证码
+     * @param phone
+     * @param zone
+     */
+    public void sendLogin(String phone,String zone) throws STException{
+        if(Preconditions.isBlank(phone)){
+            throw new STException("手机号码为空");
+        }
+        if(Preconditions.isBlank(zone)){
+            throw new STException("时区为空");
+        }
+        String mobile = "+" + zone + phone;
+        checkVerifyCode(mobile);
+        String verifyCode = StringUtil.generateRandomNumStr(6);
+        redisOperation.saveLoginVerifyCode(mobile, verifyCode);
+        String key = String.format("%s%s", RedisConstant.PREFIX_LOGIN_VERIFY_CODE_SEND_TIME_KEY, mobile);
+        redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
+        yunpianSmsSender.registerSmsForContent(mobile, String.format(loginContent, verifyCode));
+    }
+
+    /**
+     * 验证输入的登陆验证码是否正确
+     * @return
+     */
+    public void checkLoginCode(RegisterBean bean){
+        if(!testCode.equals(bean.getSmsCode())) {
+            String mobile = "+" + bean.getZoneCode() + bean.getPhone();
+            String code = redisOperation.getLoginVerifyCode(mobile);
+            if (Preconditions.isBlank(bean.getSmsCode())) {
+                throw new STException("验证码为空");
+            }
+            if (Preconditions.isBlank(code)) {
+                throw new STException("验证码已过期");
+            }
+            if (!code.equals(bean.getSmsCode())) {
+                //TODO 验证码输入错误次数过多处理
+                throw new STException("验证码输入错误");
+            }
+        }
+    }
+
 
     /**
      * 校验短信验证码是否发送频繁
@@ -113,7 +160,7 @@ public class SysUserService {
      * @param mobile
      */
     public void checkVerifyCode(String mobile) {
-        String code = redisOperation.getAuthorizationVerifyCode(mobile);
+        String code = redisOperation.getRegisterVerifyCode(mobile);
         if (Preconditions.isNotBlank(code)) {
             String key = String.format("%s%s", RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY, mobile);
             Long time = redisTemplate.getExpire(key);
@@ -125,20 +172,8 @@ public class SysUserService {
 
     public void register(RegisterBean registerBean) throws STException{
 
-        if(!testCode.equals(registerBean.getSmsCode())) {
-            String mobile = "+" + registerBean.getZoneCode() + registerBean.getPhone();
-            String code = redisOperation.getAuthorizationVerifyCode(mobile);
-            if (Preconditions.isBlank(registerBean.getSmsCode())) {
-                throw new STException("验证码为空");
-            }
-            if (Preconditions.isBlank(code)) {
-                throw new STException("验证码已过期");
-            }
-            if (!code.equals(registerBean.getSmsCode())) {
-                //TODO 验证码输入错误次数过多处理
-                throw new STException("验证码输入错误");
-            }
-        }
+        //校验验证码
+        checkLoginCode(registerBean);
         TbUser tbUser = findByPhone(registerBean.getPhone());
         if(Preconditions.isNotBlank(tbUser)){
             throw new STException("手机号码已被注册");

@@ -2,6 +2,7 @@ package com.entertainment.asset.controller;
 
 import com.entertainment.common.constant.BusinessConstant;
 import com.entertainment.common.exception.BusinessException;
+import com.entertainment.common.exception.STException;
 import com.entertainment.common.utils.ResponseContent;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
     public ResponseContent handlBusinessException(BusinessException ex) {
         logger.error(ex.getMessage(),ex);
         String message = ex.getCode();
+        return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
+    }
+
+    @ExceptionHandler(STException.class)
+    public ResponseContent handlSTException(STException ex) {
+        logger.error(ex.getMessage(),ex);
+        String message = ex.getMessage();
         return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
     }
 

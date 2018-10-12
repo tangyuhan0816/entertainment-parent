@@ -25,26 +25,53 @@ public class RedisOperation {
 
     /**
      * 保存注册验证码
+     *
      * @param mobile
      * @param verifyCode
      */
-    public void saveAuthorizationVerifyCode(String mobile,String verifyCode){
+    public void saveRegisterVerifyCode(String mobile, String verifyCode) {
         BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY + mobile);
         valueOperations.set(verifyCode, 10L, TimeUnit.MINUTES);
     }
 
     /**
      * 获取注册验证码
+     *
      * @param mobile
      */
-    public String getAuthorizationVerifyCode(String mobile){
+    public String getRegisterVerifyCode(String mobile) {
         BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY + mobile);
         Object obj = valueOperations.get();
-        if(null != obj){
-            return (String)obj;
+        if (null != obj) {
+            return (String) obj;
         }
         return null;
     }
 
+    /**
+     * 保存登陆验证码
+     *
+     * @param mobile
+     * @param verifyCode
+     */
+    public void saveLoginVerifyCode(String mobile, String verifyCode) {
+        BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY + mobile);
+        valueOperations.set(verifyCode, 10L, TimeUnit.MINUTES);
+    }
+
+    /**
+     * 获取登陆验证码
+     *
+     * @param mobile
+     * @param mobile
+     */
+    public String getLoginVerifyCode(String mobile) {
+        BoundValueOperations valueOperations = redisTemplate.boundValueOps(RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY + mobile);
+        Object obj = valueOperations.get();
+        if (null != obj) {
+            return (String) obj;
+        }
+        return null;
+    }
 
 }
