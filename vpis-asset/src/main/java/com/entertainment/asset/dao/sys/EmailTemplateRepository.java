@@ -1,7 +1,6 @@
 package com.entertainment.asset.dao.sys;
 
 import com.entertainment.asset.entity.sys.EmailTemplate;
-import com.entertainment.asset.entity.sys.SysRegisterEmail;
 import com.entertainment.common.base.BaseEntityRepository;
 import com.entertainment.common.type.EmailType;
 
@@ -13,7 +12,7 @@ import com.entertainment.common.type.EmailType;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 
  */    
-public interface EmailTemplateRepository extends BaseEntityRepository<EmailTemplate>{
+public interface EmailTemplateRepository extends BaseEntityRepository<EmailTemplate> {
 
     /**
      * 根据邮箱查找用户

@@ -6,12 +6,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @author cuixing
- * @package io.merculet.management.common.bean
- * @class ResponseContent
- * @email xing.cui@magicwindow.cn
- * @date 2018/4/2 下午6:15
- * @description
+ *  @Author: Yuhan.Tang
+ *  @ClassName: ResponseContent
+ *  @package: com.entertainment.common.utils
+ *  @Date: Created in 2018/4/2 下午6:15
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
  */
 @ApiModel
 @Data
