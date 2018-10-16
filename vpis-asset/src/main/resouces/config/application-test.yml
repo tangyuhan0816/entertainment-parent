@@ -1,0 +1,75 @@
+spring:
+  mail:
+      host: smtp.163.com
+      username: 18569034402@163.com
+      password: caonimabi2
+      default-encoding: UTF-8
+      protocol: smtp
+  profiles: test
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://118.184.217.250:3306/advertplansys?Unicode=true&amp;characterEncoding=UTF-8
+    username: root
+    password: X315134.y
+    jmx-enabled: true
+    initialSize: 5
+    maxActive: 100
+    minIdle: 5
+    maxIdle: 25
+    maxAge: 3600000
+    maxWait: 10000
+    timeBetweenEvictionRunsMillis: 10000
+    minEvictableIdleTimeMillis: 10000
+    testWhileIdle: true
+    testOnBorrow: true
+    validationQuery: "SELECT 1"
+    testOnReturn: false
+  jpa:
+#    hibernate.ddl-auto: update
+    show-sql: true
+  redis:
+    host: 193.112.97.60
+    port: 6379
+    password: 123456
+    lettuce:
+      pool:
+        min-idle: 5
+        max-wait: 10000
+        max-idle: 25
+        max-active: 8
+      shutdown-timeout: 10000
+    timeout: 10000
+    database: 0
+
+server.port: 15060
+#
+jwt:
+  sign_key: 783546576b45c9f2c8f41cb99d195d3e
+  expire_time: 1800
+
+shiro:
+  credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
+
+spring.jackson.serialization.write-dates-as-timestamps: true
+
+spring.thymeleaf.cache: false
+
+sms:
+  yunpian:
+    apiKey: 5e68207d03e6352fb1c97f77d60b1bc9
+  text:
+    registerSaveInfo: 【云导信息】验证码%s，视投用户，您正在进行APP注册操作[验证码请勿泄露或告知他人]
+    loginSaveInfo: 【云导信息】您的验证码是%s，十分钟内有效，请勿告知他人以免泄漏。
+
+test.smscode: 888123
+#
+#kafka:
+#  propertyFile: config/test/kafka.properties
+#  merculet:
+#    topicName: test.mw_behaviour_content_1
+#  business:
+#    topicName: test.mw_business_content_1
+#  score:
+#    topicName: test.mw_score_content_1
+#  partitionCount: 1
+
