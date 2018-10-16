@@ -1,8 +1,8 @@
 package com.vpis.asset.service.shiro.realm;
 
-import com.vpis.asset.entity.sys.TbUser;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.constant.BusinessConstant;
+import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.utils.Preconditions;
 import org.apache.shiro.authc.*;

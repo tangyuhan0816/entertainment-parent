@@ -2,9 +2,9 @@ package com.vpis.asset.controller.sys;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.sys.RegisterBean;
-import com.vpis.asset.entity.sys.TbUser;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SysUserService;
+import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;

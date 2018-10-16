@@ -1,9 +1,9 @@
 package com.vpis.asset;
 
-import com.vpis.asset.entity.sys.TbUser;
+import com.google.common.base.Predicate;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SysUserService;
-import com.google.common.base.Predicate;
+import com.vpis.common.entity.TbUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +46,7 @@ public class Swagger2 {
     @Bean
     public Docket createRestApi(){
 
-        TbUser sysUser = sysUserService.findByPhone("1888888888");
+        TbUser sysUser = sysUserService.findByPhone("17621476013");
         String token = "";
         if(sysUser!=null){
             token = jwtService.createJwt(sysUser);
@@ -63,7 +63,7 @@ public class Swagger2 {
         Predicate<String> pathSelectors = PathSelectors.any();
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.entertainment.asset.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.vpis.asset.controller"))
                 .paths(pathSelectors).build()
                 .globalOperationParameters(pars);
     }

@@ -4,25 +4,17 @@ import com.vpis.asset.bean.sys.RegisterBean;
 import com.vpis.asset.config.RedisOperation;
 import com.vpis.asset.config.YunpianSmsSender;
 import com.vpis.asset.constant.RedisConstant;
-import com.vpis.asset.dao.sys.SysRegisterEmailRepository;
-import com.vpis.asset.dao.sys.SysUserRepository;
 import com.vpis.asset.dao.sys.TbUserRepository;
-import com.vpis.asset.entity.sys.SysRegisterEmail;
-import com.vpis.asset.entity.sys.SysUser;
-import com.vpis.asset.entity.sys.TbUser;
 import com.vpis.asset.utils.StringUtil;
+import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.STException;
-import com.vpis.common.page.PageableRequest;
-import com.vpis.common.page.PageableResponse;
 import com.vpis.common.type.EmailSendStatus;
 import com.vpis.common.type.sys.UserStatus;
 import com.vpis.common.type.sys.UserTypeEnum;
-import com.vpis.common.utils.PageableConverter;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +30,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class SysUserService {
-
-    @Autowired
-    private SysUserRepository sysUserRepository;
-
-    @Autowired
-    private SysRegisterEmailRepository sysRegisterEmailRepository;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -73,20 +59,6 @@ public class SysUserService {
 
     @Value("${sms.text.loginSaveInfo}")
     private String loginContent;
-
-    public SysUser findSysUserByEmail(String email){
-        return sysUserRepository.findByEmailAndDeletedIsFalse(email);
-    }
-
-    public PageableResponse<SysUser> findByPage(PageableRequest pageable){
-        PageableResponse<SysUser> pageableResponse = new PageableResponse<SysUser>();
-        Page<SysUser> page = sysUserRepository.findAllByDeletedIsFalse(PageableConverter.toPageRequest(pageable));
-        pageableResponse.setList(page.getContent());
-        pageableResponse.setTotalCount(page.getSize());
-        pageableResponse.setTotalPages(page.getTotalPages());
-        return pageableResponse;
-    }
-
 
     /**
      * 发送注册短信验证码
@@ -235,12 +207,5 @@ public class SysUserService {
 //        sysRegisterEmailRepository.save(sysRegisterEmail);
 //        return ResponseContent.buildSuccess();
 //    }
-
-    public ResponseContent activation(String verifyCode){
-        SysRegisterEmail sysRegisterEmail = sysRegisterEmailRepository.findByVerifyCodeAndDeletedIsFalse(verifyCode);
-        sysRegisterEmail.setStatus(EmailSendStatus.EMAIL_VALIDATION_SUCCEE);
-        sysRegisterEmailRepository.save(sysRegisterEmail);
-        return ResponseContent.buildSuccess();
-    }
 
 }

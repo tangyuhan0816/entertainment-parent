@@ -1,7 +1,7 @@
 package com.vpis.asset.dao.sys;
 
-import com.vpis.asset.entity.sys.TbUser;
 import com.vpis.common.base.BaseEntityRepository;
+import com.vpis.common.entity.TbUser;
 import com.vpis.common.type.sys.UserTypeEnum;
 
 /**
