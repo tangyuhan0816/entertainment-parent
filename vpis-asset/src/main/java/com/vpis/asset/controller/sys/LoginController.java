@@ -8,6 +8,7 @@ import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
@@ -38,6 +39,7 @@ public class LoginController {
 
     private static final String LOGIN_MESSAGE = "login_success";
 
+    @ApiOperation(value = "登陆(支持验证码或密码) ，Owner: yuhan.tang")
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
     public ResponseContent login(HttpServletRequest request, @RequestBody RegisterBean sysUser){
         logger.info("login 请求参数:{}", JSONObject.toJSONString(sysUser));
@@ -54,6 +56,7 @@ public class LoginController {
         return ResponseContent.buildSuccess(LOGIN_MESSAGE,jwtService.createJwt(user));
     }
 
+    @ApiOperation(value = "发送注册验证码 ，Owner: yuhan.tang")
     @RequestMapping(path = "/send", method = {RequestMethod.POST})
     public ResponseContent send(@RequestParam("phone") String phone,
                                 @RequestParam("zone")String zone){
@@ -70,6 +73,7 @@ public class LoginController {
         return ResponseContent.buildSuccess();
     }
 
+    @ApiOperation(value = "发送登陆验证码 ，Owner: yuhan.tang")
     @RequestMapping(path = "/sendLogin", method = {RequestMethod.POST})
     public ResponseContent sendLogin(@RequestParam("phone") String phone,
                                 @RequestParam("zone")String zone){
@@ -88,6 +92,7 @@ public class LoginController {
 
 
 
+    @ApiOperation(value = "注册 ，Owner: yuhan.tang")
     @RequestMapping(path = "/register", method = {RequestMethod.POST})
     public ResponseContent register(HttpServletRequest request,
                                     @RequestBody RegisterBean registerBean) {

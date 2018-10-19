@@ -1,6 +1,7 @@
 package com.vpis.asset.bean.sys;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 注册bean
  */
+@ApiModel(value = "注册Bean")
 @Data
 public class RegisterBean implements Serializable{
 
