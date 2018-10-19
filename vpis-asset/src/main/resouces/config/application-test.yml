@@ -38,14 +38,14 @@ spring:
         max-idle: 25
         max-active: 8
       shutdown-timeout: 10000
-    timeout: 2592000
+    timeout: 10000
     database: 0
 
 server.port: 15060
 #
 jwt:
   sign_key: 783546576b45c9f2c8f41cb99d195d3e
-  expire_time: 1800
+  expire_time: 2592000
 
 shiro:
   credentialsSalt: c925b2643f15b14e6cb474027f8c13b8
