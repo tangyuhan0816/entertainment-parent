@@ -38,7 +38,7 @@ spring:
         max-idle: 25
         max-active: 8
       shutdown-timeout: 10000
-    timeout: 2592000
+    timeout: 10000
     database: 0
 
 server.port: 15060
