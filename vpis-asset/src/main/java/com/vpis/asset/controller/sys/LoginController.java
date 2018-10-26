@@ -1,8 +1,11 @@
 package com.vpis.asset.controller.sys;
 
 import com.alibaba.fastjson.JSONObject;
+import com.vpis.asset.bean.sys.BackPassBean;
 import com.vpis.asset.bean.sys.RegisterBean;
+import com.vpis.asset.constant.RedisConstant;
 import com.vpis.asset.service.jwt.JwtService;
+import com.vpis.asset.service.sys.SendSmsService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.STException;
@@ -35,6 +38,9 @@ public class LoginController {
     private SysUserService sysUserService;
 
     @Autowired
+    private SendSmsService sendSmsService;
+
+    @Autowired
     private JwtService jwtService;
 
     private static final String LOGIN_MESSAGE = "login_success";
@@ -45,7 +51,7 @@ public class LoginController {
         logger.info("login 请求参数:{}", JSONObject.toJSONString(sysUser));
         UsernamePasswordToken token = null;
         if(Preconditions.isNotBlank(sysUser.getSmsCode())){
-            sysUserService.checkLoginCode(sysUser);
+            sendSmsService.checkVerifyCode(sysUser.getSmsCode(),sysUser.getPhone(), RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY);
             TbUser tbUser = sysUserService.findByPhone(sysUser.getPhone());
             token = new UsernamePasswordToken(sysUser.getPhone(), tbUser.getPassWord());
         }else {
@@ -58,34 +64,32 @@ public class LoginController {
 
     @ApiOperation(value = "发送注册验证码 ，Owner: yuhan.tang")
     @RequestMapping(path = "/send", method = {RequestMethod.POST})
-    public ResponseContent send(@RequestParam("phone") String phone,
-                                @RequestParam("zone")String zone){
+    public ResponseContent send(@RequestParam("phone") String phone){
         try{
-            logger.info("send 请求参数:{},{}", phone,zone);
-            sysUserService.send(phone,zone);
+            logger.info("send 请求参数:{},{}", phone);
+            sysUserService.send(phone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());
         }catch(Exception e){
             logger.error(e.getMessage(),e);
-            return ResponseContent.buildFail(e.getMessage());
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
         }
         return ResponseContent.buildSuccess();
     }
 
     @ApiOperation(value = "发送登陆验证码 ，Owner: yuhan.tang")
     @RequestMapping(path = "/sendLogin", method = {RequestMethod.POST})
-    public ResponseContent sendLogin(@RequestParam("phone") String phone,
-                                @RequestParam("zone")String zone){
+    public ResponseContent sendLogin(@RequestParam("phone") String phone){
         try{
-            logger.info("sendLogin 请求参数:{},{}", phone,zone);
-            sysUserService.sendLogin(phone,zone);
+            logger.info("sendLogin 请求参数:{}", phone);
+            sysUserService.sendLogin(phone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());
         }catch(Exception e){
             logger.error(e.getMessage(),e);
-            return ResponseContent.buildFail(e.getMessage());
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
         }
         return ResponseContent.buildSuccess();
     }
@@ -104,7 +108,24 @@ public class LoginController {
             return ResponseContent.buildFail(e.getMessage());
         }catch(Exception e){
             logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+        return ResponseContent.buildSuccess();
+    }
+
+    @ApiOperation(value = "找回密码 ，Owner: yuhan.tang")
+    @RequestMapping(path = "/backPass", method = {RequestMethod.POST})
+    public ResponseContent backPass(HttpServletRequest request,
+                                    @RequestBody BackPassBean bean) {
+        try{
+            logger.info("backPass 请求参数:{}", bean);
+            sysUserService.backPass(bean);
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
         }
         return ResponseContent.buildSuccess();
     }

@@ -74,4 +74,19 @@ public class RedisOperation {
         return null;
     }
 
+
+    public void saveLoginVerifyCode(String mobile, String verifyCode, String vkey) {
+        BoundValueOperations valueOperations = redisTemplate.boundValueOps(vkey + mobile);
+        valueOperations.set(verifyCode, 10L, TimeUnit.MINUTES);
+    }
+
+    public String getVerifyCode(String mobile, String vkey) {
+        BoundValueOperations valueOperations = redisTemplate.boundValueOps(vkey + mobile);
+        Object obj = valueOperations.get();
+        if (null != obj) {
+            return (String) obj;
+        }
+        return null;
+    }
+
 }

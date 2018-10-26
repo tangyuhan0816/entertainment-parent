@@ -8,7 +8,7 @@ spring:
   profiles: test
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://118.184.217.250:3306/advertplansys?Unicode=true&amp;characterEncoding=UTF-8
+    url: jdbc:mysql://118.184.217.250:3306/vsprodb?Unicode=true&amp;characterEncoding=UTF-8
     username: root
     password: X315134.y
     jmx-enabled: true

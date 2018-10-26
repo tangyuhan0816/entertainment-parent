@@ -17,11 +17,29 @@ import lombok.Data;
 @Data
 public class ResponseContent<T> {
 
+    /**
+     * 成功返回状态码
+     */
     public static final int SUCCESS_CODE = 200;
-    public static final int FAIL_CODE = 500;
+
+    /**
+     * 系统异常返回状态码(比如空指针)
+     */
     public static final int INTERNAL_SERVER_ERROR_CODE = 500;
+
+    /**
+     * 业务异常返回状态码
+     */
     public static final int BUSINESS_EXCEPTION_CODE = 1000;
+
+    /**
+     * shiro异常返回状态码(比如登陆密码输入错误)
+     */
     public static final int SHIRO_EXCEPTION_CODE = 401;
+
+    /**
+     * 无权限返回状态码
+     */
     public static final int NO_PERMISSION = 961;
     /**
      * 0
@@ -80,15 +98,15 @@ public class ResponseContent<T> {
     }
 
     public static ResponseContent buildFail(String message) {
-        return new ResponseContent(FAIL_CODE, message);
+        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
     }
 
     public static ResponseContent buildFail(String message, Object data) {
-        return new ResponseContent(FAIL_CODE, message, data);
+        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message, data);
     }
 
     public static ResponseContent buildServerError(String message) {
-        return new ResponseContent(FAIL_CODE, message);
+        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
     }
 
     public static ResponseContent buildCustomizedException(int code, String message) {

@@ -1,6 +1,7 @@
-package com.vpis.asset.bean;
+package com.vpis.asset.bean.sys;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vpis.asset.bean.base.BaseBean;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import lombok.Data;
  *  @Description:
  */
 @Data
-public class LoginBean {
+public class LoginBean extends BaseBean{
 
     @ApiModelProperty("手机号")
     private String phone;
@@ -24,8 +25,4 @@ public class LoginBean {
     @ApiModelProperty("验证码")
     @JsonProperty("sms_code")
     private String smsCode;
-
-    @ApiModelProperty("时区")
-    @JsonProperty("zone_code")
-    private String zoneCode;
 }

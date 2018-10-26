@@ -6,6 +6,8 @@ import com.vpis.common.entity.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.utils.Preconditions;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -64,17 +66,17 @@ public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
     }
 
     /**
-     * 重写密码验证的方法
+     * 重写 setCredentialsMatcher 方法为自定义的 Realm 设置 hash 验证方法
      * @param credentialsMatcher
      */
-    //TODO: 加盐串
-//    @Override
-//    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
-//        // 重写 setCredentialsMatcher 方法为自定义的 Realm 设置 hash 验证方法
-//        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
-//        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
-//        hashedCredentialsMatcher.setHashIterations(10); //加密次数
-//        super.setCredentialsMatcher(hashedCredentialsMatcher);
-//    }
+    @Override
+    public void setCredentialsMatcher(CredentialsMatcher credentialsMatcher) {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        //加密类型
+        hashedCredentialsMatcher.setHashAlgorithmName("MD5");
+        //加密次数
+        hashedCredentialsMatcher.setHashIterations(10);
+        super.setCredentialsMatcher(hashedCredentialsMatcher);
+    }
 
 }

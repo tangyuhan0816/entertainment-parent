@@ -1,11 +1,10 @@
 package com.vpis.asset.bean.sys;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vpis.asset.bean.base.BaseBean;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-
-import java.io.Serializable;
 
 /**
  *  @Author: Yuhan.Tang
@@ -17,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "注册Bean")
 @Data
-public class RegisterBean implements Serializable{
+public class RegisterBean extends BaseBean{
 
     @ApiModelProperty("手机号")
     @JsonProperty("phone")
@@ -30,10 +29,6 @@ public class RegisterBean implements Serializable{
     @ApiModelProperty("密码")
     @JsonProperty("password")
     private String password;
-
-    @ApiModelProperty("时区")
-    @JsonProperty("zone_code")
-    private String zoneCode;
 
     @ApiModelProperty("代理商区域编号")
     @JsonProperty("agent_area")

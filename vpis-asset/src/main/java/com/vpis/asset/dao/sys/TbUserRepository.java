@@ -15,12 +15,12 @@ import com.vpis.common.type.sys.UserTypeEnum;
 public interface TbUserRepository extends BaseEntityRepository<TbUser>{
 
 
-    TbUser findByDeletedIsFalseAndPhoneNum(String phoneNum);
+    TbUser findByPhoneNumAndDeletedIsFalse(String phoneNum);
 
     /**
      * 查询区域管理员
      * @param agentArea
      * @return
      */
-    TbUser findByDeletedIsFalseAndUserTypeAndAgentArea(UserTypeEnum userTypeEnum ,String agentArea);
+    TbUser findByAgentAreaAndUserTypeAndDeletedIsFalse(UserTypeEnum userTypeEnum ,String agentArea);
 }
