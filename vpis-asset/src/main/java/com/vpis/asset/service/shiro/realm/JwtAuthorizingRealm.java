@@ -4,7 +4,7 @@ import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.shiro.token.JwtToken;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.constant.BusinessConstant;
-import com.vpis.common.entity.TbUser;
+import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.utils.Preconditions;
 import org.apache.shiro.authc.AuthenticationException;

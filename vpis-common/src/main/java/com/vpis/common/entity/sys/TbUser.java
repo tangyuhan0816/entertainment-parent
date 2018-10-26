@@ -1,4 +1,4 @@
-package com.vpis.common.entity;
+package com.vpis.common.entity.sys;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -74,12 +74,14 @@ public class TbUser extends BaseEntity{
     @Column(name = "email")
     private String email;
 
+    @Enumerated(EnumType.ORDINAL)
     @ApiModelProperty(value = "状态", required = true)
     @JSONField(name = "status")
     @JsonProperty("status")
     @Column(name = "status")
     private UserStatus status;
 
+    @Enumerated(EnumType.ORDINAL)
     @ApiModelProperty(value = "用户类型", required = true)
     @JSONField(name = "user_type")
     @JsonProperty("user_type")

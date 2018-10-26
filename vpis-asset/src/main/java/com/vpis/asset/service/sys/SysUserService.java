@@ -2,27 +2,19 @@ package com.vpis.asset.service.sys;
 
 import com.vpis.asset.bean.sys.BackPassBean;
 import com.vpis.asset.bean.sys.RegisterBean;
-import com.vpis.asset.config.RedisOperation;
-import com.vpis.asset.config.YunpianSmsSender;
 import com.vpis.asset.constant.RedisConstant;
-import com.vpis.asset.dao.sys.TbUserRepository;
-import com.vpis.asset.utils.StringUtil;
-import com.vpis.common.entity.TbUser;
+import com.vpis.asset.repository.sys.TbUserRepository;
+import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.exception.STException;
-import com.vpis.common.type.EmailSendStatus;
 import com.vpis.common.type.sys.UserStatus;
 import com.vpis.common.type.sys.UserTypeEnum;
 import com.vpis.common.utils.Preconditions;
-import com.vpis.common.utils.ResponseContent;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  *  @Author: Yuhan.Tang
@@ -96,7 +88,7 @@ public class SysUserService {
         TbUser adminUser = null;
         if(Preconditions.isNotBlank(registerBean.getAgentArea())){
             //查询管理员
-            adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(UserTypeEnum.ADMIN_USER, registerBean.getAgentArea());
+            adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
             if(Preconditions.isNotBlank(adminUser)){
                 tbUser.setParentId(adminUser.getUserId());
             }

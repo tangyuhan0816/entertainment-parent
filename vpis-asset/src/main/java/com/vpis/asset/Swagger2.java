@@ -3,7 +3,7 @@ package com.vpis.asset;
 import com.google.common.base.Predicate;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SysUserService;
-import com.vpis.common.entity.TbUser;
+import com.vpis.common.entity.sys.TbUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,7 +46,7 @@ public class Swagger2 {
     @Bean
     public Docket createRestApi(){
 
-        TbUser sysUser = sysUserService.findByPhone("17621476013");
+        TbUser sysUser = sysUserService.findByPhone("13888888888");
         String token = "";
         if(sysUser!=null){
             token = jwtService.createJwt(sysUser);

@@ -14,7 +14,7 @@ import lombok.Data;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 注册bean
  */
-@ApiModel(value = "注册Bean")
+@ApiModel(value = "注册登陆通用Bean")
 @Data
 public class RegisterBean extends BaseBean{
 

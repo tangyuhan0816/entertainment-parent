@@ -6,7 +6,7 @@
 ///**
 // *  @Author: Yuhan.Tang
 // *  @ClassName: SysRegisterEmailRepository
-// *  @package: com.entertainment.asset.dao.sys
+// *  @package: com.entertainment.asset.repository.sys
 // *  @Date: Created in 2018/8/3 下午4:31
 // *  @email yuhan.tang@magicwindow.cn
 // *  @Description: 

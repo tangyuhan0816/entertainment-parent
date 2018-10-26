@@ -2,7 +2,7 @@
 //
 //import com.vpis.asset.annotation.CachePutAnnotation;
 //import com.vpis.asset.annotation.CacheReadAnnotation;
-//import com.vpis.asset.dao.other.AreaRepository;
+//import com.vpis.asset.repository.other.AreaRepository;
 //import com.vpis.asset.entity.other.Area;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.context.ApplicationContext;

@@ -7,7 +7,7 @@ import com.vpis.asset.constant.RedisConstant;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SendSmsService;
 import com.vpis.asset.service.sys.SysUserService;
-import com.vpis.common.entity.TbUser;
+import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;
@@ -93,8 +93,6 @@ public class LoginController {
         }
         return ResponseContent.buildSuccess();
     }
-
-
 
     @ApiOperation(value = "注册 ，Owner: yuhan.tang")
     @RequestMapping(path = "/register", method = {RequestMethod.POST})
