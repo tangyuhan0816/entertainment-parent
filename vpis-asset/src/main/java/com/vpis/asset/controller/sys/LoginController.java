@@ -94,6 +94,22 @@ public class LoginController {
         return ResponseContent.buildSuccess();
     }
 
+    @ApiOperation(value = "发送找回密码验证码 ，Owner: yuhan.tang")
+    @RequestMapping(path = "/sendBack", method = {RequestMethod.POST})
+    public ResponseContent sendBack(@RequestParam("phone") String phone){
+        try{
+            logger.info("sendBack 请求参数:{}", phone);
+            sysUserService.sendBack(phone);
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+        return ResponseContent.buildSuccess();
+    }
+
     @ApiOperation(value = "注册 ，Owner: yuhan.tang")
     @RequestMapping(path = "/register", method = {RequestMethod.POST})
     public ResponseContent register(HttpServletRequest request,
