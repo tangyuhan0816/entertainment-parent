@@ -38,7 +38,7 @@ public class HouseVo extends BaseBean{
     @JsonProperty("heat")
     private Integer heat;
 
-    @ApiModelProperty(value = "距离")
+    @ApiModelProperty(value = "距离(单位：米)")
     @JSONField(name = "distance")
     @JsonProperty("distance")
     private BigDecimal distance;

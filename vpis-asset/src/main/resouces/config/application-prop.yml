@@ -62,6 +62,13 @@ sms:
     loginSaveInfo: 【云导信息】您的验证码是%s，十分钟内有效，请勿告知他人以免泄漏。
 
 test.smscode: 888123
+
+qiniu:
+  access_key: Qc0J2KJ2D1RaXlSNOMcs0Y2ACeWE0AnTnRxg69DS
+  secret_key: fzOzfMVAQM137YQFgIv6iuTUK7qIB2nKIYThXrgW
+  bucket:
+    name: yundao-image-test
+    domain: https://og3jro9lh.qnssl.com/
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

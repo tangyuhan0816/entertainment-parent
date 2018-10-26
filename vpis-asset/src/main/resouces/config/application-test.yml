@@ -63,6 +63,13 @@ sms:
     backPassInfo: 【云导信息】您正在找回密码，验证码为：%s，请不要把验证码泄露给其他人。如非本人操作，请忽略本信息。
 
 test.smscode: 888123
+
+qiniu:
+  access_key: Qc0J2KJ2D1RaXlSNOMcs0Y2ACeWE0AnTnRxg69DS
+  secret_key: fzOzfMVAQM137YQFgIv6iuTUK7qIB2nKIYThXrgW
+  bucket:
+    name: yundao-image-test
+    domain: https://og3jro9lh.qnssl.com/
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
