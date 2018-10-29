@@ -43,6 +43,7 @@ spring:
     timeout: 10000
     database: 0
 #
+
 jwt:
   sign_key: 783546576b45c9f2c8f41cb99d195d3e
   expire_time: 2592000
@@ -68,8 +69,17 @@ qiniu:
   access_key: Qc0J2KJ2D1RaXlSNOMcs0Y2ACeWE0AnTnRxg69DS
   secret_key: fzOzfMVAQM137YQFgIv6iuTUK7qIB2nKIYThXrgW
   bucket:
-    name: yundao-image-test
-    domain: https://og3jro9lh.qnssl.com/
+    image:
+      name: yundao-image-test
+      domain: http://phchhnlcc.bkt.clouddn.com/
+    video:
+      name: yundao-video-test
+      domain: http://phchf9afi.bkt.clouddn.com/
+
+api:
+  aliyun:
+    gps: http://gc.ditu.aliyun.com/regeocoding?l=%s,%s&type=010
+
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

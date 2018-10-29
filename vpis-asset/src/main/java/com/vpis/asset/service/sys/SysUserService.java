@@ -90,7 +90,7 @@ public class SysUserService {
             //查询管理员
             adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
             if(Preconditions.isNotBlank(adminUser)){
-                tbUser.setParentId(adminUser.getUserId());
+                tbUser.setParentId(adminUser.getId());
             }
         }
         String password = (new SimpleHash("MD5", registerBean.getPassword(), ByteSource.Util.bytes(credentialsSalt), 10)).toString();
@@ -138,6 +138,10 @@ public class SysUserService {
         }
         tbUserRepository.save(tbUser);
 
+    }
+
+    public static void main(String[] args) {
+        System.out.println((new SimpleHash("MD5", "abcd1234", ByteSource.Util.bytes("c925b2643f15b14e6cb474027f8c13b8"), 10)).toString());
     }
 
 }

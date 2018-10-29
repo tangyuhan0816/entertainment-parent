@@ -30,51 +30,73 @@ public class QiNiuUtils {
 
     private static String secretKey;
 
-    private static String bucket;
+    private static String bucketImageName;
 
-    private static String domain;
+    private static String bucketVideoName;
 
-    @Value("${qiniu.image.access_key}")
-    public void setAccessKey(String iaccessKey) {
+    private static String domainImageName;
+
+    private static String domainVideoName;
+
+    @Value("${qiniu.access_key}")
+    private void setAccessKey(String iaccessKey) {
         accessKey = iaccessKey;
     }
 
-    @Value("${qiniu.image.secret_key}")
-    public void setSecretKey(String isecretKey) {
+    @Value("${qiniu.secret_key}")
+    private void setSecretKey(String isecretKey) {
         secretKey = isecretKey;
     }
 
-    @Value("${qiniu.image.bucket}")
-    public void setBucket(String ibucket) {
-        bucket = ibucket;
+    @Value("${qiniu.bucket.image.name}")
+    private void setBucketImageName(String ibucketImageName) {
+        bucketImageName = ibucketImageName;
     }
 
-    @Value("${qiniu.image.domain}")
-    public void setDomain(String idomain) {
-        domain = idomain;
+    @Value("${qiniu.bucket.image.domain}")
+    private void setDomainImageName(String idomainImageName) {
+        domainImageName = idomainImageName;
     }
 
-    public static String uploadVideo(MultipartFile file) throws IOException {
+    @Value("${qiniu.bucket.video.name}")
+    private void setBucketVideoName(String ibucketVideoName) {
+        bucketVideoName = ibucketVideoName;
+    }
+
+    @Value("${qiniu.bucket.video.domain}")
+    private void setDomainVideoName(String idomainVideoName) {
+        domainVideoName = idomainVideoName;
+    }
+
+    public String uploadImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String extName = getExtensionName(fileName);
         String resourceName = "vpis_image_" + UUID.randomUUID().toString().replaceAll("-","") + "." + extName;
-        return upload(file,resourceName);
+        return upload(file,resourceName ,Boolean.FALSE);
     }
 
-    public static String uploadImage(MultipartFile file) throws IOException {
+    public String uploadVideo(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String extName = getExtensionName(fileName);
         String resourceName = "vpis_video_" + UUID.randomUUID().toString().replaceAll("-","") + "." + extName;
-        return upload(file,resourceName);
+        return upload(file,resourceName, Boolean.TRUE);
     }
 
-    public static String upload(MultipartFile file,String resourceName) throws IOException {
+    private String upload(MultipartFile file,String resourceName, Boolean isImage) throws IOException {
 
         Configuration cfg = new Configuration(Zone.zone0());
         UploadManager uploadManager = new UploadManager(cfg);
 
         Auth auth = Auth.create(accessKey, secretKey);
-        String upToken = auth.uploadToken(bucket);
+        String upToken = null;
+        String iDomain = null;
+        if(isImage){
+            iDomain = domainImageName;
+            upToken = auth.uploadToken(bucketImageName);
+        }else {
+            iDomain = domainVideoName;
+            upToken = auth.uploadToken(bucketVideoName);
+        }
 
         byte[] uploadBytes = file.getBytes();
         Response response = uploadManager.put(uploadBytes, resourceName, upToken);
@@ -83,13 +105,13 @@ public class QiNiuUtils {
         DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
         String url = null;
         if (Preconditions.isNotBlank(putRet.hash)) {
-            url = domain + resourceName;
+            url = iDomain + resourceName;
         }
 
         return url;
     }
 
-    private static String getExtensionName(String filename) {
+    private String getExtensionName(String filename) {
         if ((filename != null) && (filename.length() > 0)) {
             int dot = filename.lastIndexOf('.');
             if ((dot > -1) && (dot < (filename.length() - 1))) {

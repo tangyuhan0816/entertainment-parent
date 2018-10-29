@@ -3,10 +3,12 @@ package com.vpis.asset.service.house;
 import com.vpis.asset.bean.house.HouseBean;
 import com.vpis.asset.bean.vo.HouseVo;
 import com.vpis.asset.controller.sys.LoginController;
-import com.vpis.asset.dao.houses.HousesDao;
-import com.vpis.asset.repository.house.HousesRepository;
-import com.vpis.common.entity.house.Houses;
+import com.vpis.asset.dao.houses.HouseDao;
+import com.vpis.asset.repository.house.HouseRepository;
+import com.vpis.asset.service.common.CommonService;
+import com.vpis.common.entity.house.House;
 import com.vpis.common.exception.BusinessException;
+import com.vpis.common.exception.HttpServiceException;
 import com.vpis.common.exception.STException;
 import com.vpis.common.page.PageableResponse;
 import com.vpis.common.page.SortDirection;
@@ -15,11 +17,9 @@ import com.vpis.common.utils.PageableConverter;
 import com.vpis.common.utils.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,23 +34,28 @@ import java.util.List;
  *  @Description:
  */
 @Service
-public class HousesService {
+public class HouseService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
-
-    @Autowired
-    private HousesRepository housesRepository;
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private HousesDao housesDao;
+    private HouseRepository housesRepository;
 
-    public PageableResponse<HouseVo> page(HouseBean bean) {
+    @Autowired
+    private HouseDao housesDao;
 
-        Page<Houses> page = null;
+    @Autowired
+    private CommonService commonService;
+
+    public PageableResponse<HouseVo> page(HouseBean bean) throws HttpServiceException, InterruptedException {
+
+        Page<House> page = null;
 
         if (Preconditions.isBlank(bean.getPageableRequest())) {
             throw new BusinessException("page is null");
         }
+
+        String areaCode = commonService.positioning(bean.getLatitudeY().toString(),bean.getLongitudeX().toString());
 
         PageableResponse<HouseVo> response = new PageableResponse<>();
 
@@ -70,7 +75,7 @@ public class HousesService {
 
             PageRequest pageRequest = PageableConverter.toPageRequest(bean.getPageableRequest());
 
-            page = housesRepository.findByDeletedIsFalse(pageRequest);
+            page = housesRepository.findByDistrictAndDeletedIsFalse(areaCode,pageRequest);
 
         } else if (bean.getIsPrice()) {
 
@@ -78,11 +83,11 @@ public class HousesService {
 
             PageRequest pageRequest = PageableConverter.toPageRequest(bean.getPageableRequest());
 
-            page = housesRepository.findByDeletedIsFalse(pageRequest);
+            page = housesRepository.findByDistrictAndDeletedIsFalse(areaCode,pageRequest);
 
         } else if (bean.getIsNear()) {
 
-            return housesDao.near(bean.getLongitudeX(), bean.getLatitudeY(), bean.getPageableRequest().getPageNumber(), bean.getPageableRequest().getPageSize());
+            return housesDao.near(areaCode,bean.getLongitudeX(), bean.getLatitudeY(), bean.getPageableRequest().getPageNumber(), bean.getPageableRequest().getPageSize());
 
         } else {
 
@@ -91,11 +96,11 @@ public class HousesService {
 
         List<HouseVo> list = new ArrayList<>();
 
-        for (Houses houses : page.getContent()) {
+        for (House houses : page.getContent()) {
 
             HouseVo houseVo = new HouseVo();
 
-            BeanUtils.copyProperties(houses, houseVo);
+            houseVo.conver(houses);
 
             list.add(houseVo);
         }
@@ -109,4 +114,14 @@ public class HousesService {
         return response;
     }
 
+    public HouseVo findDetail(Long id){
+        House house = housesRepository.findByIdAndDeletedIsFalse(id);
+        if(Preconditions.isBlank(house)){
+            logger.error("house not found =========> {}",id);
+            throw new STException("house not found");
+        }
+        HouseVo houseVo = new HouseVo();
+        houseVo.converDetail(house);
+        return houseVo;
+    }
 }

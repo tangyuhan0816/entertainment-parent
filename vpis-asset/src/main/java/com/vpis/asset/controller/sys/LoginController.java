@@ -11,6 +11,7 @@ import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/")
+@Api(description = "登陆注册接口")
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -48,7 +50,7 @@ public class LoginController {
     @ApiOperation(value = "登陆(支持验证码或密码) ，Owner: yuhan.tang")
     @RequestMapping(path = "/login", method = {RequestMethod.POST})
     public ResponseContent login(HttpServletRequest request, @RequestBody RegisterBean sysUser){
-        logger.info("login 请求参数:{}", JSONObject.toJSONString(sysUser));
+        logger.info("登陆 login ======> {}", JSONObject.toJSONString(sysUser));
         UsernamePasswordToken token = null;
         if(Preconditions.isNotBlank(sysUser.getSmsCode())){
             sendSmsService.checkVerifyCode(sysUser.getSmsCode(),sysUser.getPhone(), RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY);
@@ -66,7 +68,7 @@ public class LoginController {
     @RequestMapping(path = "/send", method = {RequestMethod.POST})
     public ResponseContent send(@RequestParam("phone") String phone){
         try{
-            logger.info("send 请求参数:{},{}", phone);
+            logger.info("发送注册验证码 send =====> {},{}", phone);
             sysUserService.send(phone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -82,7 +84,7 @@ public class LoginController {
     @RequestMapping(path = "/sendLogin", method = {RequestMethod.POST})
     public ResponseContent sendLogin(@RequestParam("phone") String phone){
         try{
-            logger.info("sendLogin 请求参数:{}", phone);
+            logger.info("发送登陆验证码 sendLogin =======> {}", phone);
             sysUserService.sendLogin(phone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -98,7 +100,7 @@ public class LoginController {
     @RequestMapping(path = "/sendBack", method = {RequestMethod.POST})
     public ResponseContent sendBack(@RequestParam("phone") String phone){
         try{
-            logger.info("sendBack 请求参数:{}", phone);
+            logger.info("发送找回密码验证码 sendBack ========> {}", phone);
             sysUserService.sendBack(phone);
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -115,7 +117,7 @@ public class LoginController {
     public ResponseContent register(HttpServletRequest request,
                                     @RequestBody RegisterBean registerBean) {
         try{
-            logger.info("register 请求参数:{}", registerBean);
+            logger.info("注册 register =======> {}", registerBean);
             sysUserService.register(registerBean);
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -132,7 +134,7 @@ public class LoginController {
     public ResponseContent backPass(HttpServletRequest request,
                                     @RequestBody BackPassBean bean) {
         try{
-            logger.info("backPass 请求参数:{}", bean);
+            logger.info("找回密码 backPass ========> {}", bean);
             sysUserService.backPass(bean);
         }catch(STException e){
             logger.error(e.getMessage(),e);

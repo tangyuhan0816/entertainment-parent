@@ -28,6 +28,14 @@ public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
+    @JSONField(name = "id")
+    @JsonProperty("id")
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "create_date_time", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

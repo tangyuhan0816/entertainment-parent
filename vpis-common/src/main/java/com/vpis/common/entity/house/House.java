@@ -8,10 +8,11 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *  @Author: Yuhan.Tang
- *  @ClassName: Houses
+ *  @ClassName: House
  *  @package: com.vpis.common.entity.house
  *  @Date: Created in 2018/10/26 上午11:13
  *  @email yuhan.tang@magicwindow.cn
@@ -19,16 +20,8 @@ import java.math.BigDecimal;
  */
 @Data
 @Entity
-@Table(name = "houses")
-public class Houses extends BaseEntity{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "主键")
-    @JSONField(name = "house_id")
-    @JsonProperty("house_id")
-    @Column(name = "house_id")
-    private Long houseId;
+@Table(name = "house")
+public class House extends BaseEntity{
 
     @JSONField(name = "user_id")
     @JsonProperty("user_id")
@@ -41,11 +34,29 @@ public class Houses extends BaseEntity{
     @Column(name = "house_name")
     private String houseName;
 
-    @ApiModelProperty(value = "均价")
+    @ApiModelProperty(value = "原价")
+    @JSONField(name = "original_price")
+    @JsonProperty("original_price")
+    @Column(name = "original_price")
+    private BigDecimal originalPrice;
+
+    @ApiModelProperty(value = "市场价")
+    @JSONField(name = "market_price")
+    @JsonProperty("market_price")
+    @Column(name = "market_price")
+    private BigDecimal marketPrice;
+
+    @ApiModelProperty(value = "小区均价")
     @JSONField(name = "average_price")
     @JsonProperty("average_price")
     @Column(name = "average_price")
     private BigDecimal averagePrice;
+
+    @ApiModelProperty(value = "价格")
+    @JSONField(name = "price")
+    @JsonProperty("price")
+    @Column(name = "price")
+    private BigDecimal price;
 
     @ApiModelProperty(value = "总户数")
     @JSONField(name = "house_num")
@@ -70,6 +81,18 @@ public class Houses extends BaseEntity{
     @JsonProperty("advice_num")
     @Column(name = "advice_num")
     private Integer adviceNum;
+
+    @ApiModelProperty(value = "入住时间")
+    @JSONField(name = "check_in_date")
+    @JsonProperty("check_in_date")
+    @Column(name = "check_in_date")
+    private Date checkInDate;
+
+    @ApiModelProperty(value = "小区平均年龄")
+    @JSONField(name = "average_age")
+    @JsonProperty("average_age")
+    @Column(name = "average_age")
+    private Integer averageAge;
 
     @ApiModelProperty(value = "banner图路径")
     @JSONField(name = "banner_url")
@@ -105,5 +128,35 @@ public class Houses extends BaseEntity{
     @JsonProperty("heat")
     @Column(name = "heat")
     private Integer heat;
+
+    @ApiModelProperty(value = "租期开始时间")
+    @JSONField(name = "start_time")
+    @JsonProperty("start_time")
+    @Column(name = "start_time")
+    private Date startTime;
+
+    @ApiModelProperty(value = "租期结束时间")
+    @JSONField(name = "end_time")
+    @JsonProperty("end_time")
+    @Column(name = "end_time")
+    private Date endTime;
+
+    @ApiModelProperty(value = "省编码")
+    @JSONField(name = "province")
+    @JsonProperty("province")
+    @Column(name = "province")
+    private String province;
+
+    @ApiModelProperty(value = "市编码")
+    @JSONField(name = "city")
+    @JsonProperty("city")
+    @Column(name = "city")
+    private String city;
+
+    @ApiModelProperty(value = "区(县)编码")
+    @JSONField(name = "district")
+    @JsonProperty("district")
+    @Column(name = "district")
+    private String district;
 
 }

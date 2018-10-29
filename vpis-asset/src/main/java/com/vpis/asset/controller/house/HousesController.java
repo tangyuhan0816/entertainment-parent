@@ -1,10 +1,12 @@
 package com.vpis.asset.controller.house;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.house.HouseBean;
-import com.vpis.asset.service.house.HousesService;
+import com.vpis.asset.service.house.HouseService;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.ResponseContent;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,18 +23,35 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/v1/vpis/houses/")
+@Api(description = "楼盘")
 public class HousesController {
 
     private static final Logger logger = LoggerFactory.getLogger(HousesController.class);
 
     @Autowired
-    private HousesService housesService;
+    private HouseService housesService;
 
     @ApiOperation(value = "楼盘分页查询 ，Owner: yuhan.tang")
     @RequestMapping(path = "/page", method = {RequestMethod.POST})
     public ResponseContent page(@RequestBody HouseBean bean){
         try{
+            logger.info("楼盘分页查询 page =======> {}", JSONObject.toJSONString(bean));
             return ResponseContent.buildSuccess(housesService.page(bean));
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "楼盘详情查询 ，Owner: yuhan.tang")
+    @RequestMapping(path = "/find/detail", method = {RequestMethod.POST})
+    public ResponseContent page(@RequestParam(value = "id") Long id){
+        try{
+            logger.info("楼盘详情查询 detail =======> {}", id);
+            return ResponseContent.buildSuccess(housesService.findDetail(id));
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());

@@ -24,14 +24,6 @@ import java.util.Date;
 @Table(name = "tb_user")
 public class TbUser extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty(value = "主键")
-    @JSONField(name = "user_id")
-    @JsonProperty("user_id")
-    @Column(name = "user_id")
-    private Long userId;
-
     @ApiModelProperty(value = "权限ID", required = true)
     @JSONField(name = "role_id")
     @JsonProperty("role_id")
@@ -55,12 +47,6 @@ public class TbUser extends BaseEntity{
     @JsonProperty("nick")
     @Column(name = "nick")
     private String nick;
-
-    @ApiModelProperty(value = "姓名", required = true)
-    @JSONField(name = "name")
-    @JsonProperty("name")
-    @Column(name = "name")
-    private String name;
 
     @ApiModelProperty(value = "管理员ID", required = true)
     @JSONField(name = "parent_id")
