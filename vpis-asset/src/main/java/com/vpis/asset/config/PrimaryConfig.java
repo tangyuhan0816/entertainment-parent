@@ -21,12 +21,12 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
- * @author Forest Wang
- * @package cn.magicwindow.meta.config
- * @class PrimaryConfig
- * @email forest@magicwindow.cn
- * @date 24/01/2017 15:18
- * @description
+ *  @Author: Yuhan.Tang
+ *  @ClassName: PrimaryConfig
+ *  @package: com.vpis.asset.config
+ *  @Date: Created in 2018/10/30 下午3:31
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
  */
 @Configuration
 @EnableTransactionManagement

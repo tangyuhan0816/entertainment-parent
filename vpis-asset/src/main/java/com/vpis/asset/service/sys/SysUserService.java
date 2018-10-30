@@ -50,6 +50,10 @@ public class SysUserService {
         return tbUserRepository.findByPhoneNumAndDeletedIsFalse(phone);
     }
 
+    public TbUser findById(Long userId){
+        return tbUserRepository.findByUserIdAndDeletedIsFalse(userId);
+    }
+
     /**
      * 发送注册短信验证码
      * @param phone
@@ -90,7 +94,7 @@ public class SysUserService {
             //查询管理员
             adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
             if(Preconditions.isNotBlank(adminUser)){
-                tbUser.setParentId(adminUser.getId());
+                tbUser.setParentId(adminUser.getUserId());
             }
         }
         String password = (new SimpleHash("MD5", registerBean.getPassword(), ByteSource.Util.bytes(credentialsSalt), 10)).toString();

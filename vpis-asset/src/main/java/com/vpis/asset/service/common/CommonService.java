@@ -73,7 +73,7 @@ public class CommonService {
     }
 
     public String getUploadKey(String key){
-        Object obj = redisTemplate.opsForValue().get(key);
+        Object obj = redisTemplate.opsForValue().get(String.format("%s%s",key,IMAGE_KEY));
         if(Preconditions.isBlank(obj)){
             return "同步中，请稍后重试";
         }

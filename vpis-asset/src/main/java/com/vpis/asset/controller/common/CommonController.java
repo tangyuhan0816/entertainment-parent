@@ -1,6 +1,5 @@
 package com.vpis.asset.controller.common;
 
-import com.vpis.asset.controller.house.HousesController;
 import com.vpis.asset.service.common.CommonService;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.ResponseContent;

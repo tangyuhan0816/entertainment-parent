@@ -24,6 +24,15 @@ import java.util.Date;
 @Table(name = "tb_user")
 public class TbUser extends BaseEntity{
 
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
+    @JSONField(name = "user_id")
+    @JsonProperty("user_id")
+    @Column(name = "user_id")
+    private Long userId;
+
     @ApiModelProperty(value = "权限ID", required = true)
     @JSONField(name = "role_id")
     @JsonProperty("role_id")

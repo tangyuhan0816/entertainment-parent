@@ -73,18 +73,18 @@ public class QiNiuUtils {
     public String uploadImage(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String extName = getExtensionName(fileName);
-        String resourceName = "vpis_image_" + UUID.randomUUID().toString().replaceAll("-","") + "." + extName;
-        return upload(file,resourceName ,Boolean.FALSE);
+        String resourceName = "vpis_image_" + UUID.randomUUID().toString().replaceAll("-", "") + "." + extName;
+        return upload(file, resourceName, Boolean.TRUE);
     }
 
     public String uploadVideo(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
         String extName = getExtensionName(fileName);
-        String resourceName = "vpis_video_" + UUID.randomUUID().toString().replaceAll("-","") + "." + extName;
-        return upload(file,resourceName, Boolean.TRUE);
+        String resourceName = "vpis_video_" + UUID.randomUUID().toString().replaceAll("-", "") + "." + extName;
+        return upload(file, resourceName, Boolean.FALSE);
     }
 
-    private String upload(MultipartFile file,String resourceName, Boolean isImage) throws IOException {
+    private String upload(MultipartFile file, String resourceName, Boolean isImage) throws IOException {
 
         Configuration cfg = new Configuration(Zone.zone0());
         UploadManager uploadManager = new UploadManager(cfg);
@@ -92,10 +92,10 @@ public class QiNiuUtils {
         Auth auth = Auth.create(accessKey, secretKey);
         String upToken = null;
         String iDomain = null;
-        if(isImage){
+        if (isImage) {
             iDomain = domainImageName;
             upToken = auth.uploadToken(bucketImageName);
-        }else {
+        } else {
             iDomain = domainVideoName;
             upToken = auth.uploadToken(bucketVideoName);
         }

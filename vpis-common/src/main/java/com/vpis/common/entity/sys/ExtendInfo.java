@@ -6,9 +6,7 @@ import com.vpis.common.base.BaseEntity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *  @Author: Yuhan.Tang
@@ -23,6 +21,15 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "extend_info")
 public class ExtendInfo extends BaseEntity {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
+    @JSONField(name = "id")
+    @JsonProperty("id")
+    @Column(name = "id")
+    private Long id;
 
     @ApiModelProperty(value = "用户id")
     @JSONField(name = "user_id")

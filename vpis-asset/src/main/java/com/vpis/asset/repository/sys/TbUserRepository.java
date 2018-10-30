@@ -25,4 +25,6 @@ public interface TbUserRepository extends BaseEntityRepository<TbUser>{
      * @return
      */
     TbUser findByAgentAreaAndUserTypeAndDeletedIsFalse(String agentArea, UserTypeEnum userTypeEnum);
+
+    TbUser findByUserIdAndDeletedIsFalse(Long userId);
 }

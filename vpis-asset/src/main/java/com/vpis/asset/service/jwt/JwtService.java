@@ -98,9 +98,12 @@ public class JwtService {
         try {
             Algorithm al = Algorithm.HMAC256(signKey);
             String token = JWT.create()
-                    .withIssuer("asset")
+                    .withIssuer("vpis")
                     .withSubject("custom")
-                    .withClaim("username", sysUser.getPhoneNum())
+                    .withClaim("phone", sysUser.getPhoneNum())
+                    .withClaim("user_id", sysUser.getUserId())
+                    .withClaim("role_id", sysUser.getRoleId())
+                    .withClaim("agent_area", sysUser.getAgentArea())
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + expireTime*1000))
                     .sign(al);

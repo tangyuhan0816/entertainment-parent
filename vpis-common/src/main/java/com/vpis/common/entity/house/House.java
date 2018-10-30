@@ -23,6 +23,14 @@ import java.util.Date;
 @Table(name = "house")
 public class House extends BaseEntity{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "主键")
+    @JSONField(name = "id")
+    @JsonProperty("id")
+    @Column(name = "id")
+    private Long id;
+
     @JSONField(name = "user_id")
     @JsonProperty("user_id")
     @Column(name = "user_id")

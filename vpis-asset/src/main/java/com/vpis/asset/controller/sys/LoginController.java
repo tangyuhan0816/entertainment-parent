@@ -5,6 +5,7 @@ import com.vpis.asset.bean.sys.BackPassBean;
 import com.vpis.asset.bean.sys.RegisterBean;
 import com.vpis.asset.constant.RedisConstant;
 import com.vpis.asset.service.jwt.JwtService;
+import com.vpis.asset.service.shiro.realm.UsernamePasswordToken;
 import com.vpis.asset.service.sys.SendSmsService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.sys.TbUser;
@@ -14,7 +15,6 @@ import com.vpis.common.utils.ResponseContent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +55,9 @@ public class LoginController {
         if(Preconditions.isNotBlank(sysUser.getSmsCode())){
             sendSmsService.checkVerifyCode(sysUser.getSmsCode(),sysUser.getPhone(), RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY);
             TbUser tbUser = sysUserService.findByPhone(sysUser.getPhone());
-            token = new UsernamePasswordToken(sysUser.getPhone(), tbUser.getPassWord());
+            token = new UsernamePasswordToken(sysUser.getPhone(), tbUser.getPassWord(), 1);
         }else {
-            token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword());
+            token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword(), 2);
         }
         SecurityUtils.getSubject().login(token);
         TbUser user = sysUserService.findByPhone(sysUser.getPhone());

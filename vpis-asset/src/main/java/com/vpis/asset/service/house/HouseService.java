@@ -5,8 +5,12 @@ import com.vpis.asset.bean.vo.HouseVo;
 import com.vpis.asset.controller.sys.LoginController;
 import com.vpis.asset.dao.houses.HouseDao;
 import com.vpis.asset.repository.house.HouseRepository;
+import com.vpis.asset.repository.sys.ExtendInfoRepository;
 import com.vpis.asset.service.common.CommonService;
+import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.house.House;
+import com.vpis.common.entity.sys.ExtendInfo;
+import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.exception.HttpServiceException;
 import com.vpis.common.exception.STException;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *  @Author: Yuhan.Tang
@@ -46,6 +51,12 @@ public class HouseService {
 
     @Autowired
     private CommonService commonService;
+
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
+    private ExtendInfoRepository extendInfoRepository;
 
     public PageableResponse<HouseVo> page(HouseBean bean) throws HttpServiceException, InterruptedException {
 
@@ -123,5 +134,18 @@ public class HouseService {
         HouseVo houseVo = new HouseVo();
         houseVo.converDetail(house);
         return houseVo;
+    }
+
+    public List<String> findBannerUrl(String phone) {
+        TbUser user = sysUserService.findByPhone(phone);
+        if (Preconditions.isBlank(user)) {
+            throw new STException("token error");
+        }
+        TbUser parentUser = sysUserService.findById(user.getParentId());
+        if (Preconditions.isBlank(parentUser)) {
+            throw new STException("代理商用户未找到");
+        }
+        List<ExtendInfo> list = extendInfoRepository.findByUserIdAndDeletedIsFalse(parentUser.getUserId());
+        return list.stream().map(ExtendInfo::getAgentBannerUrl).collect(Collectors.toList());
     }
 }

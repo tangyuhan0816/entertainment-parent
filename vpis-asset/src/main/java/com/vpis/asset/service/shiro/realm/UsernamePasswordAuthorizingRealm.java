@@ -5,10 +5,14 @@ import com.vpis.common.constant.BusinessConstant;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.utils.Preconditions;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -61,6 +65,10 @@ public class UsernamePasswordAuthorizingRealm extends AuthorizingRealm {
         TbUser sysUser = sysUserService.findByPhone(username);
         if (Preconditions.isBlank(sysUser)) {
             throw new BusinessException(BusinessConstant.USER_NAME_NOT_FOUND);
+        }
+        if(usernamePasswordToken.getType() == 1){
+
+            sysUser.setPassWord((new SimpleHash("MD5", sysUser.getPassWord(), ByteSource.Util.bytes(credentialsSalt), 10)).toString());
         }
         return new SimpleAuthenticationInfo(sysUser, sysUser.getPassWord(), ByteSource.Util.bytes(credentialsSalt), getName());
     }
