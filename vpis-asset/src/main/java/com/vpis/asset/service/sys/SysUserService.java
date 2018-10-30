@@ -105,7 +105,6 @@ public class SysUserService {
         //0 普通用户 1管理员 2公司老总
         tbUser.setUserType(UserTypeEnum.GENERAL_USER);
         tbUser.setStatus(UserStatus.NORMAL);
-        tbUser.setSex(0);
         tbUser.setAgentArea(registerBean.getAgentArea());
         tbUserRepository.save(tbUser);
     }

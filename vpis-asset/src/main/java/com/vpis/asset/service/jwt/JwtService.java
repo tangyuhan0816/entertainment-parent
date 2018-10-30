@@ -103,7 +103,7 @@ public class JwtService {
                     .withClaim("phone", sysUser.getPhoneNum())
                     .withClaim("user_id", sysUser.getUserId())
                     .withClaim("role_id", sysUser.getRoleId())
-                    .withClaim("agent_area", sysUser.getAgentArea())
+                    .withClaim("agent_id", sysUser.getParentId())
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + expireTime*1000))
                     .sign(al);
