@@ -1,6 +1,8 @@
 package com.vpis.asset.service.common;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.vpis.asset.utils.BeanContext;
 import com.vpis.asset.utils.QiNiuUtils;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.exception.HttpServiceException;
@@ -11,10 +13,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.UUID;
+import java.util.concurrent.*;
 
 /**
  *  @Author: Yuhan.Tang
@@ -32,15 +37,41 @@ public class CommonService {
     @Autowired
     private QiNiuUtils qiNiuUtils;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Value("${api.aliyun.gps}")
     private String aliyunGpsHost;
 
+    private static final Integer POOL_SIZE = 3;
+
+    private static ThreadFactory threadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("common-upload-%d").build();
+
+    private static ExecutorService executorService = new ThreadPoolExecutor(POOL_SIZE,
+            POOL_SIZE, 0L,
+            TimeUnit.MILLISECONDS, new LinkedBlockingDeque<Runnable>(), threadFactory,
+            new ThreadPoolExecutor.AbortPolicy());
+
     public String uploadImage(MultipartFile file) throws IOException {
-        return qiNiuUtils.uploadImage(file);
+
+        String articleKey = UUID.randomUUID().toString().replaceAll("-", "");
+
+        executorService.execute(new MyUpTask(file,articleKey));
+
+        return articleKey;
     }
 
     public String uploadVideo(MultipartFile file) throws IOException {
         return qiNiuUtils.uploadImage(file);
+    }
+
+    public String getUploadKey(String key){
+        Object obj = redisTemplate.opsForValue().get(key);
+        if(Preconditions.isBlank(obj)){
+            return "同步中，请稍后重试";
+        }
+        return String.valueOf(obj);
     }
 
     private static final Integer MAX_RETRY = 3;
@@ -113,4 +144,29 @@ public class CommonService {
 
         return areaCode;
     }
+
+    class MyUpTask implements Runnable{
+
+        private MultipartFile file;
+
+        private String key;
+
+        public MyUpTask(MultipartFile file, String key){
+            this.key = key;
+            this.file = file;
+        }
+
+        @Override
+        public void run() {
+            try {
+                QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
+                RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
+                String url = qiNiuUtils.uploadImage(file);
+                redisTemplate.opsForValue().set(key, url, 60 * 60, TimeUnit.SECONDS);
+            } catch (IOException e) {
+                logger.error("MyUpTask error: {} , {}",e.getMessage(),e);
+            }
+        }
+    }
+
 }

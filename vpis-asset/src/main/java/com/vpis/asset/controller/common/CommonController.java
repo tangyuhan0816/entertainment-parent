@@ -35,7 +35,7 @@ public class CommonController {
     public ResponseContent uploadImage(@RequestBody MultipartFile file) {
         try{
             logger.info("上传图片 uploadImage =======> {},{}", file.getOriginalFilename(),file.getSize());
-            return ResponseContent.buildSuccess(commonService.uploadImage(file));
+            return ResponseContent.buildSuccess("图片上传成功，等待数据同步", commonService.uploadImage(file));
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());
@@ -51,6 +51,21 @@ public class CommonController {
         try{
             logger.info("上传视频 uploadVideo =======> {},{}", file.getOriginalFilename(),file.getSize());
             return ResponseContent.buildSuccess(commonService.uploadVideo(file));
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "查看上传图片，Owner: yuhan.tang")
+    @RequestMapping(path = "/get/upload/key", method = {RequestMethod.POST})
+    public ResponseContent uploadVideo(@RequestParam(value = "key" ,defaultValue = "") String key) {
+        try{
+            logger.info("查看上传图片 /get/upload/key =======> {}", key);
+            return ResponseContent.buildSuccess(commonService.getUploadKey(key));
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());
