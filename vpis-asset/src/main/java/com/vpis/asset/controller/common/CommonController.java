@@ -30,11 +30,11 @@ public class CommonController {
     @Autowired
     private CommonService commonService;
 
-    @ApiOperation(value = "上传图片，Owner: yuhan.tang")
+    @ApiOperation(value = "上传图片异步接口，Owner: yuhan.tang")
     @RequestMapping(path = "/upload/image", method = {RequestMethod.POST})
     public ResponseContent uploadImage(@RequestBody MultipartFile file) {
         try{
-            logger.info("上传图片 uploadImage =======> {},{}", file.getOriginalFilename(),file.getSize());
+            logger.info("上传图片 uploadImage =======> {},{}m", file.getOriginalFilename(),file.getSize());
             return ResponseContent.buildSuccess("图片上传成功，等待数据同步", commonService.uploadImage(file));
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -45,11 +45,11 @@ public class CommonController {
         }
     }
 
-    @ApiOperation(value = "上传视频，Owner: yuhan.tang")
+    @ApiOperation(value = "上传视频异步接口，Owner: yuhan.tang")
     @RequestMapping(path = "/upload/video", method = {RequestMethod.POST})
     public ResponseContent uploadVideo(@RequestBody MultipartFile file) {
         try{
-            logger.info("上传视频 uploadVideo =======> {},{}", file.getOriginalFilename(),file.getSize());
+            logger.info("上传视频 uploadVideo =======> {},{}m", file.getOriginalFilename(), file.getSize()/1024);
             return ResponseContent.buildSuccess(commonService.uploadVideo(file));
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -60,7 +60,7 @@ public class CommonController {
         }
     }
 
-    @ApiOperation(value = "查看上传图片，Owner: yuhan.tang")
+    @ApiOperation(value = "查看上传接口(同步完存储两小时)，Owner: yuhan.tang")
     @RequestMapping(path = "/get/upload/key", method = {RequestMethod.POST})
     public ResponseContent uploadVideo(@RequestParam(value = "key" ,defaultValue = "") String key) {
         try{

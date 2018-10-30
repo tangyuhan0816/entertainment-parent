@@ -34,6 +34,8 @@ public class CommonService {
 
     private static final Logger logger = LoggerFactory.getLogger(CommonService.class);
 
+    private static final String IMAGE_KEY = "SYNC:IMAGE:";
+
     @Autowired
     private QiNiuUtils qiNiuUtils;
 
@@ -57,13 +59,17 @@ public class CommonService {
 
         String articleKey = UUID.randomUUID().toString().replaceAll("-", "");
 
-        executorService.execute(new MyUpTask(file,articleKey));
+        executorService.execute(new MyUpTask(file,articleKey,1));
 
         return articleKey;
     }
 
     public String uploadVideo(MultipartFile file) throws IOException {
-        return qiNiuUtils.uploadImage(file);
+        String articleKey = UUID.randomUUID().toString().replaceAll("-", "");
+
+        executorService.execute(new MyUpTask(file,articleKey,2));
+
+        return articleKey;
     }
 
     public String getUploadKey(String key){
@@ -151,9 +157,12 @@ public class CommonService {
 
         private String key;
 
-        public MyUpTask(MultipartFile file, String key){
+        private Integer type;
+
+        public MyUpTask(MultipartFile file, String key, Integer type){
             this.key = key;
             this.file = file;
+            this.type = type;
         }
 
         @Override
@@ -161,8 +170,13 @@ public class CommonService {
             try {
                 QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
                 RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
-                String url = qiNiuUtils.uploadImage(file);
-                redisTemplate.opsForValue().set(key, url, 60 * 60, TimeUnit.SECONDS);
+                String url = null;
+                if(1 == type){
+                    url = qiNiuUtils.uploadImage(file);
+                } else {
+                    url = qiNiuUtils.uploadVideo(file);
+                }
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), url, 60 * 60 * 2, TimeUnit.SECONDS);
             } catch (IOException e) {
                 logger.error("MyUpTask error: {} , {}",e.getMessage(),e);
             }
