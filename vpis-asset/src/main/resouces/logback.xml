@@ -9,7 +9,7 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_HOME}/entertainment-asset.log</file>
+        <file>${LOG_HOME}/vpis-asset.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <fileNamePattern>${LOG_HOME}/merculet-management.log.%i</fileNamePattern>
             <minIndex>1</minIndex>
