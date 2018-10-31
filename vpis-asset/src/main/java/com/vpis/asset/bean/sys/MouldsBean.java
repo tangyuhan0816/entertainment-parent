@@ -7,6 +7,14 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: MouldsBean
+ *  @package: com.vpis.asset.bean.sys
+ *  @Date: Created in 2018/10/31 下午5:02
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 
+ */    
 @Data
 @ApiModel(value = "广告模版Bean")
 public class MouldsBean {

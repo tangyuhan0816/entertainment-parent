@@ -31,7 +31,7 @@ public class MouldsController extends BaseController{
     @Autowired
     private MouldsService mouldsService;
 
-    @ApiOperation(value = "查询通用配置模版 ，Owner: yuhan.tang")
+    @ApiOperation(value = "查询通用配置模版 ，Owner: yuhan.tang", response = MouldsBean.class)
     @RequestMapping(path = "/find/common", method = {RequestMethod.GET})
     public ResponseContent findCommonMoulds(){
         try{
@@ -47,7 +47,7 @@ public class MouldsController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "查询我的配置模版 ，Owner: yuhan.tang")
+    @ApiOperation(value = "查询我的配置模版 ，Owner: yuhan.tang", response = MouldsBean.class)
     @RequestMapping(path = "/find/me", method = {RequestMethod.GET})
     public ResponseContent findMyMoulds(){
         try{

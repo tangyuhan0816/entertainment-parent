@@ -4,6 +4,7 @@ package com.vpis.asset.controller.house;
 import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.SessionUser;
 import com.vpis.asset.bean.house.HouseBean;
+import com.vpis.asset.bean.vo.HouseVo;
 import com.vpis.asset.controller.BaseController;
 import com.vpis.asset.service.house.HouseService;
 import com.vpis.common.exception.STException;
@@ -33,7 +34,7 @@ public class HousesController extends BaseController{
     @Autowired
     private HouseService housesService;
 
-    @ApiOperation(value = "楼盘分页查询 ，Owner: yuhan.tang")
+    @ApiOperation(value = "楼盘分页查询 ，Owner: yuhan.tang", response = HouseVo.class)
     @RequestMapping(path = "/page", method = {RequestMethod.POST})
     public ResponseContent page(@RequestBody HouseBean bean){
         try{
@@ -48,7 +49,7 @@ public class HousesController extends BaseController{
         }
     }
 
-    @ApiOperation(value = "楼盘详情查询 ，Owner: yuhan.tang")
+    @ApiOperation(value = "楼盘详情查询 ，Owner: yuhan.tang", response = HouseVo.class)
     @RequestMapping(path = "/find/detail", method = {RequestMethod.POST})
     public ResponseContent page(@RequestParam(value = "id") Long id){
         try{
