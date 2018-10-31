@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -171,15 +172,20 @@ public class CommonService {
                 QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
                 RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
                 String url = null;
-                logger.info("file:{} 上传中。。。。",file.getOriginalFilename());
+                logger.info("文件名:{}，大小:{}KB =========> 上传中。。。。",file.getOriginalFilename(),file.getSize()/1024);
                 if(1 == type){
                     url = qiNiuUtils.uploadImage(file);
                 } else {
                     url = qiNiuUtils.uploadVideo(file);
                 }
+                logger.info("上传完毕Url:{}",url);
                 redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), url, 60 * 60 * 2, TimeUnit.SECONDS);
+            } catch (SocketTimeoutException e1) {
+                logger.error("MyUpTask timeout: {}", e1.getMessage());
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), "timeout 请重新上传", 60 * 60 * 2, TimeUnit.SECONDS);
             } catch (IOException e) {
                 logger.error("MyUpTask error: {} , {}",e.getMessage(),e);
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), e.getMessage(), 60 * 60 * 2, TimeUnit.SECONDS);
             }
         }
     }

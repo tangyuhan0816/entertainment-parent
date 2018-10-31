@@ -33,7 +33,7 @@ public class CommonController {
     @RequestMapping(path = "/upload/image", method = {RequestMethod.POST})
     public ResponseContent uploadImage(@RequestBody MultipartFile file) {
         try{
-            logger.info("上传图片 uploadImage =======> {},{}m", file.getOriginalFilename(),file.getSize());
+            logger.info("上传图片 uploadImage =======> {},{}KB", file.getOriginalFilename(),file.getSize()/1024);
             return ResponseContent.buildSuccess("图片上传成功，等待数据同步", commonService.uploadImage(file));
         }catch(STException e){
             logger.error(e.getMessage(),e);
@@ -48,7 +48,7 @@ public class CommonController {
     @RequestMapping(path = "/upload/video", method = {RequestMethod.POST})
     public ResponseContent uploadVideo(@RequestBody MultipartFile file) {
         try{
-            logger.info("上传视频 uploadVideo =======> {},{}m", file.getOriginalFilename(), file.getSize()/1024);
+            logger.info("上传视频 uploadVideo =======> {},{}KB", file.getOriginalFilename(), file.getSize()/1024);
             return ResponseContent.buildSuccess(commonService.uploadVideo(file));
         }catch(STException e){
             logger.error(e.getMessage(),e);
