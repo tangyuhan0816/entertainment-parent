@@ -3,6 +3,7 @@ package com.vpis.common.entity.sys;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vpis.common.base.BaseEntity;
+import com.vpis.common.type.sys.RoleTypeEnum;
 import com.vpis.common.type.sys.UserStatus;
 import com.vpis.common.type.sys.UserTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -33,11 +34,12 @@ public class TbUser extends BaseEntity{
     @Column(name = "user_id")
     private Long userId;
 
+    @Enumerated
     @ApiModelProperty(value = "权限ID", required = true)
     @JSONField(name = "role_id")
     @JsonProperty("role_id")
     @Column(name = "role_id")
-    private Long roleId;
+    private RoleTypeEnum roleType;
 
     @ApiModelProperty(value = "用户名", required = true)
     @JSONField(name = "user_name")
@@ -76,7 +78,7 @@ public class TbUser extends BaseEntity{
     @Column(name = "status")
     private UserStatus status;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated
     @ApiModelProperty(value = "用户类型", required = true)
     @JSONField(name = "user_type")
     @JsonProperty("user_type")

@@ -3,6 +3,8 @@ package com.vpis.asset.repository.sys;
 import com.vpis.common.base.BaseEntityRepository;
 import com.vpis.common.entity.sys.Moulds;
 
+import java.util.List;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: MouldsRepository
@@ -13,5 +15,9 @@ import com.vpis.common.entity.sys.Moulds;
  */    
 public interface MouldsRepository extends BaseEntityRepository<Moulds>{
 
-//    private
+    Moulds findByIdAndDeletedIsFalse(Long id);
+
+    Moulds findByIdAndUserIdAndDeletedIsFalse(Long id, Long userId);
+
+    List<Moulds> findByUserIdAndDeletedIsFalse(Long userId);
 }

@@ -171,6 +171,7 @@ public class CommonService {
                 QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
                 RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
                 String url = null;
+                logger.info("file:{} 上传中。。。。",file.getOriginalFilename());
                 if(1 == type){
                     url = qiNiuUtils.uploadImage(file);
                 } else {

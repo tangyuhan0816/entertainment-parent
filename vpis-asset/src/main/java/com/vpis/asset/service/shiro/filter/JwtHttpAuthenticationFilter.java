@@ -46,8 +46,8 @@ public class JwtHttpAuthenticationFilter extends BasicHttpAuthenticationFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader("Authorization");
         if (Preconditions.isNotBlank(authorization)) {
-            String username = jwtService.getValueByParams(authorization, "username");
-            String role = jwtService.getValueByParams(authorization, "role");
+            String username = jwtService.getStringValueByParams(authorization, "username");
+            String role = jwtService.getStringValueByParams(authorization, "role");
             authorization = role + ":" + username + ":" + authorization;
         }
         JwtToken token = new JwtToken(authorization);

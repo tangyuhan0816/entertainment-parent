@@ -39,7 +39,7 @@ public abstract class BaseController {
     protected SessionUser getSessionUser() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        String phone = jwtService.getValueByParams(authorization,"phone");
+        String phone = jwtService.getStringValueByParams(authorization,"phone");
         TbUser sysUser = sysUserService.findByPhone(phone);
         SessionUser sessionUser = new SessionUser();
         BeanUtils.copyProperties(sysUser,sessionUser);
@@ -49,19 +49,19 @@ public abstract class BaseController {
     protected String getSessionPhone(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getValueByParams(authorization,"phone");
+        return jwtService.getStringValueByParams(authorization,"phone");
     }
 
-    protected String getSessionAgentArea(){
+    protected Long getSessionAgentId(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getValueByParams(authorization,"agent_area");
+        return jwtService.getLongValueByParams(authorization,"agent_id");
     }
 
-    protected String getSessionUserId(){
+    protected Long getSessionUserId(){
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getValueByParams(authorization,"user_id");
+        return jwtService.getLongValueByParams(authorization,"user_id");
     }
 
 }

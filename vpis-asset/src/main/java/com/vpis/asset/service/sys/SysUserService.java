@@ -7,6 +7,7 @@ import com.vpis.asset.repository.sys.TbUserRepository;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.exception.STException;
+import com.vpis.common.type.sys.RoleTypeEnum;
 import com.vpis.common.type.sys.UserStatus;
 import com.vpis.common.type.sys.UserTypeEnum;
 import com.vpis.common.utils.Preconditions;
@@ -84,28 +85,47 @@ public class SysUserService {
 
         //校验验证码
         sendSmsService.checkVerifyCode(registerBean.getSmsCode(),registerBean.getPhone(), RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY);
+
         TbUser tbUser = findByPhone(registerBean.getPhone());
+
         if(Preconditions.isNotBlank(tbUser)){
+
             throw new STException("手机号码已被注册");
         }
+
         tbUser = new TbUser();
-        TbUser adminUser = null;
-        if(Preconditions.isNotBlank(registerBean.getAgentArea())){
-            //查询管理员
-            adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
-            if(Preconditions.isNotBlank(adminUser)){
-                tbUser.setParentId(adminUser.getUserId());
-            }
+
+        if(Preconditions.isBlank(registerBean.getAgentArea())){
+
+            throw new STException("区域编码为空");
         }
+
+        //查询管理员
+        TbUser adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
+
+        if(Preconditions.isBlank(adminUser)){
+
+            throw new STException("当前区域没有代理商");
+        }
+
+        tbUser.setParentId(adminUser.getUserId());
+
         String password = (new SimpleHash("MD5", registerBean.getPassword(), ByteSource.Util.bytes(credentialsSalt), 10)).toString();
+
         tbUser.setPhoneNum(registerBean.getPhone());
+
         tbUser.setUserName(registerBean.getPhone());
+
         tbUser.setPassWord(password);
-        tbUser.setRoleId(2L);
-        //0 普通用户 1管理员 2公司老总
+
+        tbUser.setRoleType(RoleTypeEnum.SHITOU);
+
         tbUser.setUserType(UserTypeEnum.GENERAL_USER);
+
         tbUser.setStatus(UserStatus.NORMAL);
+
         tbUser.setAgentArea(registerBean.getAgentArea());
+
         tbUserRepository.save(tbUser);
     }
 
@@ -141,6 +161,10 @@ public class SysUserService {
         }
         tbUserRepository.save(tbUser);
 
+    }
+
+    public void saveUser(TbUser user){
+        tbUserRepository.save(user);
     }
 
     public static void main(String[] args) {

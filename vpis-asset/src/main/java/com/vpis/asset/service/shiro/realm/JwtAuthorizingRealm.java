@@ -58,7 +58,7 @@ public class JwtAuthorizingRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String jwtToken = principals.toString();
         String realJwtToken = jwtToken.substring(jwtToken.lastIndexOf(":") + 1, jwtToken.length());
-        String username = jwtService.getValueByParams(realJwtToken, "username");
+        String username = jwtService.getStringValueByParams(realJwtToken, "username");
         TbUser tbUser = sysUserService.findByPhone(username);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         Set<String> permissions = new HashSet<>();

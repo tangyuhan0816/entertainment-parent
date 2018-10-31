@@ -98,15 +98,15 @@ public class ResponseContent<T> {
     }
 
     public static ResponseContent buildFail(String message) {
-        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
+        return new ResponseContent(BUSINESS_EXCEPTION_CODE, message);
     }
 
     public static ResponseContent buildFail(String message, Object data) {
-        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message, data);
+        return new ResponseContent(BUSINESS_EXCEPTION_CODE, message, data);
     }
 
     public static ResponseContent buildServerError(String message) {
-        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
+        return new ResponseContent(BUSINESS_EXCEPTION_CODE, message);
     }
 
     public static ResponseContent buildCustomizedException(int code, String message) {

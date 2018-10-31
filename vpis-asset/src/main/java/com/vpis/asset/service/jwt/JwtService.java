@@ -67,15 +67,37 @@ public class JwtService {
      * 获得token中的信息无需secret解密也能获得
      * @return token中包含的用户名
      */
-    public String getValueByParams(String token, String key) {
+    private Claim getValueByParams(String token, String key) {
         try {
             DecodedJWT jwt = JWT.decode(token);
             Map<String, Claim> claims = jwt.getClaims();
             if(claims != null && claims.size() > 0 && claims.containsKey(key)){
-                return claims.get(key).asString();
+                return claims.get(key);
             }
         } catch (JWTDecodeException e) {
             logger.error("get value from jwt token error with token : {} and key : {}", token, key);
+        }
+        return null;
+    }
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     * @return token中包含的用户名
+     */
+    public Long getLongValueByParams(String token, String key) {
+        Claim claim = getValueByParams(token,key);
+        if (Preconditions.isNotBlank(claim)) {
+            return claim.asLong();
+        }
+        return null;
+    }
+    /**
+     * 获得token中的信息无需secret解密也能获得
+     * @return token中包含的用户名
+     */
+    public String getStringValueByParams(String token, String key) {
+        Claim claim = getValueByParams(token,key);
+        if (Preconditions.isNotBlank(claim)) {
+            return claim.asString();
         }
         return null;
     }
@@ -84,7 +106,7 @@ public class JwtService {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String authorization = httpServletRequest.getHeader("Authorization");
 
-        String accountId = this.getValueByParams(authorization, "account_id");
+        String accountId = this.getStringValueByParams(authorization, "account_id");
 
         return Long.valueOf(accountId);
     }
@@ -102,7 +124,7 @@ public class JwtService {
                     .withSubject("custom")
                     .withClaim("phone", sysUser.getPhoneNum())
                     .withClaim("user_id", sysUser.getUserId())
-                    .withClaim("role_id", sysUser.getRoleId())
+                    .withClaim("role_id", sysUser.getRoleType().ordinal())
                     .withClaim("agent_id", sysUser.getParentId())
                     .withIssuedAt(new Date())
                     .withExpiresAt(new Date(System.currentTimeMillis() + expireTime*1000))
