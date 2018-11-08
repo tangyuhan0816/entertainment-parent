@@ -49,6 +49,12 @@ public class HouseVo extends BaseBean{
     @JsonProperty("average_price")
     private BigDecimal averagePrice;
 
+    @ApiModelProperty(value = "市场价")
+    @JSONField(name = "market_price")
+    @JsonProperty("market_price")
+    @Column(name = "market_price")
+    private BigDecimal marketPrice;
+
     @ApiModelProperty(value = "可投放广告幅数")
     @JSONField(name = "advice_num")
     @JsonProperty("advice_num")
@@ -95,6 +101,7 @@ public class HouseVo extends BaseBean{
         this.setBannerUrl(house.getBannerUrl());
         this.setHeat(house.getHeat());
         this.setPrice(house.getPrice());
+        this.setMarketPrice(house.getMarketPrice());
         this.setOriginalPrice(house.getOriginalPrice());
         this.setAveragePrice(house.getAveragePrice());
         this.setId(house.getId());
@@ -106,6 +113,7 @@ public class HouseVo extends BaseBean{
         this.setBannerUrl(house.getBannerUrl());
         this.setHeat(house.getHeat());
         this.setPrice(house.getPrice());
+        this.setMarketPrice(house.getMarketPrice());
         this.setOriginalPrice(house.getOriginalPrice());
         this.setAveragePrice(house.getAveragePrice());
         this.setHouseName(house.getHouseName());

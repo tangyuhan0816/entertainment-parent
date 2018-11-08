@@ -9,6 +9,7 @@ import com.vpis.common.exception.HttpServiceException;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.AsyncHttpUtils;
 import com.vpis.common.utils.Preconditions;
+import com.vpis.common.utils.ResponseContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,24 +169,27 @@ public class CommonService {
 
         @Override
         public void run() {
+            JSONObject param = new JSONObject();
             try {
                 QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
                 RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
                 String url = null;
-                logger.info("文件名:{}，大小:{}KB =========> 上传中。。。。",file.getOriginalFilename(),file.getSize()/1024);
+                logger.info("文件名:{}，大小:{}KB，key:{} =========> 上传中。。。。",file.getOriginalFilename(),file.getSize()/1024, key);
                 if(1 == type){
                     url = qiNiuUtils.uploadImage(file);
                 } else {
                     url = qiNiuUtils.uploadVideo(file);
                 }
+                param.put("code", 200);
+                param.put("data", url);
                 logger.info("上传完毕Url:{}",url);
-                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), url, 60 * 60 * 2, TimeUnit.SECONDS);
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), ResponseContent.buildSuccess(url), 60 * 60, TimeUnit.SECONDS);
             } catch (SocketTimeoutException e1) {
-                logger.error("MyUpTask timeout: {}", e1.getMessage());
-                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), "timeout 请重新上传", 60 * 60 * 2, TimeUnit.SECONDS);
+                logger.error("MyUpTask timeout: {},key{}", e1.getMessage(),key);
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), ResponseContent.buildServerError("timeout 请重新上传"), 60 * 60, TimeUnit.SECONDS);
             } catch (IOException e) {
-                logger.error("MyUpTask error: {} , {}",e.getMessage(),e);
-                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), e.getMessage(), 60 * 60 * 2, TimeUnit.SECONDS);
+                logger.error("MyUpTask error: {} ,key{} , {}",e.getMessage(),key,e);
+                redisTemplate.opsForValue().set(String.format("%s%s",key,IMAGE_KEY), ResponseContent.buildServerError(e.getMessage()), 60 * 60, TimeUnit.SECONDS);
             }
         }
     }

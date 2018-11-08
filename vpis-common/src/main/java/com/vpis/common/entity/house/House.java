@@ -84,6 +84,18 @@ public class House extends BaseEntity{
     @Column(name = "month_person_flow")
     private Integer monthPersonFlow;
 
+    @ApiModelProperty(value = "总共可投放广告幅数")
+    @JSONField(name = "sum_advice_num")
+    @JsonProperty("sum_advice_num")
+    @Column(name = "sum_advice_num")
+    private Integer sumAdviceNum;
+
+    @ApiModelProperty(value = "已经投放广告幅数")
+    @JSONField(name = "has_advice_num")
+    @JsonProperty("has_advice_num")
+    @Column(name = "has_advice_num")
+    private Integer hasAdviceNum;
+
     @ApiModelProperty(value = "可投放广告幅数")
     @JSONField(name = "advice_num")
     @JsonProperty("advice_num")

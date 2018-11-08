@@ -106,7 +106,11 @@ public class ResponseContent<T> {
     }
 
     public static ResponseContent buildServerError(String message) {
-        return new ResponseContent(BUSINESS_EXCEPTION_CODE, message);
+        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
+    }
+
+    public static ResponseContent buildServerError(String message, Object data) {
+        return new ResponseContent(INTERNAL_SERVER_ERROR_CODE, message);
     }
 
     public static ResponseContent buildCustomizedException(int code, String message) {
