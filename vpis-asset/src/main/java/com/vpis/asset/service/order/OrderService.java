@@ -73,7 +73,7 @@ public class OrderService {
             if(Preconditions.isBlank(house)){
                 throw new STException("小区未查询到数据");
             }
-            if(house.getAdviceNum() > orderItem.getCount()){
+            if(orderItem.getCount() > house.getAdviceNum()){
                 throw new STException("选择项超出可投放数量");
             }
             sumCount = sumCount + orderItem.getCount();

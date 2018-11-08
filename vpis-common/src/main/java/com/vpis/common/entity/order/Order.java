@@ -20,7 +20,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order extends BaseEntity{
 
     @Id
