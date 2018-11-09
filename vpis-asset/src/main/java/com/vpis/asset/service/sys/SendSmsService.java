@@ -3,7 +3,9 @@ package com.vpis.asset.service.sys;
 import com.vpis.asset.bean.sys.RegisterBean;
 import com.vpis.asset.config.RedisOperation;
 import com.vpis.asset.config.YunpianSmsSender;
+import com.vpis.asset.utils.AccountValidatorUtil;
 import com.vpis.asset.utils.StringUtil;
+import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +51,14 @@ public class SendSmsService {
         if(Preconditions.isBlank(phone)){
             throw new STException("手机号码为空");
         }
+        AccountValidatorUtil.isMobile(phone);
         String mobile = "+" + phone;
         checkVerifyCodeSendTime(mobile,vKey,sendKey);
         String verifyCode = StringUtil.generateRandomNumStr(6);
         redisOperation.saveLoginVerifyCode(mobile, verifyCode, vKey);
         String key = String.format("%s%s", sendKey, mobile);
         redisTemplate.opsForValue().set(key, "TIME", SEND_TIME, TimeUnit.SECONDS);
-        yunpianSmsSender.registerSmsForContent(mobile, String.format(content, verifyCode));
+        yunpianSmsSender.registerSmsForContent(phone, String.format(content, verifyCode));
     }
 
     /**

@@ -8,6 +8,7 @@ import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.shiro.realm.UsernamePasswordToken;
 import com.vpis.asset.service.sys.SendSmsService;
 import com.vpis.asset.service.sys.SysUserService;
+import com.vpis.asset.utils.AccountValidatorUtil;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
@@ -21,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.regex.Pattern;
 
 /**
  *  @Author: Yuhan.Tang
@@ -52,6 +54,7 @@ public class LoginController {
     public ResponseContent login(HttpServletRequest request, @RequestBody RegisterBean sysUser){
         logger.info("登陆 login ======> {}", JSONObject.toJSONString(sysUser));
         UsernamePasswordToken token = null;
+        AccountValidatorUtil.isMobile(sysUser.getPhone());
         if(Preconditions.isNotBlank(sysUser.getSmsCode())){
             sendSmsService.checkVerifyCode(sysUser.getSmsCode(),sysUser.getPhone(), RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY);
             TbUser tbUser = sysUserService.findByPhone(sysUser.getPhone());

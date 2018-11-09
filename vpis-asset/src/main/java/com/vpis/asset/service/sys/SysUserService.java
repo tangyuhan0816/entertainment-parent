@@ -4,6 +4,7 @@ import com.vpis.asset.bean.sys.BackPassBean;
 import com.vpis.asset.bean.sys.RegisterBean;
 import com.vpis.asset.constant.RedisConstant;
 import com.vpis.asset.repository.sys.TbUserRepository;
+import com.vpis.asset.utils.AccountValidatorUtil;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.BusinessException;
 import com.vpis.common.exception.STException;
@@ -60,6 +61,10 @@ public class SysUserService {
      * @param phone
      */
     public void send(String phone) throws STException{
+        TbUser user = findByPhone(phone);
+        if(Preconditions.isNotBlank(user)){
+            throw new STException("该手机号码已注册");
+        }
         sendSmsService.send(phone,registerContent,RedisConstant.PREFIX_REGISTER_VERIFY_CODE_SEND_TIME_KEY,RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY);
     }
 
@@ -72,10 +77,14 @@ public class SysUserService {
     }
 
     /**
-     * 发送登陆短信验证码
+     * 发送找回密码短信验证码
      * @param phone
      */
     public void sendBack(String phone) throws STException{
+        TbUser user = findByPhone(phone);
+        if(Preconditions.isBlank(user)){
+            throw new STException("未查询到此人");
+        }
         sendSmsService.send(phone,backPassContent,RedisConstant.PREFIX_BACK_PASS_VERIFY_CODE_SEND_TIME_KEY,RedisConstant.PREFIX_BACK_PASS_VERIFY_CODE_KEY);
     }
 
@@ -83,6 +92,11 @@ public class SysUserService {
 
     public void register(RegisterBean registerBean) throws STException{
 
+        if(Preconditions.isBlank(registerBean.getPassword())){
+            throw new STException("密码不能为空");
+        }
+
+        AccountValidatorUtil.isMobile(registerBean.getPhone());
         //校验验证码
         sendSmsService.checkVerifyCode(registerBean.getSmsCode(),registerBean.getPhone(), RedisConstant.PREFIX_REGISTER_VERIFY_CODE_KEY);
 
