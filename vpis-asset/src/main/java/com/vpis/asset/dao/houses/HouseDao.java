@@ -39,7 +39,7 @@ public class HouseDao {
         params.put("latY",latitudeY);
         params.put("district",areaCode);
 
-        String sqlCount = "select count(1) from (SELECT (st_distance (point (longitude_x, latitude_y),point(:lonX,:latY) ) *111195) distance FROM  house s where s.district = :district and s.deleted = 0 HAVING distance < 50) m;";
+        String sqlCount = "select count(1) from (SELECT (st_distance (point (longitude_x, latitude_y),point(:lonX,:latY) ) *111195) distance FROM  house s where s.district = :district and s.deleted = 0 HAVING distance < 200) m;";
         Long count = jdbcTemplate.queryForObject(sqlCount,params,Long.class);
 
         if(Preconditions.isNotBlank(count) && count > 0){
@@ -48,7 +48,7 @@ public class HouseDao {
             }
             params.put("pageNumber", pageNumber * pageSize);
             params.put("pageSize",pageSize);
-            String sqlPage = "SELECT  s.id,s.house_name, s.original_price, s.price, s.advice_num, s.banner_url, s.heat, (st_distance (point (longitude_x, latitude_y),point(:lonX,:latY) ) *111195) AS distance  FROM  house s where s.district = :district and s.deleted = 0  HAVING distance < 50 ORDER BY distance limit :pageNumber, :pageSize;";
+            String sqlPage = "SELECT  s.id,s.house_name, s.original_price, s.price, s.advice_num, s.banner_url, s.heat, (st_distance (point (longitude_x, latitude_y),point(:lonX,:latY) ) *111195) AS distance  FROM  house s where s.district = :district and s.deleted = 0  HAVING distance < 200 ORDER BY distance limit :pageNumber, :pageSize;";
             List<HouseVo>  list = jdbcTemplate.query(sqlPage,params, new BeanPropertyRowMapper<>(HouseVo.class));
             for(HouseVo houseVo : list){
                 houseVo.setDistance(houseVo.getDistance().setScale(1, BigDecimal.ROUND_HALF_DOWN));
