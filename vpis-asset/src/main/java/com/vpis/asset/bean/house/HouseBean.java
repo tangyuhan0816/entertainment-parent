@@ -22,20 +22,10 @@ import java.math.BigDecimal;
 @ApiModel(value = "楼盘请求对象")
 public class HouseBean extends BaseBean{
 
-    @ApiModelProperty(value = "是否按热度查询")
-    @JSONField(name = "is_heat")
-    @JsonProperty("is_heat")
-    private Boolean isHeat;
-
-    @ApiModelProperty(value = "是否按距离查询")
-    @JSONField(name = "is_near")
-    @JsonProperty("is_near")
-    private Boolean isNear;
-
-    @ApiModelProperty(value = "是否按价格查询")
-    @JSONField(name = "is_price")
-    @JsonProperty("is_price")
-    private Boolean isPrice;
+    @ApiModelProperty(value = "0 热度查询 1距离查询 2 价格查询")
+    @JSONField(name = "type")
+    @JsonProperty("type")
+    private Integer type;
 
     @ApiModelProperty(value = "经度")
     @JSONField(name = "longitude_x")
