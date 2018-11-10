@@ -80,7 +80,7 @@ public class HouseService {
 
         bean.getPageableRequest().setSortFields(sortFields);
 
-        if (bean.getIsHeat()) {
+        if (bean.getType() == 0) {
 
             sortField.setFieldName("heat");
 
@@ -88,7 +88,7 @@ public class HouseService {
 
             page = housesRepository.findByDistrictAndDeletedIsFalse(areaCode,pageRequest);
 
-        } else if (bean.getIsPrice()) {
+        } else if (bean.getType() == 1) {
 
             sortField.setFieldName("averagePrice");
 
@@ -96,7 +96,7 @@ public class HouseService {
 
             page = housesRepository.findByDistrictAndDeletedIsFalse(areaCode,pageRequest);
 
-        } else if (bean.getIsNear()) {
+        } else if (bean.getType() == 2) {
 
             return housesDao.near(areaCode,bean.getLongitudeX(), bean.getLatitudeY(), bean.getPageableRequest().getPageNumber(), bean.getPageableRequest().getPageSize());
 
