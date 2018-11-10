@@ -105,6 +105,7 @@ public class HouseVo extends BaseBean{
         this.setOriginalPrice(house.getOriginalPrice());
         this.setAveragePrice(house.getAveragePrice());
         this.setId(house.getId());
+        this.setHouseName(house.getHouseName());
         return this;
     }
 
