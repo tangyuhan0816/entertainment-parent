@@ -110,6 +110,7 @@ public class HouseVo extends BaseBean{
     }
 
     public HouseVo converDetail(House house){
+        this.setId(house.getId());
         this.setAdviceNum(house.getAdviceNum());
         this.setBannerUrl(house.getBannerUrl());
         this.setHeat(house.getHeat());

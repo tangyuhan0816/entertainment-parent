@@ -2,6 +2,9 @@ package com.vpis.asset.repository.order;
 
 import com.vpis.common.base.BaseEntityRepository;
 import com.vpis.common.entity.order.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 /**
  *  @Author: Yuhan.Tang
@@ -11,5 +14,6 @@ import com.vpis.common.entity.order.Order;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:
  */
-public interface OrderRepository extends BaseEntityRepository<Order>{
+public interface OrderRepository extends BaseEntityRepository<Order>, JpaSpecificationExecutor<Order>{
+
 }

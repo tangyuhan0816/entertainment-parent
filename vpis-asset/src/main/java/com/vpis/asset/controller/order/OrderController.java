@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *  @Author: Yuhan.Tang
@@ -40,5 +37,15 @@ public class OrderController extends BaseController{
         Long userId = getSessionUserId();
         orderService.createOrderInfo(userId, bean);
         return ResponseContent.buildSuccess();
+    }
+
+    @ApiOperation(value = "订单查询 ，Owner: yuhan.tang", response = ResponseContent.class)
+    @RequestMapping(path = "/page", method = {RequestMethod.GET})
+    public ResponseContent page(@RequestParam(name = "page_number", defaultValue = "0") Integer pageNumber,
+                                @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize,
+                                @RequestParam(name = "order_status", defaultValue = "", required = false) Integer orderStatus){
+        logger.info("订单查询 page =======> {},{},{}", pageNumber,pageSize,orderStatus);
+        Long userId = getSessionUserId();
+        return ResponseContent.buildSuccess(orderService.findOrderByList(userId, pageNumber,pageSize,orderStatus));
     }
 }

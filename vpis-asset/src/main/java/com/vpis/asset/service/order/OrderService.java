@@ -3,6 +3,8 @@ package com.vpis.asset.service.order;
 import com.vpis.asset.bean.order.OrderBean;
 import com.vpis.asset.bean.order.OrderItemBean;
 import com.vpis.asset.bean.vo.HouseVo;
+import com.vpis.asset.bean.vo.OrderVo;
+import com.vpis.asset.dao.order.OrderDao;
 import com.vpis.asset.repository.order.OrderItemRepository;
 import com.vpis.asset.repository.order.OrderRepository;
 import com.vpis.asset.service.house.HouseService;
@@ -11,18 +13,29 @@ import com.vpis.common.entity.order.Order;
 import com.vpis.common.entity.order.OrderItem;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
+import com.vpis.common.page.PageableResponse;
 import com.vpis.common.type.order.OrderStatus;
 import com.vpis.common.utils.OrderUtil;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -47,6 +60,9 @@ public class OrderService {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private OrderDao orderDao;
 
     private static final String SUM_COUNT = "sum_count";
     private static final String SUM_PRICE = "sum_price";
@@ -201,5 +217,63 @@ public class OrderService {
         orderItem.setProductId(house.getId());
 
         return orderItem;
+    }
+
+    /**
+     * 查询订单列表
+     * @param userId
+     * @param pageSize
+     * @param pageNumber
+     */
+    public PageableResponse<OrderVo> findOrderByList(Long userId, Integer pageNumber, Integer pageSize, Integer orderStatus){
+        PageableResponse<OrderVo> response = orderDao.findOrderList(userId, pageNumber, pageSize, orderStatus);
+
+        List<OrderVo> result = new ArrayList<>();
+
+        List<OrderVo> param = response.getList();
+
+        if(Preconditions.isNotBlank(param)) {
+
+            Map<Long, List<OrderVo>> maps = param.stream().filter(distinctByKey(OrderVo::getId)).collect(Collectors.groupingBy(o -> o.getId()));
+
+            for (Map.Entry<Long, List<OrderVo>> entry : maps.entrySet()) {
+                List<OrderVo> value = entry.getValue();
+
+                OrderVo vo = new OrderVo();
+
+                Integer sumCount = 0;
+
+                BigDecimal sumAount = BigDecimal.ZERO;
+
+                for (OrderVo orderVo : value) {
+
+                    sumCount += orderVo.getProductCount();
+
+                    sumAount = sumAount.add(orderVo.getOrderAmountTotal());
+                }
+
+                vo.setId(value.get(0).getId());
+
+                vo.setHouseName(value.get(0).getHouseName());
+
+                vo.setOrderAmountTotal(sumAount);
+
+                vo.setProductCount(sumCount);
+
+                result.add(vo);
+            }
+        }
+
+        if(Preconditions.isNotBlank(result)){
+
+            response.setList(result);
+        }
+
+        return response;
+    }
+
+    public static <T> java.util.function.Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }

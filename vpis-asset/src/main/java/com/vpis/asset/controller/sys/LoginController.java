@@ -16,6 +16,8 @@ import com.vpis.common.utils.ResponseContent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,9 @@ public class LoginController {
         if(Preconditions.isNotBlank(sysUser.getSmsCode())){
             sendSmsService.checkVerifyCode(sysUser.getSmsCode(),sysUser.getPhone(), RedisConstant.PREFIX_LOGIN_VERIFY_CODE_KEY);
             TbUser tbUser = sysUserService.findByPhone(sysUser.getPhone());
+            if(Preconditions.isBlank(tbUser)){
+                throw new IncorrectCredentialsException();
+            }
             token = new UsernamePasswordToken(sysUser.getPhone(), tbUser.getPassWord(), 1);
         }else {
             token = new UsernamePasswordToken(sysUser.getPhone(), sysUser.getPassword(), 2);
