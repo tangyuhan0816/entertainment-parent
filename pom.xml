@@ -13,6 +13,7 @@
         <module>vpis-common</module>
         <module>vpis-asset</module>
         <module>vpis-trade</module>
+        <module>vpis-schedule-quartz</module>
     </modules>
 
 
