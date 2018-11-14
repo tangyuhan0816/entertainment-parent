@@ -1,5 +1,8 @@
 package com.vpis.schedule.service.order;
 
+import com.vpis.common.entity.order.Order;
+import com.vpis.schedule.dao.order.OrderDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,6 +15,14 @@ import org.springframework.stereotype.Service;
  */    
 @Service
 public class OrderService {
+
+    @Autowired
+    private OrderDao orderDao;
+
+    public Order find(){
+        return orderDao.selectByPrimaryKey(1L);
+    }
+
     public void play() {
         System.out.println("user id play");
     }

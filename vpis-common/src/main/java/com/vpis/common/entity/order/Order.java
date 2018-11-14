@@ -41,13 +41,13 @@ public class Order extends BaseEntity{
     @JSONField(name = "product_amount_total")
     @JsonProperty("product_amount_total")
     @Column(name = "product_amount_total")
-    private BigDecimal productAmoutTotal;
+    private BigDecimal productAmountTotal;
 
     @ApiModelProperty(value = "实际付款金额")
     @JSONField(name = "order_amount_total")
     @JsonProperty("order_amount_total")
     @Column(name = "order_amount_total")
-    private BigDecimal orderAmoutTotal;
+    private BigDecimal orderAmountTotal;
 
     @ApiModelProperty(value = "价格单位")
     @JSONField(name = "price_unit")
