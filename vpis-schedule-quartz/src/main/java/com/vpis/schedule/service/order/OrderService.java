@@ -5,6 +5,8 @@ import com.vpis.schedule.dao.order.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderService
@@ -19,15 +21,11 @@ public class OrderService {
     @Autowired
     private OrderDao orderDao;
 
-    public Order find(){
-        return orderDao.selectByPrimaryKey(1L);
+    public List<Order> findByOrderStatus(){
+        return orderDao.findByOrderStatus();
     }
 
-    public void play() {
-        System.out.println("user id play");
-    }
-
-    public void study() {
-        System.out.println("user id study");
+    public void updateOrderStatus(List<Order> list){
+        orderDao.updateStatus(list);
     }
 }

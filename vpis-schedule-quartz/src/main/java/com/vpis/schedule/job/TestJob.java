@@ -13,12 +13,12 @@ public class TestJob extends QuartzJobBean{
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        orderService.play();
+        System.out.println("开始-----------");
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        orderService.study();
+        System.out.println("结束-----------");
     }
 }

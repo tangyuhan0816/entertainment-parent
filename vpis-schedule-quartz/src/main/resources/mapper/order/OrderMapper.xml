@@ -30,18 +30,9 @@
     mark, order_status, payment_config_info, create_date_time, update_date_time, deleted, 
     version
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from `order`
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from order
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.vpis.common.entity.order.Order" >
-    insert into order (id, order_no, product_amount_total, 
+
+  <insert id="save" parameterType="com.vpis.common.entity.order.Order" >
+    insert into `order` (id, order_no, product_amount_total,
       order_amount_total, price_unit, payment_order_no, 
       street, phone_number, name, 
       order_type, pay_channel, pay_time, 
@@ -58,228 +49,36 @@
       #{updateDateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, #{version,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.vpis.common.entity.order.Order" >
-    insert into order
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="orderNo != null" >
-        order_no,
-      </if>
-      <if test="productAmountTotal != null" >
-        product_amount_total,
-      </if>
-      <if test="orderAmountTotal != null" >
-        order_amount_total,
-      </if>
-      <if test="priceUnit != null" >
-        price_unit,
-      </if>
-      <if test="paymentOrderNo != null" >
-        payment_order_no,
-      </if>
-      <if test="street != null" >
-        street,
-      </if>
-      <if test="phoneNumber != null" >
-        phone_number,
-      </if>
-      <if test="name != null" >
-        name,
-      </if>
-      <if test="orderType != null" >
-        order_type,
-      </if>
-      <if test="payChannel != null" >
-        pay_channel,
-      </if>
-      <if test="payTime != null" >
-        pay_time,
-      </if>
-      <if test="userId != null" >
-        user_id,
-      </if>
-      <if test="providerId != null" >
-        provider_id,
-      </if>
-      <if test="mark != null" >
-        mark,
-      </if>
-      <if test="orderStatus != null" >
-        order_status,
-      </if>
-      <if test="paymentConfigInfo != null" >
-        payment_config_info,
-      </if>
-      <if test="createDateTime != null" >
-        create_date_time,
-      </if>
-      <if test="updateDateTime != null" >
-        update_date_time,
-      </if>
-      <if test="deleted != null" >
-        deleted,
-      </if>
-      <if test="version != null" >
-        version,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="orderNo != null" >
-        #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productAmountTotal != null" >
-        #{productAmountTotal,jdbcType=DECIMAL},
-      </if>
-      <if test="orderAmountTotal != null" >
-        #{orderAmountTotal,jdbcType=DECIMAL},
-      </if>
-      <if test="priceUnit != null" >
-        #{priceUnit,jdbcType=VARCHAR},
-      </if>
-      <if test="paymentOrderNo != null" >
-        #{paymentOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="street != null" >
-        #{street,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneNumber != null" >
-        #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        #{orderType,jdbcType=TINYINT},
-      </if>
-      <if test="payChannel != null" >
-        #{payChannel,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null" >
-        #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userId != null" >
-        #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="providerId != null" >
-        #{providerId,jdbcType=BIGINT},
-      </if>
-      <if test="mark != null" >
-        #{mark,jdbcType=VARCHAR},
-      </if>
-      <if test="orderStatus != null" >
-        #{orderStatus,jdbcType=BIT},
-      </if>
-      <if test="paymentConfigInfo != null" >
-        #{paymentConfigInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="createDateTime != null" >
-        #{createDateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDateTime != null" >
-        #{updateDateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null" >
-        #{deleted,jdbcType=BIT},
-      </if>
-      <if test="version != null" >
-        #{version,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.vpis.common.entity.order.Order" >
-    update order
-    <set >
-      <if test="orderNo != null" >
-        order_no = #{orderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="productAmountTotal != null" >
-        product_amount_total = #{productAmountTotal,jdbcType=DECIMAL},
-      </if>
-      <if test="orderAmountTotal != null" >
-        order_amount_total = #{orderAmountTotal,jdbcType=DECIMAL},
-      </if>
-      <if test="priceUnit != null" >
-        price_unit = #{priceUnit,jdbcType=VARCHAR},
-      </if>
-      <if test="paymentOrderNo != null" >
-        payment_order_no = #{paymentOrderNo,jdbcType=VARCHAR},
-      </if>
-      <if test="street != null" >
-        street = #{street,jdbcType=VARCHAR},
-      </if>
-      <if test="phoneNumber != null" >
-        phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="orderType != null" >
-        order_type = #{orderType,jdbcType=TINYINT},
-      </if>
-      <if test="payChannel != null" >
-        pay_channel = #{payChannel,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null" >
-        pay_time = #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="providerId != null" >
-        provider_id = #{providerId,jdbcType=BIGINT},
-      </if>
-      <if test="mark != null" >
-        mark = #{mark,jdbcType=VARCHAR},
-      </if>
-      <if test="orderStatus != null" >
-        order_status = #{orderStatus,jdbcType=BIT},
-      </if>
-      <if test="paymentConfigInfo != null" >
-        payment_config_info = #{paymentConfigInfo,jdbcType=VARCHAR},
-      </if>
-      <if test="createDateTime != null" >
-        create_date_time = #{createDateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateDateTime != null" >
-        update_date_time = #{updateDateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="deleted != null" >
-        deleted = #{deleted,jdbcType=BIT},
-      </if>
-      <if test="version != null" >
-        version = #{version,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
+
+
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from `order`
+    where id = #{id,jdbcType=BIGINT} and deleted = 0
+  </select>
+
+
+  <select id="findByOrderStatus" resultMap="BaseResultMap">
+
+    select
+      <include refid="Base_Column_List" />
+    from `order` o
+    <![CDATA[
+    where o.create_date_time < DATE_SUB(NOW(),INTERVAL 60 MINUTE) and o.order_status = 0 and deleted = 0
+    ]]>
+  </select>
+
+  <update id="updateStatus">
+    update `order` o
+    set
+      o.order_status = 5,
+      o.update_date_time = NOW()
+    where o.id in
+    <foreach collection="list" open="(" separator="," close=")" item="item" index="index" >
+      #{item.id}
+    </foreach>
   </update>
 
-  <update id="updateByPrimaryKey" parameterType="com.vpis.common.entity.order.Order" >
-    update order
-    set order_no = #{orderNo,jdbcType=VARCHAR},
-      product_amount_total = #{productAmountTotal,jdbcType=DECIMAL},
-      order_amount_total = #{orderAmountTotal,jdbcType=DECIMAL},
-      price_unit = #{priceUnit,jdbcType=VARCHAR},
-      payment_order_no = #{paymentOrderNo,jdbcType=VARCHAR},
-      street = #{street,jdbcType=VARCHAR},
-      phone_number = #{phoneNumber,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      order_type = #{orderType,jdbcType=TINYINT},
-      pay_channel = #{payChannel,jdbcType=VARCHAR},
-      pay_time = #{payTime,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=BIGINT},
-      provider_id = #{providerId,jdbcType=BIGINT},
-      mark = #{mark,jdbcType=VARCHAR},
-      order_status = #{orderStatus,jdbcType=BIT},
-      payment_config_info = #{paymentConfigInfo,jdbcType=VARCHAR},
-      create_date_time = #{createDateTime,jdbcType=TIMESTAMP},
-      update_date_time = #{updateDateTime,jdbcType=TIMESTAMP},
-      deleted = #{deleted,jdbcType=BIT},
-      version = #{version,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
 </mapper>

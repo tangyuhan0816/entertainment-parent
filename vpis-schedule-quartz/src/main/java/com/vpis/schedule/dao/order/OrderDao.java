@@ -2,6 +2,8 @@ package com.vpis.schedule.dao.order;
 
 import com.vpis.common.entity.order.Order;
 
+import java.util.List;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderDao
@@ -12,15 +14,15 @@ import com.vpis.common.entity.order.Order;
  */
 public interface OrderDao {
 
-    int deleteByPrimaryKey(Long id);
-
     int insert(Order record);
 
-    int insertSelective(Order record);
+    Order findById(Long id);
 
-    Order selectByPrimaryKey(Long id);
+    /**
+     * 获取一小时没支付的订单
+     * @return
+     */
+    List<Order> findByOrderStatus();
 
-    int updateByPrimaryKeySelective(Order record);
-
-    int updateByPrimaryKey(Order record);
+    void updateStatus(List<Order> list);
 }
