@@ -1,4 +1,4 @@
-package com.vpis.schedule.dao.order;
+package com.vpis.schedule.dao.business.order;
 
 import com.vpis.common.entity.order.Order;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderDao
- *  @package: com.vpis.schedule.dao.order
+ *  @package: com.vpis.schedule.dao.business.order
  *  @Date: Created in 2018/11/14 上午11:20
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:

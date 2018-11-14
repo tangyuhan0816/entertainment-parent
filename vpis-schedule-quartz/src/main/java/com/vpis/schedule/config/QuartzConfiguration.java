@@ -1,12 +1,13 @@
 package com.vpis.schedule.config;
 
 
-import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -18,7 +19,6 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 
 /**
  *  @Author: Yuhan.Tang
@@ -28,8 +28,8 @@ import java.io.IOException;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: quartz
  */
-@Configuration
 @EnableScheduling
+@Configuration
 public class QuartzConfiguration {
 
 
@@ -69,17 +69,21 @@ public class QuartzConfiguration {
         return jobFactory;
     }
 
+    @Autowired
+    @Qualifier("quartzDataSource")
+    private DataSource quartzDataSource;
+
+
     /**
      * 配置任务调度器
      * 使用项目数据源作为quartz数据源
      *
      * @param jobFactory 自定义配置任务工厂
-     * @param dataSource 数据源实例
      * @return
      * @throws Exception
      */
     @Bean(destroyMethod = "destroy", autowire = Autowire.NO)
-    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory, DataSource dataSource) throws Exception {
+    public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory) throws Exception {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         //将spring管理job自定义工厂交由调度器维护
         schedulerFactoryBean.setJobFactory(jobFactory);
@@ -90,7 +94,7 @@ public class QuartzConfiguration {
         //设置调度器自动运行
         schedulerFactoryBean.setAutoStartup(true);
         //设置数据源，使用与项目统一数据源
-        schedulerFactoryBean.setDataSource(dataSource);
+        schedulerFactoryBean.setDataSource(quartzDataSource);
         //设置上下文spring bean name
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         //设置配置文件位置

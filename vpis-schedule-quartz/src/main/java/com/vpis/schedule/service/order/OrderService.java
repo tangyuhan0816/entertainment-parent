@@ -1,7 +1,7 @@
 package com.vpis.schedule.service.order;
 
 import com.vpis.common.entity.order.Order;
-import com.vpis.schedule.dao.order.OrderDao;
+import com.vpis.schedule.dao.business.order.OrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,13 @@ import java.util.List;
 @Service
 public class OrderService {
 
+
     @Autowired
     private OrderDao orderDao;
+
+    public Order findById(){
+        return orderDao.findById(1L);
+    }
 
     public List<Order> findByOrderStatus(){
         return orderDao.findByOrderStatus();

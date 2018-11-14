@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.vpis.schedule.dao.JobAndTriggersDao" >
+<mapper namespace="com.vpis.schedule.dao.quartz.JobAndTriggersDao" >
   <resultMap id="BaseResultMap" type="com.vpis.common.entity.quartz.JobAndTriggers" >
     <id column="SCHED_NAME" property="schedName" jdbcType="VARCHAR" />
     <id column="TRIGGER_NAME" property="triggerName" jdbcType="VARCHAR" />

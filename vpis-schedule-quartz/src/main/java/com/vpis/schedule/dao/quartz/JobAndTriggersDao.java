@@ -1,4 +1,4 @@
-package com.vpis.schedule.dao;
+package com.vpis.schedule.dao.quartz;
 
 import com.vpis.common.entity.quartz.JobAndTriggers;
 import com.vpis.common.entity.quartz.JobAndTriggersKey;

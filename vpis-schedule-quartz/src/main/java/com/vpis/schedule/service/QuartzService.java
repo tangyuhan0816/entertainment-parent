@@ -2,7 +2,7 @@ package com.vpis.schedule.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.vpis.schedule.dao.JobAndTriggersDao;
+import com.vpis.schedule.dao.quartz.JobAndTriggersDao;
 import com.vpis.schedule.entity.JobAndTrigger;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;

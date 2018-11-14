@@ -18,9 +18,26 @@ spring:
     minEvictableIdleTimeMillis: 10000
     testWhileIdle: true
     testOnBorrow: true
-    validationQuery: "SELECT 1"
+    validationQuery: SELECT1FROMDUAL
     testOnReturn: false
-
+  quartz-datasource:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://118.184.217.250:3306/quartz?Unicode=true&amp;characterEncoding=UTF-8
+      username: root
+      password: X315134.y
+      jmx-enabled: true
+      initialSize: 5
+      maxActive: 100
+      minIdle: 5
+      maxIdle: 25
+      maxAge: 3600000
+      maxWait: 10000
+      timeBetweenEvictionRunsMillis: 10000
+      minEvictableIdleTimeMillis: 10000
+      testWhileIdle: true
+      testOnBorrow: true
+      validationQuery: SELECT1FROMDUAL
+      testOnReturn: false
   application:
       name: quartz-cluster-node-first
   redis:
@@ -36,6 +53,8 @@ spring:
       shutdown-timeout: 10000
     timeout: 10000
     database: 0
+
+
 
 ## 该配置节点为独立的节点。这个配置放在spring的节点下，导致配置无法被识别
 mybatis:
