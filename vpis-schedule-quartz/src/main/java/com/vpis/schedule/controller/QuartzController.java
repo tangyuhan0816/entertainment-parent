@@ -1,7 +1,7 @@
 package com.vpis.schedule.controller;
 
-import com.vpis.common.entity.quartz.QrtzTriggers;
-import com.vpis.common.page.PageableResponse;
+import com.github.pagehelper.PageInfo;
+import com.vpis.schedule.entity.JobAndTrigger;
 import com.vpis.schedule.service.QuartzService;
 import org.quartz.*;
 import org.slf4j.Logger;
@@ -128,10 +128,10 @@ public class QuartzController {
 
     @GetMapping(value = "/queryjob")
     public Map<String, Object> queryjob(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
-        PageableResponse<QrtzTriggers> jobAndTrigger = quartzService.getJobAndTriggerDetails(pageNum, pageSize);
+        PageInfo<JobAndTrigger> jobAndTrigger = quartzService.getJobAndTriggerDetails(pageNum, pageSize);
         Map<String, Object> map = new HashMap<>();
-        map.put("QrtzTriggers", jobAndTrigger.getList());
-        map.put("number", jobAndTrigger.getTotalCount());
+        map.put("JobAndTrigger", jobAndTrigger);
+        map.put("number", jobAndTrigger.getTotal());
         return map;
     }
 

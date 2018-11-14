@@ -6,7 +6,7 @@ import com.vpis.common.entity.order.OrderItem;
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderItemRepository
- *  @package: com.vpis.asset.mapper.order
+ *  @package: com.vpis.asset.dao.order
  *  @Date: Created in 2018/11/8 下午3:03
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:

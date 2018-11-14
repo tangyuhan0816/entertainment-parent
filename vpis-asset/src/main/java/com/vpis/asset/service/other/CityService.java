@@ -10,7 +10,7 @@
 //public class CityService{
 //
 //    @Autowired
-//    private com.vpis.asset.mapper.other.CityRepository CityRepository;
+//    private com.vpis.asset.dao.other.CityRepository CityRepository;
 //
 //    public List<City> findByProvinceId(Long provnceId){
 //        return  CityRepository.findByProvinceIdAndDeletedIsFalse(provnceId);

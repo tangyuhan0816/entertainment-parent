@@ -8,7 +8,7 @@ import java.util.List;
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: ExtendInfoRepository
- *  @package: com.vpis.asset.mapper.sys
+ *  @package: com.vpis.asset.dao.sys
  *  @Date: Created in 2018/10/30 下午3:30
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:

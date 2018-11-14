@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: HouseRepository
- *  @package: com.vpis.asset.mapper.house
+ *  @package: com.vpis.asset.dao.house
  *  @Date: Created in 2018/10/26 上午11:55
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:

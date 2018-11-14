@@ -1,8 +1,10 @@
 package com.vpis.schedule;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  *  @Author: Yuhan.Tang
@@ -12,6 +14,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: quartz
  */
+@ComponentScan("com.vpis.schedule")
+@MapperScan("com.vpis.schedule.dao")
 @EntityScan(value = "com.vpis.common.*")
 @SpringBootApplication
 public class QuartzApplication {

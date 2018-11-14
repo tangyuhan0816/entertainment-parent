@@ -1,12 +1,12 @@
 package com.vpis.schedule.service;
 
-import com.vpis.common.entity.quartz.QrtzTriggers;
-import com.vpis.common.page.PageableResponse;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.vpis.schedule.dao.JobAndTriggersDao;
+import com.vpis.schedule.entity.JobAndTrigger;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class QuartzService {
     private Scheduler scheduler;
 
     @Autowired
-    private JobAndTriggerRepository jobAndTriggerRepository;
+    private JobAndTriggersDao jobAndTriggersDao;
 
     @PostConstruct
     public void startScheduler() {
@@ -257,12 +257,10 @@ public class QuartzService {
         return jobList;
     }
 
-    public PageableResponse<QrtzTriggers> getJobAndTriggerDetails(int pageNum, int pageSize) {
-        PageableResponse<QrtzTriggers> response = new PageableResponse<>();
-        Page<QrtzTriggers> page = jobAndTriggerRepository.findAll(PageRequest.of(pageNum,pageSize));
-        response.setList(page.getContent());
-        response.setTotalPages(page.getTotalPages());
-        response.setTotalCount(page.getTotalElements());
-        return response;
+    public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<JobAndTrigger> list = jobAndTriggersDao.getJobAndTriggerDetails();
+        PageInfo<JobAndTrigger> page = new PageInfo<JobAndTrigger>(list);
+        return page;
     }
 }

@@ -1,9 +1,21 @@
-package com.vpis.schedule.mapper;
+package com.vpis.schedule.dao;
 
 import com.vpis.common.entity.quartz.JobAndTriggers;
 import com.vpis.common.entity.quartz.JobAndTriggersKey;
+import com.vpis.schedule.entity.JobAndTrigger;
 
-public interface JobAndTriggersMapper {
+import java.util.List;
+
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: JobAndTriggersDao
+ *  @package: com.vpis.schedule.dao
+ *  @Date: Created in 2018/11/14 上午10:56
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
+public interface JobAndTriggersDao {
+
     int deleteByPrimaryKey(JobAndTriggersKey key);
 
     int insert(JobAndTriggers record);
@@ -17,4 +29,6 @@ public interface JobAndTriggersMapper {
     int updateByPrimaryKeyWithBLOBs(JobAndTriggers record);
 
     int updateByPrimaryKey(JobAndTriggers record);
+
+    List<JobAndTrigger> getJobAndTriggerDetails();
 }
