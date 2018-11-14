@@ -77,6 +77,7 @@ vpis-parent.iml
 vpis-asset/vpis-asset.iml
 vpis-asset/asset-core/asset-core.iml
 vpis-asset/asset-common/asset-common.iml
+vpis-schedule-quartz/vpis-schedule-quartz.iml
 vpis-common/vpis-common.iml
 vpis-trade/vpis-trade.iml
 .DS_Store
