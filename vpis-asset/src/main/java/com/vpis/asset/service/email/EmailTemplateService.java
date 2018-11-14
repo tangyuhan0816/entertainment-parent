@@ -2,7 +2,7 @@
 //
 //import com.vpis.asset.annotation.CachePutAnnotation;
 //import com.vpis.asset.annotation.CacheReadAnnotation;
-//import com.vpis.asset.repository.sys.EmailTemplateRepository;
+//import com.vpis.asset.mapper.sys.EmailTemplateRepository;
 //import com.vpis.asset.entity.sys.EmailTemplate;
 //import com.vpis.common.type.EmailType;
 //import org.springframework.beans.factory.annotation.Autowired;

@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @SpringBootApplication
 public class QuartzApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(QuartzApplication.class);
     }
 }

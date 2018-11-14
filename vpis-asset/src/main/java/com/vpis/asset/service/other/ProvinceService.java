@@ -1,6 +1,6 @@
 //package com.vpis.asset.service.other;
 //
-//import com.vpis.asset.repository.other.ProvinceRepository;
+//import com.vpis.asset.mapper.other.ProvinceRepository;
 //import com.vpis.asset.entity.other.Province;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;

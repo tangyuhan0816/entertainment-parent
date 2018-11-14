@@ -1,6 +1,8 @@
 package com.vpis.schedule.config;
 
 
+import org.quartz.Scheduler;
+import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.BeansException;
@@ -16,6 +18,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 
 /**
  *  @Author: Yuhan.Tang
@@ -91,7 +94,12 @@ public class QuartzConfiguration {
         //设置上下文spring bean name
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         //设置配置文件位置
-        schedulerFactoryBean.setConfigLocation(new ClassPathResource("/quartz.properties"));
+        schedulerFactoryBean.setConfigLocation(new ClassPathResource("quartz/quartz.properties"));
         return schedulerFactoryBean;
+    }
+
+    @Bean
+    public QuartzInitializerListener executorListener() {
+        return new QuartzInitializerListener();
     }
 }
