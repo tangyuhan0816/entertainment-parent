@@ -1,12 +1,6 @@
 server.port: 15060
 
 spring:
-  mail:
-      host: smtp.163.com
-      username: 18569034402@163.com
-      password: caonimabi2
-      default-encoding: UTF-8
-      protocol: smtp
   profiles: test
   datasource:
     driverClassName: com.mysql.jdbc.Driver
