@@ -17,7 +17,7 @@ import javax.servlet.MultipartConfigElement;
  *  @Description:
  */
 
-@EntityScan(value = "com.vpis.common.*")
+//@EntityScan(value = "com.vpis.common.*")
 @SpringBootApplication
 public class Application {
 

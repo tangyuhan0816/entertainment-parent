@@ -74,6 +74,12 @@ api:
   aliyun:
     gps: http://gc.ditu.aliyun.com/regeocoding?l=%s,%s&type=010
 
+wechat:
+  mpAppId: wxf123456
+  mchId: 141xxxxxxx
+  mchKey: 32未签名key
+  keyPath: /var/weixin_cert/h5.p12
+  notifyUrl: /notify.htm
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
