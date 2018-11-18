@@ -39,4 +39,16 @@ public class OrderUtil {
         }
         return stringBuffer.toString();
     }
+
+    private static final Random RANDOM = new Random();
+
+    public static String getRandomStr() {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < 16; ++i) {
+            sb.append("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".charAt(RANDOM.nextInt("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".length())));
+        }
+
+        return sb.toString();
+    }
 }

@@ -1,6 +1,18 @@
 package com.vpis.asset.service.pay;
 
-public interface IPayService<T> {
+import com.vpis.common.entity.pay.request.wechat.PayRequest;
+import com.vpis.common.entity.pay.response.wechat.PayResponse;
 
-    T pay();
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: IPayService
+ *  @package: com.vpis.asset.service.pay
+ *  @Date: Created in 2018/11/18 下午3:21
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description:
+ */
+public interface IPayService {
+
+    PayResponse pay(PayRequest payRequest);
+
 }
