@@ -89,7 +89,7 @@ public class Order extends BaseEntity{
     @JSONField(name = "pay_channel")
     @JsonProperty("pay_channel")
     @Column(name = "pay_channel")
-    private String payChannel;
+    private Integer payChannel;
 
     @ApiModelProperty(value = "支付时间")
     @JSONField(name = "pay_time")
