@@ -23,6 +23,8 @@ spring:
   jpa:
 #    hibernate.ddl-auto: update
     show-sql: true
+  thymeleaf:
+      prefix: classpath:/templates/
   redis:
     host: 193.112.97.60
     port: 6379
@@ -75,11 +77,12 @@ api:
     gps: http://gc.ditu.aliyun.com/regeocoding?l=%s,%s&type=010
 
 wechat:
-  mpAppId: wxf364269526c4abb6
-  mchId: 1415547702
-  mchKey: magicwindowmagicwindowmagicwindo
+  mpAppId: wx49388eb65c74a6e3
+  mchId: 1519239921
+  mchKey: shitoushitoushitoushitoushitoush
+  AppSecret: 82178899f5d010403c908ed58aee3b82
   keyPath: /var/weixin_cert/h5.p12
-  notifyUrl: https://merculet-appmarket-cn.liaoyantech.cn/pay/notify.htm
+  notifyUrl: http://118.184.217.250:15060/pay/notify.htm
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties

@@ -31,6 +31,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -148,6 +149,9 @@ public class OrderService {
             throw new STException("未查询到用户信息");
         }
 
+        //支付渠道
+        PayTypeEnum payTypeEnum = PayTypeEnum.getIndex(orderBean.getPayType());
+
         List<OrderItem> orderItemList = new ArrayList<>(orderBean.getOrderItemList().size());
 
         for(OrderItemBean orderItemBean : orderBean.getOrderItemList()){
@@ -157,7 +161,7 @@ public class OrderService {
         }
 
         //创建订单
-        Order order = createOrder(user, orderItemList, orderBean.getPayType());
+        Order order = createOrder(user, orderItemList, payTypeEnum.ordinal());
 
         //给订单项赋值Order Id
         for (OrderItem orderItem : orderItemList) {
@@ -167,7 +171,7 @@ public class OrderService {
         //创建订单项
         orderItemRepository.saveAll(orderItemList);
 
-        IPayService iPayService = null;
+        IPayService iPayService = BeanContext.payServiceMap.get(PayTypeEnum.getIndex(orderBean.getPayType()).getServiceName());;
 
         // TODO 微信支付  处理预支付/支付逻辑
         PayRequest payRequest = new PayRequest();
@@ -176,14 +180,8 @@ public class OrderService {
         //商品描述交易字段格式根据不同的应用场景按照以下格式：
         //APP——需传入应用市场上的APP名字-实际商品名称，天天爱消除-游戏充值。
         payRequest.setOrderName("视投科技-楼盘下单");
-        payRequest.setPayType(PayTypeEnum.WXPAY_APP);
+        payRequest.setPayType(payTypeEnum);
         payRequest.setSpbillCreateIp(spbillCreateIp);
-        if(orderBean.getPayType() == 1){
-            iPayService = BeanContext.getBean("aliPayService");
-        } else {
-            //默认微信支付
-            iPayService = BeanContext.getBean("wechatService");
-        }
 
         return iPayService.pay(payRequest);
     }

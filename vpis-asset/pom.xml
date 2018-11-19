@@ -62,6 +62,13 @@
       <version>1.7</version>
     </dependency>
 
+    <!-- 基础组件-->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
@@ -86,6 +93,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-freemarker</artifactId>
     </dependency>
 
     <dependency>
@@ -197,6 +210,7 @@
         <includes>
           <include>**/*.xml</include>
           <include>**/*.yml</include>
+          <include>**/*.ftl</include>
         </includes>
         <filtering>false</filtering>
       </resource>
