@@ -96,6 +96,16 @@ public class HouseVo extends BaseBean{
     @JsonProperty("distance")
     private BigDecimal distance;
 
+    @ApiModelProperty(value = "经度")
+    @JSONField(name = "longitude_x")
+    @JsonProperty("longitude_x")
+    private BigDecimal longitudeX;
+
+    @ApiModelProperty(value = "纬度")
+    @JSONField(name = "latitude_y")
+    @JsonProperty("latitude_y")
+    private BigDecimal latitudeY;
+
     public HouseVo conver(House house){
         this.setAdviceNum(house.getAdviceNum());
         this.setBannerUrl(house.getBannerUrl());
@@ -106,6 +116,8 @@ public class HouseVo extends BaseBean{
         this.setAveragePrice(house.getAveragePrice());
         this.setId(house.getId());
         this.setHouseName(house.getHouseName());
+        this.setLatitudeY(house.getLatitudeY());
+        this.setLongitudeX(house.getLongitudeX());
         return this;
     }
 
@@ -122,6 +134,8 @@ public class HouseVo extends BaseBean{
         this.setMonthPersonFlow(house.getMonthPersonFlow());
         this.setCheckInDate(house.getCheckInDate());
         this.setAverageAge(house.getAverageAge());
+        this.setLatitudeY(house.getLatitudeY());
+        this.setLongitudeX(house.getLongitudeX());
         return this;
     }
 }

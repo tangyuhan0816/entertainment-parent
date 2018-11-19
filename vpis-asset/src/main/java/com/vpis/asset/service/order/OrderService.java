@@ -8,16 +8,21 @@ import com.vpis.asset.dao.order.OrderDao;
 import com.vpis.asset.repository.order.OrderItemRepository;
 import com.vpis.asset.repository.order.OrderRepository;
 import com.vpis.asset.service.house.HouseService;
+import com.vpis.asset.service.pay.IPayService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.order.Order;
 import com.vpis.common.entity.order.OrderItem;
+import com.vpis.common.entity.pay.request.wechat.PayRequest;
+import com.vpis.common.entity.pay.response.wechat.PayResponse;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.page.PageableResponse;
 import com.vpis.common.type.order.OrderStatus;
+import com.vpis.common.type.pay.PayTypeEnum;
 import com.vpis.common.utils.OrderUtil;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -64,6 +69,9 @@ public class OrderService {
     @Autowired
     private OrderDao orderDao;
 
+    @Autowired
+    private IPayService wechatService;
+
     private static final String SUM_COUNT = "sum_count";
     private static final String SUM_PRICE = "sum_price";
 
@@ -108,7 +116,7 @@ public class OrderService {
      * 创建订单
      */
     @Transactional(rollbackFor = Exception.class)
-    public void createOrderInfo(Long userId, OrderBean orderBean){
+    public PayResponse createOrderInfo(Long userId,String spbillCreateIp, OrderBean orderBean){
 
         if(Preconditions.isBlank(orderBean) ||
                 Preconditions.isBlank(orderBean.getStartDate()) ||
@@ -162,6 +170,15 @@ public class OrderService {
         orderItemRepository.saveAll(orderItemList);
 
         // TODO 微信支付  处理预支付/支付逻辑
+        PayRequest payRequest = new PayRequest();
+        payRequest.setOrderAmount(order.getOrderAmountTotal().doubleValue());
+        payRequest.setOrderId(order.getOrderNo());
+        //商品描述交易字段格式根据不同的应用场景按照以下格式：
+        //APP——需传入应用市场上的APP名字-实际商品名称，天天爱消除-游戏充值。
+        payRequest.setOrderName("视投科技-楼盘下单");
+        payRequest.setPayType(PayTypeEnum.WXPAY_APP);
+        payRequest.setSpbillCreateIp(spbillCreateIp);
+        return wechatService.pay(payRequest);
     }
 
     public Order createOrder(TbUser user, List<OrderItem> orderItemList){

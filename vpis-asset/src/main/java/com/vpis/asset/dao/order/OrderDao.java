@@ -2,7 +2,6 @@ package com.vpis.asset.dao.order;
 
 import com.vpis.asset.bean.vo.OrderVo;
 import com.vpis.common.page.PageableResponse;
-import com.vpis.common.type.order.OrderStatus;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +28,8 @@ public class OrderDao {
         if(Preconditions.isNotBlank(params.get("orderStatus"))){
             sql.append(" and o.order_status = :orderStatus ");
         }
+
+        sql.append(" and o.deleted = 0 ");
 
         return jdbcTemplate.queryForObject(sql.toString(), params, Long.class);
     }
@@ -59,6 +60,7 @@ public class OrderDao {
             params.put("pageNumber", pageNumber * pageSize);
             params.put("pageSize", pageSize);
 
+            sql.append(" and o.deleted = 0 ");
             sql.append(" order by o.create_date_time desc ");
             sql.append(" limit ");
             sql.append(" :pageNumber ");

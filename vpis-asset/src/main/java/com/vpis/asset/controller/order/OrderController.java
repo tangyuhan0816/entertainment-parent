@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderController
@@ -32,11 +34,11 @@ public class OrderController extends BaseController{
 
     @ApiOperation(value = "统一创建订单接口 ，Owner: yuhan.tang", response = ResponseContent.class)
     @RequestMapping(path = "/create", method = {RequestMethod.POST})
-    public ResponseContent create(@RequestBody OrderBean bean){
+    public ResponseContent create(HttpServletRequest request, @RequestBody OrderBean bean){
         logger.info("统一创建订单接口 create =======> {}", JSONObject.toJSONString(bean));
         Long userId = getSessionUserId();
-        orderService.createOrderInfo(userId, bean);
-        return ResponseContent.buildSuccess();
+        String spbillCreateIp = getIp(request);
+        return ResponseContent.buildSuccess(orderService.createOrderInfo(userId, spbillCreateIp, bean));
     }
 
     @ApiOperation(value = "订单查询 ，Owner: yuhan.tang", response = ResponseContent.class)

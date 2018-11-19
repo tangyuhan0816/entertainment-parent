@@ -34,34 +34,57 @@ public abstract class BaseController {
     /**
      * 获取当前登陆的用户信息
      * RequestContextHolder.getRequestAttributes()).getRequest() 子线程无法获取参数，请注意使用
+     *
      * @return
      */
     protected SessionUser getSessionUser() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        String phone = jwtService.getStringValueByParams(authorization,"phone");
+        String phone = jwtService.getStringValueByParams(authorization, "phone");
         TbUser sysUser = sysUserService.findByPhone(phone);
         SessionUser sessionUser = new SessionUser();
-        BeanUtils.copyProperties(sysUser,sessionUser);
+        BeanUtils.copyProperties(sysUser, sessionUser);
         return sessionUser;
     }
 
-    protected String getSessionPhone(){
+    protected String getSessionPhone() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getStringValueByParams(authorization,"phone");
+        return jwtService.getStringValueByParams(authorization, "phone");
     }
 
-    protected Long getSessionAgentId(){
+    protected Long getSessionAgentId() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getLongValueByParams(authorization,"agent_id");
+        return jwtService.getLongValueByParams(authorization, "agent_id");
     }
 
-    protected Long getSessionUserId(){
+    protected Long getSessionUserId() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String authorization = request.getHeader("Authorization");
-        return jwtService.getLongValueByParams(authorization,"user_id");
+        return jwtService.getLongValueByParams(authorization, "user_id");
     }
 
+    public String getIp(HttpServletRequest request) {
+        String ipp = request.getRemoteAddr();
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.vpis.common.type.order;
 
+import com.vpis.common.utils.Preconditions;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: OrderStatus
@@ -10,27 +12,27 @@ package com.vpis.common.type.order;
  */
 public enum OrderStatus {
     //未支付
-    PENDING("PENDING", "0"),
+    PENDING("PENDING", 0),
     //已支付 == 待审核
-    PROCESSING("PROCESSING", "1"),
+    PROCESSING("PROCESSING", 1),
     //待投放
-    AWAITING("AWAITING", "2"),
+    AWAITING("AWAITING", 2),
     //已完成
-    COMPLETE("COMPLETE", "3"),
+    COMPLETE("COMPLETE", 3),
     //支付失败
-    FAIL("FAIL", "4"),
+    FAIL("FAIL", 4),
     //已取消
-    CANCELED("CANCELED", "5"),
+    CANCELED("CANCELED", 5),
     //已退款
-    REFUNDED("REFUNDED", "6"),
+    REFUNDED("REFUNDED", 6),
 
-    SYNCHING("SYNCHING", "7");
+    SYNCHING("SYNCHING", 7);
 
     private String name;
 
-    private String index;
+    private Integer index;
 
-    OrderStatus(String name, String index) {
+    OrderStatus(String name, Integer index) {
         this.name = name;
         this.index = index;
     }
@@ -43,11 +45,11 @@ public enum OrderStatus {
         this.name = name;
     }
 
-    public String getIndex() {
+    public Integer getIndex() {
         return index;
     }
 
-    public void setIndex(String index) {
+    public void setIndex(Integer index) {
         this.index = index;
     }
 
@@ -64,5 +66,17 @@ public enum OrderStatus {
             default:
                 return null;
         }
+    }
+
+    public static OrderStatus getStatusIndex(Integer index){
+        if(Preconditions.isBlank(index)){
+            return null;
+        }
+        for(OrderStatus status : OrderStatus.values()){
+            if(status.getIndex().equals(index)){
+                return status;
+            }
+        }
+        return null;
     }
 }
