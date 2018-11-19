@@ -39,4 +39,9 @@ public class OrderBean extends BaseBean {
     @JSONField(name = "end_date")
     @JsonProperty("end_date")
     private Date endDate;
+
+    @ApiModelProperty(value = "支付类型")
+    @JSONField(name = "pay_type")
+    @JsonProperty("pay_type")
+    private Integer payType;
 }

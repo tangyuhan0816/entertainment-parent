@@ -10,6 +10,7 @@ import com.vpis.asset.repository.order.OrderRepository;
 import com.vpis.asset.service.house.HouseService;
 import com.vpis.asset.service.pay.IPayService;
 import com.vpis.asset.service.sys.SysUserService;
+import com.vpis.asset.utils.BeanContext;
 import com.vpis.common.entity.order.Order;
 import com.vpis.common.entity.order.OrderItem;
 import com.vpis.common.entity.pay.request.wechat.PayRequest;
@@ -68,9 +69,6 @@ public class OrderService {
 
     @Autowired
     private OrderDao orderDao;
-
-    @Autowired
-    private IPayService wechatService;
 
     private static final String SUM_COUNT = "sum_count";
     private static final String SUM_PRICE = "sum_price";
@@ -159,7 +157,7 @@ public class OrderService {
         }
 
         //创建订单
-        Order order = createOrder(user, orderItemList);
+        Order order = createOrder(user, orderItemList, orderBean.getPayType());
 
         //给订单项赋值Order Id
         for (OrderItem orderItem : orderItemList) {
@@ -168,6 +166,8 @@ public class OrderService {
 
         //创建订单项
         orderItemRepository.saveAll(orderItemList);
+
+        IPayService iPayService = null;
 
         // TODO 微信支付  处理预支付/支付逻辑
         PayRequest payRequest = new PayRequest();
@@ -178,10 +178,17 @@ public class OrderService {
         payRequest.setOrderName("视投科技-楼盘下单");
         payRequest.setPayType(PayTypeEnum.WXPAY_APP);
         payRequest.setSpbillCreateIp(spbillCreateIp);
-        return wechatService.pay(payRequest);
+        if(orderBean.getPayType() == 1){
+            iPayService = BeanContext.getBean("aliPayService");
+        } else {
+            //默认微信支付
+            iPayService = BeanContext.getBean("wechatService");
+        }
+
+        return iPayService.pay(payRequest);
     }
 
-    public Order createOrder(TbUser user, List<OrderItem> orderItemList){
+    public Order createOrder(TbUser user, List<OrderItem> orderItemList, Integer payType){
         Order order = new Order();
 
         String orderNo = OrderUtil.generateOrderId("H");
@@ -203,6 +210,8 @@ public class OrderService {
 
         //0 购买   1其它方式
         order.setOrderType(0);
+
+        order.setPayChannel(payType);
 
         order.setOrderStatus(OrderStatus.PENDING.ordinal());
 
