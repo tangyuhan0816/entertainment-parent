@@ -148,4 +148,9 @@ public class HouseService {
         List<ExtendInfo> list = extendInfoRepository.findByUserIdAndDeletedIsFalse(parentUser.getUserId());
         return list.stream().map(ExtendInfo::getAgentBannerUrl).collect(Collectors.toList());
     }
+
+    public House findById(Long id){
+        return housesRepository.findByIdAndDeletedIsFalse(id);
+    }
+
 }

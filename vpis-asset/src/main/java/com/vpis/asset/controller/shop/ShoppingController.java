@@ -2,7 +2,8 @@ package com.vpis.asset.controller.shop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.vo.OrderVo;
-import com.vpis.asset.service.jwt.JwtService;
+import com.vpis.asset.controller.BaseController;
+import com.vpis.asset.service.order.ShoppingService;
 import com.vpis.common.utils.ResponseContent;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,17 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.List;
 
 /**
  *  @Author: Huan.Liu
@@ -32,16 +26,18 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/v1/vpis/shop/")
-@Api(description = "购物车接口")
-public class ShoppingController {
-    private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
+@Api(description = "购物车接口(目前不用)")
+public class ShoppingController extends BaseController {
 
-    @Autowired
-    private JwtService jwtService;
+    private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
 
     @Autowired
     private RedisTemplate redisTemplateJackson;
 
+    @Autowired
+    private ShoppingService shoppingService;
+
+    @Deprecated
     @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopQuery", method = {RequestMethod.POST})
     public ResponseContent query() {
@@ -55,6 +51,7 @@ public class ShoppingController {
         }
     }
 
+    @Deprecated
     @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopDel", method = {RequestMethod.POST})
     public ResponseContent del( @RequestBody OrderVo orderVo) {
@@ -77,6 +74,7 @@ public class ShoppingController {
 
     }
 
+    @Deprecated
     @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopInsert", method = {RequestMethod.POST})
     public ResponseContent insert(@RequestBody OrderVo orderVo) {
@@ -94,6 +92,7 @@ public class ShoppingController {
         }
     }
 
+    @Deprecated
     @ApiOperation(value = "修改商品 ，Owner: Huan.Liu")
     @RequestMapping(path = "/Shopupdate", method = {RequestMethod.POST})
     public ResponseContent update(@RequestBody OrderVo orderVo) {
@@ -117,10 +116,53 @@ public class ShoppingController {
         }
     }
 
-    protected Long getSessionUserId(){
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String authorization = request.getHeader("Authorization");
-        return jwtService.getLongValueByParams(authorization,"user_id");
+
+
+
+
+
+    /***************************************************************************************************************/
+
+    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
+    @RequestMapping(path = "/insert", method = {RequestMethod.POST})
+    public ResponseContent insertShop(@RequestParam(name = "house_id") Long houseId,
+                                      @RequestParam(name = "product_count") Integer productCount) {
+        try {
+            logger.info("新增商品 ShopInsert =======> {},{}", houseId,productCount);
+            Long userId = getSessionUserId();
+            return  ResponseContent.buildSuccess(shoppingService.saveShop(houseId,userId,productCount));
+        }catch (Exception e) {
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+    }
+
+
+    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
+    @RequestMapping(path = "/findList", method = {RequestMethod.POST})
+    public ResponseContent findAll() {
+        try {
+            Long userId = getSessionUserId();
+            logger.info("查询购物车 findAll =======> {}", userId);
+            return ResponseContent.buildSuccess(shoppingService.findAll(userId));
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
+    @RequestMapping(path = "/del", method = {RequestMethod.POST})
+    public ResponseContent delShop(@RequestParam(name = "ids")List<Long> houseIds) {
+        try {
+            logger.info("删除购物车 ShopDel =======> {}", JSONObject.toJSONString(houseIds));
+            Long userId = getSessionUserId();
+            return ResponseContent.buildSuccess(shoppingService.delShop(houseIds,userId));
+        }catch (Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+
     }
 
 
