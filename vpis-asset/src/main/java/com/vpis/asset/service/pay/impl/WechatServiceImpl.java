@@ -13,6 +13,7 @@ import com.vpis.common.utils.OrderUtil;
 import com.vpis.common.utils.Preconditions;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Serializer;
@@ -36,6 +37,7 @@ import java.util.TreeMap;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 微信服务
  */
+@Slf4j
 @Service("wechatService")
 public class WechatServiceImpl implements IPayService{
 
@@ -101,6 +103,12 @@ public class WechatServiceImpl implements IPayService{
                 return this.buildPayResponse(response);
             }
         }
+    }
+
+    @Override
+    public void doNotify(String notifyData) {
+        log.info("【微信异步回调参数】:{}",notifyData);
+//        WxPayUnifiedorderResponse
     }
 
     public PayResponse buildPayResponse(WxPayUnifiedorderResponse wxResponse){

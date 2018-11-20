@@ -42,4 +42,8 @@ public class PayResponse {
     @JSONField(name = "sign")
     @JsonProperty("sign")
     private String paySign;
+
+    @JSONField(name = "body")
+    @JsonProperty("body")
+    private String body;
 }

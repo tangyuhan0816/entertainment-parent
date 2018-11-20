@@ -37,6 +37,11 @@ public class PayRequest {
     @JsonProperty("order_name")
     private String orderName;
 
+    @ApiModelProperty(value = "商品名")
+    @JSONField(name = "subject")
+    @JsonProperty("subject")
+    private String subject;
+
     @ApiModelProperty(value = "创建用户IP")
     @JSONField(name = "spbill_create_ip")
     @JsonProperty("spbill_create_ip")
