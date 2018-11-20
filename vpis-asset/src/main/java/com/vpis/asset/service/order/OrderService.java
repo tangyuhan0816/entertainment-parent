@@ -1,5 +1,6 @@
 package com.vpis.asset.service.order;
 
+import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.order.OrderBean;
 import com.vpis.asset.bean.order.OrderItemBean;
 import com.vpis.asset.bean.vo.HouseVo;
@@ -173,7 +174,8 @@ public class OrderService {
 
         IPayService iPayService = BeanContext.payServiceMap.get(PayTypeEnum.getIndex(orderBean.getPayType()).getServiceName());;
 
-        // TODO 微信支付  处理预支付/支付逻辑
+        // 对接第三方处理下单，支付逻辑
+
         PayRequest payRequest = new PayRequest();
         payRequest.setOrderAmount(order.getOrderAmountTotal().doubleValue());
         payRequest.setOrderId(order.getOrderNo());
@@ -182,8 +184,16 @@ public class OrderService {
         payRequest.setOrderName("视投科技-楼盘下单");
         payRequest.setPayType(payTypeEnum);
         payRequest.setSpbillCreateIp(spbillCreateIp);
+        PayResponse payResponse = iPayService.pay(payRequest);
+        if(Preconditions.isBlank(payRequest)){
+            throw new STException("统一下单异常");
+        }
 
-        return iPayService.pay(payRequest);
+        String paymentConfigInfo = JSONObject.toJSONString(payResponse);
+        order.setPaymentConfigInfo(paymentConfigInfo);
+        orderRepository.save(order);
+
+        return payResponse;
     }
 
     public Order createOrder(TbUser user, List<OrderItem> orderItemList, Integer payType){

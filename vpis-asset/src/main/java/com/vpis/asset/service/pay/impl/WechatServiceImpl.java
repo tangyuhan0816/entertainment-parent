@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,32 +42,38 @@ public class WechatServiceImpl implements IPayService{
     @Value("${wechat.mpAppId}")
     public String mpAppId;
 
-    @Value("${wechat.mpAppId}")
+    @Value("${wechat.mchId}")
     public String mchId;
 
-    @Value("${wechat.mpAppId}")
+    @Value("${wechat.mchKey}")
     public String mchKey;
 
-    @Value("${wechat.mpAppId}")
+    @Value("${wechat.notifyUrl}")
     public String notifyUrl;
 
     private static final String WX_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    private static final String UNINI = "CNY";
+
+    private static final String TRADETYPE = "APP";
 
     @Override
     public PayResponse pay(PayRequest payRequest) {
         WxPayUnifiedorderRequest request = new WxPayUnifiedorderRequest();
         request.setAppId(mpAppId);
         request.setMchId(mchId);
-        request.setNonceStr(OrderUtil.getRandomStr());
 
         //默认MD5
         request.setSignType(SignType.MD5.name());
+        request.setDeviceInfo(TRADETYPE);
+        request.setNonceStr(OrderUtil.getRandomStr());
         request.setBody(payRequest.getOrderName());
         request.setOutTradeNo(payRequest.getOrderId());
         request.setTotalFee(MoneyUtil.Yuan2Fen(payRequest.getOrderAmount()).toString());
         request.setSpbillCreateIp(payRequest.getSpbillCreateIp());
         request.setNotifyUrl(notifyUrl);
-        request.setTradeType("APP");
+        request.setTradeType(TRADETYPE);
+        request.setFeeType(UNINI);
         request.setSign(this.sign(this.buildMap(request), mchKey));
 
         HttpHeaders headers = new DefaultHttpHeaders();
@@ -80,6 +87,11 @@ public class WechatServiceImpl implements IPayService{
         if(Preconditions.isBlank(responseBody)){
             throw new RuntimeException("微信统一下单】发起下单网络异常！");
         } else {
+            try {
+                responseBody = new String(responseBody.getBytes("ISO-8859-1"),"UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("【微信统一下单】下单乱码解码异常,responseBody = " + responseBody);
+            }
             WxPayUnifiedorderResponse response = (WxPayUnifiedorderResponse) stringToXml(responseBody, WxPayUnifiedorderResponse.class);
             if (!response.getReturnCode().equals("SUCCESS")) {
                 throw new RuntimeException("【微信统一下单】下单, returnCode != SUCCESS, returnMsg = " + response.getReturnMsg());
@@ -99,6 +111,7 @@ public class WechatServiceImpl implements IPayService{
         PayResponse payResponse = new PayResponse();
         payResponse.setAppId(wxResponse.getAppId());
         payResponse.setPartnerId(wxResponse.getMchId());
+        payResponse.setPrepayId(wxResponse.getPrepayId());
         payResponse.setPackAge("Sign=WXPay");
         payResponse.setNonceStr(nonceStr);
         payResponse.setTimeStamp(timeStamp);
@@ -135,6 +148,7 @@ public class WechatServiceImpl implements IPayService{
             Class<?> aClass = obj.getClass();
             Field[] fields = aClass.getDeclaredFields();
             for (Field field : fields) {
+                field.setAccessible(true);
                 String fieldName = field.getName();
                 Element annotation = field.getAnnotation(Element.class);
                 if (Preconditions.isNotBlank(annotation)) {
@@ -169,6 +183,6 @@ public class WechatServiceImpl implements IPayService{
         }
 
         url.append("key=").append(signKey);
-        return DigestUtils.md5Hex(url.toString());
+        return DigestUtils.md5Hex(url.toString()).toUpperCase();
     }
 }

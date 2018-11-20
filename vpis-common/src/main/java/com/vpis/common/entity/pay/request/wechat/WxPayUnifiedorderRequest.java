@@ -36,7 +36,10 @@ public class WxPayUnifiedorderRequest {
     /**
      * 终端设备号(门店号或收银设备ID)，默认请传"WEB"
      */
-    @Element(name = "device_info")
+    @Element(
+            name = "device_info",
+            required = false
+    )
     private String deviceInfo;
 
     /**
@@ -57,7 +60,8 @@ public class WxPayUnifiedorderRequest {
      * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
      * 否
      */
-    @Element(name = "sign_type")
+    @Element(name = "sign_type",
+            required = false)
     private String signType;
 
     /**
@@ -71,14 +75,16 @@ public class WxPayUnifiedorderRequest {
      * 商品详细描述，对于使用单品优惠的商户，改字段必须按照规范上传
      * 否
      */
-    @Element(name = "detail")
+    @Element(name = "detail",
+            required = false)
     private String detail;
 
     /**
      * 附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
      * 否
      */
-    @Element(name = "attach")
+    @Element(name = "attach",
+            required = false)
     private String attach;
 
     /**
@@ -113,21 +119,24 @@ public class WxPayUnifiedorderRequest {
      * 订单生成时间，格式为yyyyMMddHHmmss，如2009年12月25日9点10分10秒表示为20091225091010。
      * 否
      */
-    @Element(name = "time_start")
+    @Element(name = "time_start",
+            required = false)
     private String timeStart;
 
     /**
      * 订单失效时间，格式为yyyyMMddHHmmss，如2009年12月27日9点10分10秒表示为20091227091010。订单失效时间是针对订单号而言的，由于在请求支付的时候有一个必传参数prepay_id只有两小时的有效期，所以在重入时间超过2小时的时候需要重新请求下单接口获取新的prepay_id
      * 否
      */
-    @Element(name = "time_expire")
+    @Element(name = "time_expire",
+            required = false)
     private String timeExpire;
 
     /**
      * 订单优惠标记，代金券或立减优惠功能的参数
      * 否
      */
-    @Element(name = "goods_tag")
+    @Element(name = "goods_tag",
+            required = false)
     private String goosdTag;
 
     /**
@@ -148,7 +157,8 @@ public class WxPayUnifiedorderRequest {
      * no_credit--指定不能使用信用卡支付
      * 否
      */
-    @Element(name = "limit_pay")
+    @Element(name = "limit_pay",
+            required = false)
     private String limitPay;
 
     /**
@@ -161,6 +171,7 @@ public class WxPayUnifiedorderRequest {
          }
      * 否
      */
-    @Element(name = "scene_info")
+    @Element(name = "scene_info",
+            required = false)
     private String sceneInfo;
 }

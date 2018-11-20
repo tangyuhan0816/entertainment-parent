@@ -25,14 +25,14 @@ public enum PayTypeEnum {
     private String name;
     private String serviceName;
 
-    private PayTypeEnum(String code, String name, String serviceName) {
+    PayTypeEnum(String code, String name, String serviceName) {
         this.code = code;
         this.name = name;
         this.serviceName = serviceName;
     }
 
     public static PayTypeEnum getIndex(Integer index){
-        PayTypeEnum payTypeEnum = PayTypeEnum.values()[0];
+        PayTypeEnum payTypeEnum = PayTypeEnum.values()[index];
         if(Preconditions.isBlank(payTypeEnum)){
             throw new STException("index is null");
         }

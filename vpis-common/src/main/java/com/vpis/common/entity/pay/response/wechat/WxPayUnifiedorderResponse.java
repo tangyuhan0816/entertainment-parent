@@ -38,37 +38,43 @@ public class WxPayUnifiedorderResponse {
     /**
      * 调用接口提交的应用ID
      */
-    @Element(name = "appid")
+    @Element(name = "appid",
+            required = false)
     private String appId;
 
     /**
      * 调用接口提交的商户号
      */
-    @Element(name = "mch_id")
+    @Element(name = "mch_id",
+            required = false)
     private String mchId;
 
     /**
      * 调用接口提交的终端设备号
      */
-    @Element(name = "device_info")
+    @Element(name = "device_info",
+            required = false)
     private String deviceInfo;
 
     /**
      * 微信返回的随机字符串
      */
-    @Element(name = "nonce_str")
+    @Element(name = "nonce_str",
+            required = false)
     private String nonceStr;
 
     /**
      * 微信返回的签名
      */
-    @Element(name = "sign")
+    @Element(name = "sign",
+            required = false)
     private String sign;
 
     /**
      * SUCCESS/FAIL
      */
-    @Element(name = "result_code")
+    @Element(name = "result_code",
+            required = false)
     private String resultCode;
 
     /**
@@ -88,25 +94,29 @@ public class WxPayUnifiedorderResponse {
          POST_DATA_EMPTY	       post数据为空	        post数据不能为空	            请检查post数据是否为空
          NOT_UTF8	               编码格式错误	        未使用指定编码格式	            请使用NOT_UTF8编码格式
      */
-    @Element(name = "err_code")
+    @Element(name = "err_code",
+            required = false)
     private String errCode;
 
     /**
      * 错误返回的信息描述
      */
-    @Element(name = "err_code_des")
+    @Element(name = "err_code_des",
+            required = false)
     private String errCodeDes;
 
     /**
      * 调用接口提交的交易类型，取值如下：JSAPI，NATIVE，APP
      */
-    @Element(name = "trade_type")
+    @Element(name = "trade_type",
+            required = false)
     private String tradeType;
 
     /**
      * 微信生成的预支付回话标识，用于后续接口调用中使用，该值有效期为2小时
      */
-    @Element(name = "prepay_id")
+    @Element(name = "prepay_id",
+            required = false)
     private String prepayId;
 
 }
