@@ -207,7 +207,7 @@
       <artifactId>sdk-java</artifactId>    <!--自定义-->
       <version>3.3.2</version> <!--自定义-->
       <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
-      <systemPath>${basedir}/lib/alipay-sdk-java-3.3.2.jar</systemPath> <!--项目根目录下的lib文件夹下-->
+      <systemPath>${project.basedir}/lib/alipay-sdk-java-3.3.2.jar</systemPath> <!--项目根目录下的lib文件夹下-->
     </dependency>
 
 
@@ -226,6 +226,15 @@
         </includes>
         <filtering>false</filtering>
       </resource>
+
+      <!--引入外部jar  maven配置-->
+      <resource>
+         <directory>${project.basedir}/lib</directory>
+         <targetPath>BOOT-INF/lib/</targetPath>
+         <includes>
+             <include>**/*.jar</include>
+         </includes>
+      </resource>
     </resources>
 
     <plugins>
@@ -234,21 +243,6 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <fork>true</fork>
-        </configuration>
-      </plugin>
-
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>    //指定添加项目中使用的外部jar的classpath项
-              <classpathPrefix>lib/</classpathPrefix> //指定外部jar所在的路径，添加的classpath为 【路径】/jar文件名，Maven自动解析文件名，使用本项目生成的jar包时，当前目录下有lib文件夹，lib文件夹中有本项目使用的外部jar文件即可
-              <mainClass>main.MainExec</mainClass>    //指定本项目jar包的Main-Class
-            </manifest>
-          </archive>
         </configuration>
       </plugin>
 
