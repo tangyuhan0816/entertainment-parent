@@ -28,7 +28,7 @@ import java.text.DecimalFormat;
 @Service("aliPayService")
 public class AliPayServiceImpl implements IPayService{
 
-    @Value("${wechat.notifyUrl}")
+    @Value("${alipay.notifyUrl}")
     public String notifyUrl;
 
     private static final String TIMEOUT = "60m";

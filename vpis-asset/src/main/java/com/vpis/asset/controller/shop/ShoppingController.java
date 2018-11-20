@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/v1/vpis/shop/")
-@Api(description = "购物车接口(目前不用)")
+//@Api(description = "购物车接口(目前不用)")
 public class ShoppingController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ShoppingController.class);
@@ -38,7 +38,7 @@ public class ShoppingController extends BaseController {
     private ShoppingService shoppingService;
 
     @Deprecated
-    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopQuery", method = {RequestMethod.POST})
     public ResponseContent query() {
         try {
@@ -52,7 +52,7 @@ public class ShoppingController extends BaseController {
     }
 
     @Deprecated
-    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopDel", method = {RequestMethod.POST})
     public ResponseContent del( @RequestBody OrderVo orderVo) {
         try {
@@ -75,7 +75,7 @@ public class ShoppingController extends BaseController {
     }
 
     @Deprecated
-    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
     @RequestMapping(path = "/ShopInsert", method = {RequestMethod.POST})
     public ResponseContent insert(@RequestBody OrderVo orderVo) {
         try {
@@ -93,7 +93,7 @@ public class ShoppingController extends BaseController {
     }
 
     @Deprecated
-    @ApiOperation(value = "修改商品 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "修改商品 ，Owner: Huan.Liu")
     @RequestMapping(path = "/Shopupdate", method = {RequestMethod.POST})
     public ResponseContent update(@RequestBody OrderVo orderVo) {
         try {
@@ -123,7 +123,7 @@ public class ShoppingController extends BaseController {
 
     /***************************************************************************************************************/
 
-    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
     @RequestMapping(path = "/insert", method = {RequestMethod.POST})
     public ResponseContent insertShop(@RequestParam(name = "house_id") Long houseId,
                                       @RequestParam(name = "product_count") Integer productCount) {
@@ -138,7 +138,7 @@ public class ShoppingController extends BaseController {
     }
 
 
-    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/findList", method = {RequestMethod.POST})
     public ResponseContent findAll() {
         try {
@@ -151,7 +151,7 @@ public class ShoppingController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
     @RequestMapping(path = "/del", method = {RequestMethod.POST})
     public ResponseContent delShop(@RequestParam(name = "ids")List<Long> houseIds) {
         try {

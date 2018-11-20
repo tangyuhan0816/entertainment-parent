@@ -4,10 +4,13 @@ import com.google.common.base.Predicate;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.sys.TbUser;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.request.async.DeferredResult;
+import springfox.documentation.RequestHandler;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -60,13 +63,30 @@ public class Swagger2 {
         tokenPar.name("locale").description("语言").modelRef(new ModelRef("string")).parameterType("query").defaultValue("ch").required(false);
         pars.add(tokenPar.build());
         Predicate<String> pathSelectors = PathSelectors.any();
-        if (profiles.contains("prod")) {
-            pathSelectors = PathSelectors.none();
-        }
+
+
+        Predicate<RequestHandler> predicate = new Predicate<RequestHandler>() {
+
+            @Override
+            public boolean apply(RequestHandler input) {
+                //只有添加了ApiOperation注解的method才在API中显示
+                if(input.isAnnotatedWith(ApiOperation.class)) {
+                    return true;
+                }
+                return false;
+            }
+        };
+
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(apiInfo()).select()
-                .apis(RequestHandlerSelectors.basePackage("com.vpis.asset.controller"))
-                .paths(pathSelectors).build()
+                .groupName("openapi")
+                .genericModelSubstitutes(DeferredResult.class)
+                .useDefaultResponseMessages(false)
+                .forCodeGeneration(false)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(predicate)
+                .paths(pathSelectors)
+                .build()
                 .globalOperationParameters(pars);
     }
 

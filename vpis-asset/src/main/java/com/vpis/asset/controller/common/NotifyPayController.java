@@ -2,6 +2,7 @@ package com.vpis.asset.controller.common;
 
 import com.vpis.asset.utils.BeanContext;
 import com.vpis.common.type.pay.PayTypeEnum;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

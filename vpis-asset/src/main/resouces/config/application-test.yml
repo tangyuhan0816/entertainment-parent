@@ -86,7 +86,7 @@ wechat:
 
 
 alipay:
-  notify_url: http://118.184.217.250:15060/apay/app/notify.htm
+  notifyUrl: http://118.184.217.250:15060/apay/app/notify.htm
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
