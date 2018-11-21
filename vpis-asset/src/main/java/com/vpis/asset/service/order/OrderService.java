@@ -184,6 +184,7 @@ public class OrderService {
         payRequest.setOrderName("视投科技-楼盘下单");
         payRequest.setPayType(payTypeEnum);
         payRequest.setSpbillCreateIp(spbillCreateIp);
+        payRequest.setSubject("视投科技");
         PayResponse payResponse = iPayService.pay(payRequest);
         if(Preconditions.isBlank(payRequest)){
             throw new STException("统一下单异常");
