@@ -58,6 +58,8 @@ public class AliPayServiceImpl implements IPayService{
 
         model.setOutTradeNo(payRequest.getOrderId());
 
+        model.setProductCode("QUICK_MSECURITY_PAY");
+
         appPayReq.setBizModel(model);
 
         appPayReq.setNotifyUrl(notifyUrl);
