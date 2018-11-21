@@ -205,11 +205,10 @@
     <dependency>
       <groupId>com.alipay</groupId>  <!--自定义-->
       <artifactId>sdk-java</artifactId>    <!--自定义-->
-      <version>3.3.2</version> <!--自定义-->
+      <version>3.4.27</version> <!--自定义-->
       <scope>system</scope> <!--system，类似provided，需要显式提供依赖的jar以后，Maven就不会在Repository中查找它-->
-      <systemPath>${project.basedir}/lib/alipay-sdk-java-3.3.2.jar</systemPath> <!--项目根目录下的lib文件夹下-->
+      <systemPath>${project.basedir}/lib/alipay-sdk-java-3.4.27.ALL.jar</systemPath> <!--项目根目录下的lib文件夹下-->
     </dependency>
-
 
 
   </dependencies>
