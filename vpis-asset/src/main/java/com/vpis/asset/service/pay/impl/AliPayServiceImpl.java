@@ -56,7 +56,7 @@ public class AliPayServiceImpl implements IPayService{
         model.setTimeoutExpress(TIMEOUT);
 
         // 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]   [建议填写] 非必填 类型String 最大长度9
-        model.setTotalAmount(new DecimalFormat("#.00").format(payRequest.getOrderAmount()));
+        model.setTotalAmount(payRequest.getOrderAmount().toString());
 
         // 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。  非必填 类型String 最大长度128
         model.setBody(payRequest.getOrderName());

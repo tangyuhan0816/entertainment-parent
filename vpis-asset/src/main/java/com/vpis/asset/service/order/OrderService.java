@@ -203,8 +203,8 @@ public class OrderService {
         order.setOrderNo(orderNo);
 
         BigDecimal amountTotal = orderItemList.stream().map(OrderItem::getProductAmountTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
-        order.setOrderAmountTotal(amountTotal);
-        order.setProductAmountTotal(amountTotal);
+        order.setOrderAmountTotal(amountTotal.setScale(2, BigDecimal.ROUND_UP));
+        order.setProductAmountTotal(amountTotal.setScale(2, BigDecimal.ROUND_UP));
 
         order.setPriceUnit(PRICE_UNIT);
 
