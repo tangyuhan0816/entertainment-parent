@@ -49,7 +49,7 @@ public class AlipayConfig {
     /**
      * 请求和签名使用的字符编码格式，支持GBK和UTF-8
      */
-    public static final String ALIPAY_CHARSET = "utf-8";
+    public static final String ALIPAY_CHARSET = "UTF-8";
 
     /**
      * 支付宝公钥，由支付宝生成
