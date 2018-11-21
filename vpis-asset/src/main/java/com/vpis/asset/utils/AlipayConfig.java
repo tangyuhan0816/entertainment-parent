@@ -44,7 +44,7 @@ public class AlipayConfig {
     /**
      * 参数返回格式，只支持json
      */
-    public static final String ALIPAY_FORMAT = "json";
+    public static final String ALIPAY_FORMAT = "JSON";
 
     /**
      * 请求和签名使用的字符编码格式，支持GBK和UTF-8
