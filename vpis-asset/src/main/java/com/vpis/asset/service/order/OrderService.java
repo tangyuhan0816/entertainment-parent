@@ -15,6 +15,7 @@ import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.asset.utils.BeanContext;
 import com.vpis.common.entity.order.Order;
 import com.vpis.common.entity.order.OrderItem;
+import com.vpis.common.entity.pay.request.PayAsyncRequest;
 import com.vpis.common.entity.pay.request.PayRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
 import com.vpis.common.entity.sys.Moulds;
@@ -23,6 +24,7 @@ import com.vpis.common.exception.STException;
 import com.vpis.common.page.PageableResponse;
 import com.vpis.common.type.order.OrderStatus;
 import com.vpis.common.type.pay.PayTypeEnum;
+import com.vpis.common.utils.DateUtils;
 import com.vpis.common.utils.OrderUtil;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -322,4 +321,31 @@ public class OrderService {
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
+
+    public BigDecimal findAmountByOrderNo(String orderNo){
+        Order order = orderRepository.findByOrderNoAndDeletedIsFalse(orderNo);
+        if(Preconditions.isNotBlank(order)){
+            return order.getOrderAmountTotal();
+        }
+        return BigDecimal.ZERO;
+    }
+
+    public void updateOrderError(String orderNo){
+        Order order = orderRepository.findByOrderNoAndDeletedIsFalse(orderNo);
+        if(Preconditions.isNotBlank(order)){
+            order.setOrderStatus(OrderStatus.FAIL.ordinal());
+            orderRepository.save(order);
+        }
+    }
+
+    public void updateOrderSuccess(String orderNo, String tradeNo){
+        Order order = orderRepository.findByOrderNoAndDeletedIsFalse(orderNo);
+        if(Preconditions.isNotBlank(order)){
+            order.setOrderStatus(OrderStatus.PROCESSING.ordinal());
+            order.setPayTime(new Date());
+            order.setPaymentOrderNo(tradeNo);
+            orderRepository.save(order);
+        }
+    }
+
 }

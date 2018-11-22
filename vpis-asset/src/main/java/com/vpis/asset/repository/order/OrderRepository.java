@@ -16,4 +16,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
  */
 public interface OrderRepository extends BaseEntityRepository<Order>, JpaSpecificationExecutor<Order>{
 
+    Order findByOrderNoAndDeletedIsFalse(String orderNo);
 }

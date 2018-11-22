@@ -1,9 +1,12 @@
 package com.vpis.asset.service.pay.impl;
 
+import com.sun.xml.internal.ws.util.xml.XmlUtil;
+import com.vpis.asset.service.order.OrderService;
 import com.vpis.asset.service.pay.IPayService;
 import com.vpis.common.entity.pay.request.PayRequest;
 import com.vpis.common.entity.pay.request.wechat.WxPayUnifiedorderRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
+import com.vpis.common.entity.pay.response.wechat.WxPayAsyncResponse;
 import com.vpis.common.entity.pay.response.wechat.WxPayUnifiedorderResponse;
 import com.vpis.common.exception.HttpServiceException;
 import com.vpis.common.type.pay.SignType;
@@ -12,11 +15,14 @@ import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -49,6 +55,9 @@ public class WechatServiceImpl implements IPayService{
     private static final String UNINI = "CNY";
 
     private static final String TRADETYPE = "APP";
+
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public PayResponse pay(PayRequest payRequest) {
@@ -98,8 +107,39 @@ public class WechatServiceImpl implements IPayService{
 
     @Override
     public void doNotify(String notifyData) {
-        log.info("【微信异步回调参数】:{}",notifyData);
-//        WxPayUnifiedorderResponse
+        if(this.verify(XmlUtils.toMap(notifyData), mchKey).booleanValue()) {
+            log.error("【微信支付异步通知】签名验证失败, response={}", notifyData);
+            throw new RuntimeException("【微信支付异步通知】签名验证失败");
+        } else {
+            WxPayAsyncResponse asyncResponse = (WxPayAsyncResponse)XmlUtils.toObject(notifyData, WxPayAsyncResponse.class);
+
+            //支付失败且为非支付订单
+            if(!Objects.equals(asyncResponse.getReturnCode(),"SUCCESS") && !Objects.equals(asyncResponse.getErrCode(),"ORDERPAID")) {
+                throw new RuntimeException("【微信支付异步通知】发起支付, returnCode != SUCCESS, returnMsg = " + asyncResponse.getReturnMsg());
+            }
+
+            //支付失败但为已支付订单
+            if(!Objects.equals(asyncResponse.getResultCode(),"SUCCESS") && Objects.equals(asyncResponse.getErrCode(),"ORDERPAID")) {
+                orderService.updateOrderSuccess(asyncResponse.getOutTradeNo(), asyncResponse.getTransactionId());
+            }
+
+            //支付成功订单
+            if(Objects.equals(asyncResponse.getResultCode(),"SUCCESS")) {
+
+                //校验订单金额,防止数据泄漏导致出现“假通知”,造成资金损失
+                BigDecimal amount = orderService.findAmountByOrderNo(asyncResponse.getOutTradeNo());
+                if(amount != null){
+                    BigDecimal wxResult = new BigDecimal(asyncResponse.getTotalFee()).movePointLeft(2);
+                    if(amount.compareTo(wxResult) != 0){
+                        orderService.updateOrderError(asyncResponse.getOutTradeNo());
+                    }else{
+                        orderService.updateOrderSuccess(asyncResponse.getOutTradeNo(), asyncResponse.getTransactionId());
+                    }
+                }
+            } else {
+                throw new RuntimeException("【微信支付异步通知】发起支付, resultCode != SUCCESS, err_code = " + asyncResponse.getErrCode() + " err_code_des=" + asyncResponse.getErrCodeDes());
+            }
+        }
     }
 
     public PayResponse buildPayResponse(WxPayUnifiedorderResponse wxResponse){
@@ -136,5 +176,10 @@ public class WechatServiceImpl implements IPayService{
 
         url.append("key=").append(signKey);
         return DigestUtils.md5Hex(url.toString()).toUpperCase();
+    }
+
+    public Boolean verify(Map<String, String> params, String signKey) {
+        String sign = sign(params, signKey);
+        return sign.equals(params.get("sign"));
     }
 }

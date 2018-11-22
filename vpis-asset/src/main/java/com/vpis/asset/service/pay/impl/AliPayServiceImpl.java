@@ -8,14 +8,18 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
+import com.vpis.asset.service.order.OrderService;
 import com.vpis.asset.service.pay.IPayService;
 import com.vpis.asset.utils.AlipayConfig;
+import com.vpis.common.entity.pay.request.PayAsyncRequest;
 import com.vpis.common.entity.pay.request.PayRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,6 +40,9 @@ public class AliPayServiceImpl implements IPayService{
     public String notifyUrl;
 
     private static final String TIMEOUT = "60m";
+
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public PayResponse pay(PayRequest payRequest) {
@@ -104,7 +111,19 @@ public class AliPayServiceImpl implements IPayService{
 
             boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PRIVATE_KEY, AlipayConfig.ALIPAY_CHARSET,"RSA2");
             if(flag){
+                PayAsyncRequest request = this.buildAliPayResponse(params);
+                if(request.getTradeStatus().equals("TRADE_SUCCESS")){
+                    String orderNo = request.getOutTradeNo();
+                    BigDecimal amount = orderService.findAmountByOrderNo(orderNo);
+                    if(amount.compareTo(BigDecimal.ZERO) > 0){
+                        orderService.updateOrderSuccess(orderNo, request.getTradeNo());
+                    } else {
+                        orderService.updateOrderError(orderNo);
+                    }
+                }
 
+            } else {
+                log.error("【支付宝异步回调参数】 签名校验error:{}",notifyData);
             }
             log.info("【支付宝异步回调参数】:{}",notifyData);
         } catch (AlipayApiException e) {
@@ -116,5 +135,23 @@ public class AliPayServiceImpl implements IPayService{
         PayResponse payResponse = new PayResponse();
         payResponse.setBody(response.getBody());
         return payResponse;
+    }
+
+    public PayAsyncRequest buildAliPayResponse(Map<String,String> params){
+        PayAsyncRequest request = new PayAsyncRequest();
+        request.setNotifyTime(params.get("notify_time"));
+        request.setNotifyType(params.get("notify_type"));
+        request.setNotifyId(params.get("notify_id"));
+        request.setAppId(params.get("app_id"));
+        request.setCharset(params.get("charset"));
+        request.setVersion(params.get("version"));
+        request.setSignType(params.get("sign_type"));
+        request.setSign(params.get("sign"));
+        request.setTradeNo(params.get("trade_no"));
+        request.setOutTradeNo(params.get("out_trade_no"));
+        request.setTradeStatus(params.get("trade_status"));
+        request.setTotalAmount(params.get("total_amount"));
+        request.setGmtPayment(params.get("gmt_payment"));
+        return request;
     }
 }
