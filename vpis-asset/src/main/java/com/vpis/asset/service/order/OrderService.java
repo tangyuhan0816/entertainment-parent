@@ -341,6 +341,14 @@ public class OrderService {
     public void updateOrderSuccess(String orderNo, String tradeNo){
         Order order = orderRepository.findByOrderNoAndDeletedIsFalse(orderNo);
         if(Preconditions.isNotBlank(order)){
+
+            if (order.getOrderStatus().equals(OrderStatus.PROCESSING.ordinal())) {
+                throw new STException("【回调SUCCESS】订单已完成，请勿重复支付！");
+            }
+
+            if (order.getOrderStatus().equals(OrderStatus.FAIL.ordinal())) {
+                throw new STException("【回调SUCCESS】订单已取消");
+            }
             order.setOrderStatus(OrderStatus.PROCESSING.ordinal());
             order.setPayTime(new Date());
             order.setPaymentOrderNo(tradeNo);
