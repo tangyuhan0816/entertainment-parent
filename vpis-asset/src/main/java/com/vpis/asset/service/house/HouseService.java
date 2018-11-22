@@ -26,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +67,19 @@ public class HouseService {
             throw new BusinessException("page is null");
         }
 
-        String areaCode = commonService.positioning(bean.getLatitudeY().toString(),bean.getLongitudeX().toString());
+        String areaCode = null;
+
+        if(Preconditions.isNotBlank(bean.getAreaCode())){
+            areaCode = bean.getAreaCode();
+        }
+
+        if(Preconditions.isNotBlank(bean.getLatitudeY()) &&
+                bean.getLatitudeY().compareTo(BigDecimal.ZERO) > 0 &&
+                Preconditions.isNotBlank(bean.getLongitudeX()) &&
+                bean.getLongitudeX().compareTo(BigDecimal.ZERO) > 0 ){
+
+            areaCode = commonService.positioning(bean.getLatitudeY().toString(),bean.getLongitudeX().toString());
+        }
 
         PageableResponse<HouseVo> response = new PageableResponse<>();
 
@@ -96,7 +109,9 @@ public class HouseService {
 
             page = housesRepository.findByDistrictAndDeletedIsFalse(areaCode,pageRequest);
 
-        } else if (bean.getType() == 2) {
+        } else if (bean.getType() == 2 &&
+                Preconditions.isNotBlank(bean.getLatitudeY()) &&
+                Preconditions.isNotBlank(bean.getLongitudeX())) {
 
             return housesDao.near(areaCode,bean.getLongitudeX(), bean.getLatitudeY(), bean.getPageableRequest().getPageNumber(), bean.getPageableRequest().getPageSize());
 
@@ -151,6 +166,14 @@ public class HouseService {
 
     public House findById(Long id){
         return housesRepository.findByIdAndDeletedIsFalse(id);
+    }
+
+    public Integer findAdviceNum(Long id){
+        House house = findById(id);
+        if(Preconditions.isNotBlank(house)){
+            return house.getAdviceNum();
+        }
+        return 0;
     }
 
 }

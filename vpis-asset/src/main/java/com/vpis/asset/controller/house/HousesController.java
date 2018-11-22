@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  *  @Author: Yuhan.Tang
  *  @ClassName: HousesController
@@ -71,6 +73,21 @@ public class HousesController extends BaseController{
             String phone = getSessionPhone();
             logger.info("banner图列表 /find/banner =======> {}", phone);
             return ResponseContent.buildSuccess(housesService.findBannerUrl(phone));
+        }catch(STException e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(e.getMessage());
+        }catch(Exception e){
+            logger.error(e.getMessage(),e);
+            return ResponseContent.buildFail(ResponseContent.INTERNAL_SERVER_ERROR_CODE, e.getMessage());
+        }
+    }
+
+    @ApiOperation(value = "查询最大的投放数量 ，Owner: yuhan.tang")
+    @RequestMapping(path = "/find/maxCount", method = {RequestMethod.POST})
+    public ResponseContent findBanner(HttpServletRequest request, @RequestParam(name = "id") Long id){
+        try{
+            logger.info("查询最大的投放数量 /find/maxCount =======> {}", id);
+            return ResponseContent.buildSuccess(housesService.findAdviceNum(id));
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());

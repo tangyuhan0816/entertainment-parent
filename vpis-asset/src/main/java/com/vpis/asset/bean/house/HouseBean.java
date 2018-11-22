@@ -37,8 +37,14 @@ public class HouseBean extends BaseBean{
     @JsonProperty("latitude_y")
     private BigDecimal latitudeY;
 
+    @ApiModelProperty(value = "区域编码")
+    @JSONField(name = "area_code")
+    @JsonProperty("area_code")
+    private String areaCode;
+
     @ApiModelProperty(value = "分页")
     @JSONField(name = "page")
     @JsonProperty("page")
     private PageableRequest pageableRequest;
+
 }

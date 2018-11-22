@@ -46,8 +46,7 @@ public class OrderBean extends BaseBean {
     private Integer payType;
 
     @ApiModelProperty(value = "模版ID")
+    @JSONField(name = "mould_id")
+    @JsonProperty("mould_id")
     private Long mouldId;
-
-    @ApiModelProperty(value = "模版投放区域code")
-    private Integer code;
 }
