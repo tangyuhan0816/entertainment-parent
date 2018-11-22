@@ -1,6 +1,6 @@
 package com.vpis.asset.service.pay;
 
-import com.vpis.common.entity.pay.request.wechat.PayRequest;
+import com.vpis.common.entity.pay.request.PayRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
 
 /**

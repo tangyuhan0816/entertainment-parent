@@ -1,20 +1,24 @@
 package com.vpis.asset.service.pay.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.vpis.asset.service.pay.IPayService;
 import com.vpis.asset.utils.AlipayConfig;
-import com.vpis.common.entity.pay.request.wechat.PayRequest;
+import com.vpis.common.entity.pay.request.PayRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  *  @Author: Yuhan.Tang
@@ -82,7 +86,30 @@ public class AliPayServiceImpl implements IPayService{
 
     @Override
     public void doNotify(String notifyData) {
-        log.info("【支付宝异步回调参数】:{}",notifyData);
+        try {
+            Map<String,String> params = new HashMap<>();
+            Map requestParams = JSONObject.parseObject(notifyData, Map.class);
+            for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
+                String name = (String) iter.next();
+                String[] values = (String[]) requestParams.get(name);
+                String valueStr = "";
+                for (int i = 0; i < values.length; i++) {
+                    valueStr = (i == values.length - 1) ? valueStr + values[i]
+                            : valueStr + values[i] + ",";
+                }
+                //乱码解决，这段代码在出现乱码时使用。
+                //valueStr = new String(valueStr.getBytes("ISO-8859-1"), "utf-8");
+                params.put(name, valueStr);
+            }
+
+            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PRIVATE_KEY, AlipayConfig.ALIPAY_CHARSET,"RSA2");
+            if(flag){
+
+            }
+            log.info("【支付宝异步回调参数】:{}",notifyData);
+        } catch (AlipayApiException e) {
+            log.error("【支付宝异步回调异常】error:{},{}",e.getMessage(),e);
+        }
     }
 
     public PayResponse buildAliPayResponse(AlipayTradeAppPayResponse response){

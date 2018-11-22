@@ -1,4 +1,4 @@
-package com.vpis.common.entity.pay.request.wechat;
+package com.vpis.common.entity.pay.request;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonProperty;
