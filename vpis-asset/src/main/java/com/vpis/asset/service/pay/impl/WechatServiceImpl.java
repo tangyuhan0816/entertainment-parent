@@ -1,6 +1,5 @@
 package com.vpis.asset.service.pay.impl;
 
-import com.sun.xml.internal.ws.util.xml.XmlUtil;
 import com.vpis.asset.service.order.OrderService;
 import com.vpis.asset.service.pay.IPayService;
 import com.vpis.common.entity.pay.request.PayRequest;
