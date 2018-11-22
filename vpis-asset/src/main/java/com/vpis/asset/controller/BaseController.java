@@ -4,6 +4,7 @@ import com.vpis.asset.bean.SessionUser;
 import com.vpis.asset.service.jwt.JwtService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.common.entity.sys.TbUser;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -21,9 +22,8 @@ import javax.servlet.http.HttpServletRequest;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description:
  */
+@Slf4j
 public abstract class BaseController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
 
     @Autowired
     private JwtService jwtService;
@@ -65,24 +65,28 @@ public abstract class BaseController {
         return jwtService.getLongValueByParams(authorization, "user_id");
     }
 
+    private static final String UNKNOWN = "unknown";
+
     public String getIp(HttpServletRequest request) {
         String ipp = request.getRemoteAddr();
+        log.info("访问IP request.getRemoteAddr() :{}",request.getRemoteAddr());
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
+        log.info("访问IP request.getHeader :{}", ip);
         return ip;
 
 

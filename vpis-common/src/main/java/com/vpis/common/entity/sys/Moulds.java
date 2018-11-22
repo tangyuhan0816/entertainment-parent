@@ -73,4 +73,10 @@ public class Moulds extends BaseEntity{
     @Column(name = "mould_type")
     private Integer mouldType;
 
+    @ApiModelProperty(value = "对应MouldCodeType枚举类")
+    @JSONField(name = "mould_code")
+    @JsonProperty("mould_code")
+    @Column(name = "mould_code")
+    private Integer mouldCode;
+
 }

@@ -33,7 +33,7 @@ public class MouldsService {
         return mouldsRepository.findByUserIdAndDeletedIsFalse(userId);
     }
 
-    public void saveMould(MouldsBean bean,Long userId){
+    public Moulds saveMould(MouldsBean bean,Long userId){
         Moulds mould = new Moulds();
         if(Preconditions.isNotBlank(bean.getId())){
             Moulds m = mouldsRepository.findByIdAndUserIdAndDeletedIsFalse(bean.getId(),userId);
@@ -44,7 +44,8 @@ public class MouldsService {
             mould.setUserId(userId);
         }
         BeanUtils.copyProperties(bean,mould);
-        mouldsRepository.save(mould);
+        mould = mouldsRepository.save(mould);
+        return mould;
     }
 
     public void del(Long id, Long userId){
@@ -54,6 +55,10 @@ public class MouldsService {
         }
         mould.setDeleted(Boolean.TRUE);
         mouldsRepository.save(mould);
+    }
+
+    public Moulds findByIdAndUserId(Long id, Long userId){
+        return mouldsRepository.findByIdAndUserIdAndDeletedIsFalse(id,userId);
     }
 
 }

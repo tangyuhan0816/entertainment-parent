@@ -69,8 +69,7 @@ public class MouldsController extends BaseController{
         try{
             Long userId = getSessionUserId();
             logger.info("保存或修改我的广告模版配置 moulds save =======> {},{}", JSONObject.toJSONString(bean), userId);
-            mouldsService.saveMould(bean, userId);
-            return ResponseContent.buildSuccess();
+            return ResponseContent.buildSuccess(mouldsService.saveMould(bean, userId));
         }catch(STException e){
             logger.error(e.getMessage(),e);
             return ResponseContent.buildFail(e.getMessage());

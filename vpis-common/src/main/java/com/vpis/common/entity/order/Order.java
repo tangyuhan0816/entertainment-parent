@@ -97,6 +97,18 @@ public class Order extends BaseEntity{
     @Column(name = "pay_time")
     private Date payTime;
 
+    @ApiModelProperty(value = "投放模版ID")
+    @JSONField(name = "mould_id")
+    @JsonProperty("mould_id")
+    @Column(name = "mould_id")
+    private Long mouldId;
+
+    @ApiModelProperty(value = "对应MouldCodeType枚举类")
+    @JSONField(name = "mould_code")
+    @JsonProperty("mould_code")
+    @Column(name = "mould_code")
+    private Integer mouldCode;
+
     @ApiModelProperty(value = "用户id")
     @JSONField(name = "user_id")
     @JsonProperty("user_id")

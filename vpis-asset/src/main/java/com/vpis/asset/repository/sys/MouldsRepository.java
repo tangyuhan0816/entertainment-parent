@@ -20,4 +20,5 @@ public interface MouldsRepository extends BaseEntityRepository<Moulds>{
     Moulds findByIdAndUserIdAndDeletedIsFalse(Long id, Long userId);
 
     List<Moulds> findByUserIdAndDeletedIsFalse(Long userId);
+
 }

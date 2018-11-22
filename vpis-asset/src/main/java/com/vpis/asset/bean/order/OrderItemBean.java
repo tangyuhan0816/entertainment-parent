@@ -1,6 +1,7 @@
 package com.vpis.asset.bean.order;
 
 import com.vpis.asset.bean.base.BaseBean;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -14,7 +15,9 @@ import lombok.Data;
 @Data
 public class OrderItemBean extends BaseBean{
 
+    @ApiModelProperty(value = "产品ID")
     private Long productId;
 
+    @ApiModelProperty(value = "购买产品数量")
     private Integer count;
 }

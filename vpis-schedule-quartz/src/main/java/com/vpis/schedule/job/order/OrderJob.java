@@ -32,7 +32,7 @@ public class OrderJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         List<Order> orderList = orderService.findByOrderStatus();
         logger.info("orderJob 一小时未支付订单数量：{}", orderList.size());
-        if(orderList.size() > 1){
+        if(orderList.size() > 0){
 
             int updatePage = orderList.size() / 100;
             if(Preconditions.isNotBlank(orderList.size()) && updatePage <= 1){

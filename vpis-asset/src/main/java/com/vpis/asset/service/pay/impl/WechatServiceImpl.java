@@ -7,24 +7,15 @@ import com.vpis.common.entity.pay.response.wechat.PayResponse;
 import com.vpis.common.entity.pay.response.wechat.WxPayUnifiedorderResponse;
 import com.vpis.common.exception.HttpServiceException;
 import com.vpis.common.type.pay.SignType;
-import com.vpis.common.utils.AsyncHttpUtils;
-import com.vpis.common.utils.MoneyUtil;
-import com.vpis.common.utils.OrderUtil;
-import com.vpis.common.utils.Preconditions;
+import com.vpis.common.utils.*;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaders;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -76,13 +67,13 @@ public class WechatServiceImpl implements IPayService{
         request.setNotifyUrl(notifyUrl);
         request.setTradeType(TRADETYPE);
         request.setFeeType(UNINI);
-        request.setSign(this.sign(this.buildMap(request), mchKey));
+        request.setSign(this.sign(XmlUtils.buildMap(request), mchKey));
 
         HttpHeaders headers = new DefaultHttpHeaders();
         headers.set("Content-Type","application/xml; charset=utf-8");
         String responseBody = null;
         try {
-            responseBody = AsyncHttpUtils.syncPost(WX_ORDER_URL, xmlToString(request));
+            responseBody = AsyncHttpUtils.syncPost(WX_ORDER_URL, XmlUtils.xmlToString(request));
         } catch (HttpServiceException e) {
             e.printStackTrace();
         }
@@ -94,7 +85,7 @@ public class WechatServiceImpl implements IPayService{
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException("【微信统一下单】下单乱码解码异常,responseBody = " + responseBody);
             }
-            WxPayUnifiedorderResponse response = (WxPayUnifiedorderResponse) stringToXml(responseBody, WxPayUnifiedorderResponse.class);
+            WxPayUnifiedorderResponse response = (WxPayUnifiedorderResponse) XmlUtils.stringToXml(responseBody, WxPayUnifiedorderResponse.class);
             if (!response.getReturnCode().equals("SUCCESS")) {
                 throw new RuntimeException("【微信统一下单】下单, returnCode != SUCCESS, returnMsg = " + response.getReturnMsg());
             } else if (!response.getResultCode().equals("SUCCESS")) {
@@ -123,55 +114,8 @@ public class WechatServiceImpl implements IPayService{
         payResponse.setPackAge("Sign=WXPay");
         payResponse.setNonceStr(nonceStr);
         payResponse.setTimeStamp(timeStamp);
-        payResponse.setPaySign(this.sign(this.buildMap(payResponse), mchKey));
+        payResponse.setPaySign(this.sign(XmlUtils.buildMap(payResponse), mchKey));
         return payResponse;
-    }
-
-    public String xmlToString(WxPayUnifiedorderRequest request){
-        Serializer serializer = new Persister();
-        StringWriter stringWriter = new StringWriter();
-        try {
-            serializer.write(request, stringWriter);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return stringWriter.toString();
-    }
-
-    public Object stringToXml(String xml, Class<?> cls){
-        Serializer serializer = new Persister();
-
-        try {
-            return serializer.read(cls,xml);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    public Map<String, String> buildMap(Object obj) {
-        Map<String, String> params = new HashMap<>();
-        try {
-            Class<?> aClass = obj.getClass();
-            Field[] fields = aClass.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-                String fieldName = field.getName();
-                Element annotation = field.getAnnotation(Element.class);
-                if (Preconditions.isNotBlank(annotation)) {
-                    fieldName = annotation.name();
-                }
-                String value = field.get(obj) == null ? "" : String.valueOf(field.get(obj));
-                if(Preconditions.isBlank(value)){
-                    continue;
-                }
-                params.put(fieldName,value);
-            }
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return params;
     }
 
     public String sign(Map<String, String> param, String signKey){

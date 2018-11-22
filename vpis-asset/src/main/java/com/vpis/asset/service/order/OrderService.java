@@ -10,12 +10,15 @@ import com.vpis.asset.repository.order.OrderItemRepository;
 import com.vpis.asset.repository.order.OrderRepository;
 import com.vpis.asset.service.house.HouseService;
 import com.vpis.asset.service.pay.IPayService;
+import com.vpis.asset.service.sys.MouldsService;
 import com.vpis.asset.service.sys.SysUserService;
 import com.vpis.asset.utils.BeanContext;
 import com.vpis.common.entity.order.Order;
 import com.vpis.common.entity.order.OrderItem;
 import com.vpis.common.entity.pay.request.wechat.PayRequest;
 import com.vpis.common.entity.pay.response.wechat.PayResponse;
+import com.vpis.common.entity.sys.ExtendInfo;
+import com.vpis.common.entity.sys.Moulds;
 import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.page.PageableResponse;
@@ -72,10 +75,16 @@ public class OrderService {
     @Autowired
     private OrderDao orderDao;
 
+    @Autowired
+    private MouldsService mouldsService;
+
     private static final String SUM_COUNT = "sum_count";
     private static final String SUM_PRICE = "sum_price";
 
     private static final String PRICE_UNIT = "RMB";
+    private static final String ORDER_NAME = "视投科技-楼盘下单";
+
+    private static final String SUBJECT = "视投科技";
 
     /**
      * 校验订单项
@@ -153,6 +162,16 @@ public class OrderService {
         //支付渠道
         PayTypeEnum payTypeEnum = PayTypeEnum.getIndex(orderBean.getPayType());
 
+        if(Preconditions.isBlank(payTypeEnum)){
+            throw new STException("未查询到支付渠道");
+        }
+
+        Moulds mould = mouldsService.findByIdAndUserId(orderBean.getMouldId(), userId);
+
+        if(Preconditions.isBlank(mould)){
+            throw new STException("未查询到模版信息");
+        }
+
         List<OrderItem> orderItemList = new ArrayList<>(orderBean.getOrderItemList().size());
 
         for(OrderItemBean orderItemBean : orderBean.getOrderItemList()){
@@ -162,7 +181,7 @@ public class OrderService {
         }
 
         //创建订单
-        Order order = createOrder(user, orderItemList, payTypeEnum.ordinal());
+        Order order = createOrder(user, orderItemList, payTypeEnum.ordinal(), mould);
 
         //给订单项赋值Order Id
         for (OrderItem orderItem : orderItemList) {
@@ -175,16 +194,15 @@ public class OrderService {
         IPayService iPayService = BeanContext.payServiceMap.get(PayTypeEnum.getIndex(orderBean.getPayType()).getServiceName());;
 
         // 对接第三方处理下单，支付逻辑
-
         PayRequest payRequest = new PayRequest();
         payRequest.setOrderAmount(order.getOrderAmountTotal().doubleValue());
         payRequest.setOrderId(order.getOrderNo());
         //商品描述交易字段格式根据不同的应用场景按照以下格式：
         //APP——需传入应用市场上的APP名字-实际商品名称，天天爱消除-游戏充值。
-        payRequest.setOrderName("视投科技-楼盘下单");
+        payRequest.setOrderName(ORDER_NAME);
         payRequest.setPayType(payTypeEnum);
         payRequest.setSpbillCreateIp(spbillCreateIp);
-        payRequest.setSubject("视投科技");
+        payRequest.setSubject(SUBJECT);
         PayResponse payResponse = iPayService.pay(payRequest);
         if(Preconditions.isBlank(payRequest)){
             throw new STException("统一下单异常");
@@ -197,7 +215,7 @@ public class OrderService {
         return payResponse;
     }
 
-    public Order createOrder(TbUser user, List<OrderItem> orderItemList, Integer payType){
+    public Order createOrder(TbUser user, List<OrderItem> orderItemList, Integer payType, Moulds mould){
         Order order = new Order();
 
         String orderNo = OrderUtil.generateOrderId("H");
@@ -216,6 +234,10 @@ public class OrderService {
         order.setUserId(user.getUserId());
 
         order.setProviderId(user.getParentId());
+
+        order.setMouldCode(mould.getMouldCode());
+
+        order.setMouldId(mould.getId());
 
         //0 购买   1其它方式
         order.setOrderType(0);
