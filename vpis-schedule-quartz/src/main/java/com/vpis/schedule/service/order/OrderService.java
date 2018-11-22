@@ -30,7 +30,7 @@ public class OrderService {
         return orderDao.findByOrderStatus();
     }
 
-    public void updateOrderStatus(List<Order> list){
-        orderDao.updateStatus(list);
+    public Integer updateOrderStatus(List<Order> list){
+        return orderDao.updateStatus(list);
     }
 }

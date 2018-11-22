@@ -24,5 +24,5 @@ public interface OrderDao {
      */
     List<Order> findByOrderStatus();
 
-    void updateStatus(List<Order> list);
+    Integer updateStatus(List<Order> list);
 }

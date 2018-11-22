@@ -31,13 +31,14 @@ public class OrderJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         List<Order> orderList = orderService.findByOrderStatus();
-        logger.info("orderJob 一小时未支付订单数量：{}", orderList.size());
+        logger.info("======================== orderJob start 一小时未支付订单数量：{} ======================== ", orderList.size());
+        Integer count = 0;
         if(orderList.size() > 0){
 
             int updatePage = orderList.size() / 100;
             if(Preconditions.isNotBlank(orderList.size()) && updatePage <= 1){
                 //直接批量保存
-                orderService.updateOrderStatus(orderList);
+                count = orderService.updateOrderStatus(orderList);
             } else if(updatePage > 1 && updatePage < 10){
 
                 //分批保存 100条数据一次
@@ -47,7 +48,7 @@ public class OrderJob extends QuartzJobBean {
 
                 for(int i = 0;i < updatePage;i++){
                     updateList = orderList.subList(i * 100, (i + 1) * 100);
-                    orderService.updateOrderStatus(updateList);
+                    count = orderService.updateOrderStatus(updateList);
                 }
 
                 if(pageNum > 0){
@@ -58,5 +59,6 @@ public class OrderJob extends QuartzJobBean {
                 //启用多线程协同处理大数据量 暂时不做
             }
         }
+        logger.info("======================== orderJob end 一小时未支付订单数量：{}, 修改成功数量:{} ========================", orderList.size(), count);
     }
 }
