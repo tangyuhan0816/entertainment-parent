@@ -15,6 +15,6 @@ public interface IPayService {
 
     PayResponse pay(PayRequest payRequest);
 
-    void doNotify(String notifyData);
+    void doNotify(Object request);
 
 }

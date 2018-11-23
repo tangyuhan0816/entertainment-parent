@@ -105,7 +105,8 @@ public class WechatServiceImpl implements IPayService{
     }
 
     @Override
-    public void doNotify(String notifyData) {
+    public void doNotify(Object request) {
+        String notifyData = (String)request;
         if(this.verify(XmlUtils.toMap(notifyData), mchKey).booleanValue()) {
             log.error("【微信支付异步通知】签名验证失败, response={}", notifyData);
             throw new RuntimeException("【微信支付异步通知】签名验证失败");

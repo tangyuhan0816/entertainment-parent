@@ -1,11 +1,8 @@
 package com.vpis.asset.controller.common;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alipay.api.internal.util.AlipaySignature;
-import com.vpis.asset.utils.AlipayConfig;
 import com.vpis.asset.utils.BeanContext;
 import com.vpis.common.type.pay.PayTypeEnum;
-import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,9 +26,7 @@ import java.util.Map;
 @Controller
 public class NotifyPayController {
 
-    private static final Integer wxPayIndex = 3;
-
-    private static final Integer aliPayIndex = 0;
+    private static final Integer WXPAYINDEX = 3;
 
     /**
      * 上报微信异步回调内容
@@ -39,11 +34,11 @@ public class NotifyPayController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/wpay/app/notify.htm")
-    public ModelAndView wxnotify(@RequestBody String notifyData) {
+    @PostMapping("/pay/appwpay/notify.htm")
+    public ModelAndView wechatNotify(@RequestBody String notifyData) {
         log.info("【微信异步回调】request={}", notifyData);
         try {
-            BeanContext.payServiceMap.get(PayTypeEnum.getIndex(wxPayIndex)).doNotify(notifyData);
+            BeanContext.payServiceMap.get(PayTypeEnum.getIndex(WXPAYINDEX).getServiceName()).doNotify(notifyData);
             log.info("【微信异步回调】结束");
         } catch (Exception e) {
             log.info("【微信异步回调】异常, response={}", e.getMessage());
@@ -52,12 +47,14 @@ public class NotifyPayController {
         return new ModelAndView("wechat/pay/success");
     }
 
-    @PostMapping("/apay/app/notify.htm")
-    public ModelAndView alnotify(HttpServletRequest request) {
+    private static final Integer ALIPAYINDEX = 0;
+
+    @PostMapping("/pay/apay/notify.htm")
+    public ModelAndView aliPayNotify(HttpServletRequest request) {
         String notifyData = JSONObject.toJSONString(request.getParameterMap());
         log.info("【支付宝异步回调】request={}", notifyData);
         try {
-            BeanContext.payServiceMap.get(PayTypeEnum.getIndex(aliPayIndex)).doNotify(notifyData);
+            BeanContext.payServiceMap.get(PayTypeEnum.getIndex(ALIPAYINDEX).getServiceName()).doNotify(request);
             log.info("【支付宝异步回调】结束");
         } catch (Exception e) {
             log.info("【支付宝异步回调】异常, response={}", e.getMessage());

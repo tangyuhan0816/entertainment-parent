@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -92,10 +93,11 @@ public class AliPayServiceImpl implements IPayService{
     }
 
     @Override
-    public void doNotify(String notifyData) {
+    public void doNotify(Object notifyData) {
         try {
+            HttpServletRequest request = (HttpServletRequest) notifyData;
             Map<String,String> params = new HashMap<>();
-            Map requestParams = JSONObject.parseObject(notifyData, Map.class);
+            Map requestParams = request.getParameterMap();
             for (Iterator iter = requestParams.keySet().iterator(); iter.hasNext();) {
                 String name = (String) iter.next();
                 String[] values = (String[]) requestParams.get(name);
@@ -111,12 +113,12 @@ public class AliPayServiceImpl implements IPayService{
 
             boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PRIVATE_KEY, AlipayConfig.ALIPAY_CHARSET,"RSA2");
             if(flag){
-                PayAsyncRequest request = this.buildAliPayResponse(params);
-                if(request.getTradeStatus().equals("TRADE_SUCCESS")){
-                    String orderNo = request.getOutTradeNo();
+                PayAsyncRequest payAsyncRequest = this.buildAliPayResponse(params);
+                if(payAsyncRequest.getTradeStatus().equals("TRADE_SUCCESS")){
+                    String orderNo = payAsyncRequest.getOutTradeNo();
                     BigDecimal amount = orderService.findAmountByOrderNo(orderNo);
                     if(amount.compareTo(BigDecimal.ZERO) > 0){
-                        orderService.updateOrderSuccess(orderNo, request.getTradeNo());
+                        orderService.updateOrderSuccess(orderNo, payAsyncRequest.getTradeNo());
                     } else {
                         orderService.updateOrderError(orderNo);
                     }
@@ -125,7 +127,6 @@ public class AliPayServiceImpl implements IPayService{
             } else {
                 log.error("【支付宝异步回调参数】 签名校验error:{}",notifyData);
             }
-            log.info("【支付宝异步回调参数】:{}",notifyData);
         } catch (AlipayApiException e) {
             log.error("【支付宝异步回调异常】error:{},{}",e.getMessage(),e);
         }
