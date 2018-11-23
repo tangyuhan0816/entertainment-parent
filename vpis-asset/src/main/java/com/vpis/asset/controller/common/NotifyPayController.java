@@ -34,7 +34,7 @@ public class NotifyPayController {
      * @return
      * @throws Exception
      */
-    @PostMapping("/pay/appwpay/notify.htm")
+    @PostMapping("/pay/wpay/notify.htm")
     public ModelAndView wechatNotify(@RequestBody String notifyData) {
         log.info("【微信异步回调】request={}", notifyData);
         try {
