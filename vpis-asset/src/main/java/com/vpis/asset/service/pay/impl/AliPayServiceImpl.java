@@ -1,6 +1,5 @@
 package com.vpis.asset.service.pay.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -111,7 +110,7 @@ public class AliPayServiceImpl implements IPayService{
                 params.put(name, valueStr);
             }
 
-            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PRIVATE_KEY, AlipayConfig.ALIPAY_CHARSET,"RSA2");
+            boolean flag = AlipaySignature.rsaCheckV1(params, AlipayConfig.ALIPAY_PUBLIC_KEY, AlipayConfig.ALIPAY_CHARSET,"RSA2");
             if(flag){
                 PayAsyncRequest payAsyncRequest = this.buildAliPayResponse(params);
                 if(payAsyncRequest.getTradeStatus().equals("TRADE_SUCCESS")){
