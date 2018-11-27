@@ -86,7 +86,7 @@ wechat:
 
 
 alipay:
-  notifyUrl: http://api.yunstou.com/pay/wpay/notify.htm
+  notifyUrl: http://api.yunstou.com/pay/apay/notify.htm
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
