@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Objects;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  *  @Author: Yuhan.Tang
@@ -146,6 +143,14 @@ public class WechatServiceImpl implements IPayService{
 
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000L);
         String nonceStr = OrderUtil.getRandomStr();
+        String packAge = "prepay_id=" + wxResponse.getPrepayId();
+        String signType = "MD5";
+        Map<String, String> map = new HashMap<>();
+        map.put("appId", wxResponse.getAppId());
+        map.put("timeStamp", timeStamp);
+        map.put("nonceStr", nonceStr);
+        map.put("package", packAge);
+        map.put("signType", signType);
 
         PayResponse payResponse = new PayResponse();
         payResponse.setAppId(wxResponse.getAppId());
@@ -154,7 +159,7 @@ public class WechatServiceImpl implements IPayService{
         payResponse.setPackAge("Sign=WXPay");
         payResponse.setNonceStr(nonceStr);
         payResponse.setTimeStamp(timeStamp);
-        payResponse.setPaySign(this.sign(XmlUtils.buildMap(payResponse), mchKey));
+        payResponse.setPaySign(this.sign(map, mchKey));
         return payResponse;
     }
 
