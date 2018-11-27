@@ -63,7 +63,7 @@ public class WechatServiceImpl implements IPayService{
 
         //默认MD5
         request.setSignType(SignType.MD5.name());
-        request.setDeviceInfo(TRADETYPE);
+//        request.setDeviceInfo(TRADETYPE);
         request.setNonceStr(OrderUtil.getRandomStr());
         request.setBody(payRequest.getOrderName());
         request.setOutTradeNo(payRequest.getOrderId());
@@ -140,39 +140,25 @@ public class WechatServiceImpl implements IPayService{
     }
 
     public PayResponse buildPayResponse(WxPayUnifiedorderResponse wxResponse){
-
-//        String timeStamp = String.valueOf(System.currentTimeMillis() / 1000L);
-//        String nonceStr = OrderUtil.getRandomStr();
-//        String packAge = "prepay_id=" + wxResponse.getPrepayId();
-//        String signType = "MD5";
-//        Map<String, String> map = new HashMap<>();
-//        map.put("appId", wxResponse.getAppId());
-//        map.put("timeStamp", timeStamp);
-//        map.put("nonceStr", nonceStr);
-//        map.put("package", packAge);
-//        map.put("signType", signType);
-//
-//        PayResponse payResponse = new PayResponse();
-//        payResponse.setAppId(wxResponse.getAppId());
-//        payResponse.setPartnerId(wxResponse.getMchId());
-//        payResponse.setPrepayId(wxResponse.getPrepayId());
-//        payResponse.setPackAge("Sign=WXPay");
-//        payResponse.setNonceStr(nonceStr);
-//        payResponse.setTimeStamp(timeStamp);
-//        payResponse.setPaySign(this.sign(map, mchKey));
-//        return payResponse;
-
         String timeStamp = String.valueOf(System.currentTimeMillis() / 1000L);
-//        String nonceStr = OrderUtil.getRandomStr();
+        String nonceStr = OrderUtil.getRandomStr();
+
+        Map<String, String> signMap = new HashMap<>();
+        signMap.put("appid",mpAppId);
+        signMap.put("partnerid",mchId);
+        signMap.put("prepayid",wxResponse.getPrepayId());
+        signMap.put("package","Sign=WXPay");
+        signMap.put("noncestr",nonceStr);
+        signMap.put("timestamp",timeStamp);
 
         PayResponse payResponse = new PayResponse();
-        payResponse.setAppId(wxResponse.getAppId());
-        payResponse.setPartnerId(wxResponse.getMchId());
+        payResponse.setAppId(mpAppId);
+        payResponse.setPartnerId(mchId);
         payResponse.setPrepayId(wxResponse.getPrepayId());
         payResponse.setPackAge("Sign=WXPay");
-        payResponse.setNonceStr(wxResponse.getNonceStr());
+        payResponse.setNonceStr(nonceStr);
         payResponse.setTimeStamp(timeStamp);
-        payResponse.setPaySign(wxResponse.getSign());
+        payResponse.setPaySign(this.sign(signMap, mchKey));
         return payResponse;
     }
 
