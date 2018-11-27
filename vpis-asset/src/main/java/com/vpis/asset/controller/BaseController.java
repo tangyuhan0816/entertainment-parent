@@ -68,8 +68,6 @@ public abstract class BaseController {
     private static final String UNKNOWN = "unknown";
 
     public String getIp(HttpServletRequest request) {
-        String ipp = request.getRemoteAddr();
-        log.info("访问IP request.getRemoteAddr() :{}",request.getRemoteAddr());
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
