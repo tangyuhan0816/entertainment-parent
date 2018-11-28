@@ -18,9 +18,9 @@ spring:
     testOnBorrow: true
     validationQuery: "SELECT 1"
     testOnReturn: false
-  jpa:
+#  jpa:
 #    hibernate.ddl-auto: update
-    show-sql: true
+#    show-sql: true
   redis:
     host: 193.112.97.60
     port: 6379
@@ -55,22 +55,31 @@ sms:
     registerSaveInfo: 【云导信息】验证码%s，视投用户，您正在进行APP注册操作[验证码请勿泄露或告知他人]
     loginSaveInfo: 【云导信息】您的验证码是%s，十分钟内有效，请勿告知他人以免泄漏。
 
-test.smscode: 888123
-
 qiniu:
   access_key: Qc0J2KJ2D1RaXlSNOMcs0Y2ACeWE0AnTnRxg69DS
   secret_key: fzOzfMVAQM137YQFgIv6iuTUK7qIB2nKIYThXrgW
   bucket:
-    name: yundao-image-test
-    domain: https://og3jro9lh.qnssl.com/
-#
-#kafka:
-#  propertyFile: config/test/kafka.properties
-#  merculet:
-#    topicName: test.mw_behaviour_content_1
-#  business:
-#    topicName: test.mw_business_content_1
-#  score:
-#    topicName: test.mw_score_content_1
-#  partitionCount: 1
+    image:
+      name: yundao-image
+      domain: http://image.yunstou.com/
+    video:
+      name: yundao-video
+      domain: http://video.yunstou.com/
+
+api:
+  aliyun:
+    gps: http://gc.ditu.aliyun.com/regeocoding?l=%s,%s&type=010
+
+wechat:
+  mpAppId: wx49388eb65c74a6e3
+  mchId: 1519239921
+  mchKey: shitoushitoushitoushitoushitoush
+  appSecret: 82178899f5d010403c908ed58aee3b82
+  keyPath: /var/weixin_cert/h5.p12
+  notifyUrl: http://api.yunstou.com/pay/wpay/notify.htm
+
+
+alipay:
+  notifyUrl: http://api.yunstou.com/pay/apay/notify.htm
+
 
