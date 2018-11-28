@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ShiroException.class)
     public ResponseContent handlShiroException(ShiroException ex) {
-        logger.error(ex.getMessage(),ex);
+        logger.error("ShiroException:{}", ex.getMessage());
         if(null != ex.getCause() && ex.getCause() instanceof BusinessException){
             BusinessException bex = (BusinessException) ex.getCause();
             return ResponseContent.buildFail(ResponseContent.SHIRO_EXCEPTION_CODE,bex.getCode());

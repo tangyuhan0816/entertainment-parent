@@ -82,11 +82,11 @@ wechat:
   mchKey: shitoushitoushitoushitoushitoush
   appSecret: 82178899f5d010403c908ed58aee3b82
   keyPath: /var/weixin_cert/h5.p12
-  notifyUrl: http://api.yunstou.com/pay/wpay/notify.htm
+  notifyUrl: https://api.yunstou.com/pay/wpay/notify.htm
 
 
 alipay:
-  notifyUrl: http://api.yunstou.com/pay/apay/notify.htm
+  notifyUrl: https://api.yunstou.com/pay/apay/notify.htm
 #
 #kafka:
 #  propertyFile: config/test/kafka.properties
