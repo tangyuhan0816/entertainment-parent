@@ -1,5 +1,5 @@
 spring:
-  profiles: test
+  profiles: prod
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://118.184.217.250:3306/vsprodb?Unicode=true&amp;characterEncoding=UTF-8
