@@ -23,6 +23,7 @@
     <div id="top">
         <el-button type="text" @click="search" style="color:white">查询</el-button>
         <el-button type="text" @click="handleadd" style="color:white">添加</el-button>
+        <el-button type="text" @click="handleaddSimple" style="color:white">添加Simple</el-button>
         </span>
     </div>
 
@@ -34,8 +35,8 @@
                 ref="testTable"
                 :data="tableData"
                 style="width:100%"
-                border
-        >
+                border>
+
             <el-table-column
                     prop="job_NAME"
                     label="任务名称"
@@ -135,6 +136,31 @@
         </div>
     </el-dialog>
 
+    <el-dialog title="添加任务" :visible.sync="dialogFormVisibleSimple">
+        <el-form :model="form">
+            <el-form-item label="任务名称" label-width="120px" style="width:75%">
+                <el-input v-model="form.jobName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="任务类名" label-width="120px" style="width:75%">
+                <el-input v-model="form.jobClassName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="任务分组" label-width="120px" style="width:75%">
+                <el-input v-model="form.jobGroupName" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="时间表达式" label-width="120px" style="width:74%">
+                <el-input v-model="form.jobTime" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="运行的次数" label-width="120px" style="width:75%">
+                <el-input v-model="form.jobTimes" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisibleSimple = false">取 消</el-button>
+            <el-button type="primary" @click="addSimple">确 定</el-button>
+        </div>
+    </el-dialog>
+
     <el-dialog title="修改任务" :visible.sync="updateFormVisible">
         <el-form :model="updateform">
             <el-form-item label="表达式" label-width="120px" style="width:75%">
@@ -177,6 +203,8 @@
 
             //添加对话框默认可见性
             dialogFormVisible: false,
+
+            dialogFormVisibleSimple: false,
 
             //修改对话框默认可见性
             updateFormVisible: false,
@@ -244,11 +272,27 @@
                 this.dialogFormVisible = true;
             },
 
+            //弹出对话框
+            handleaddSimple: function(){
+                this.dialogFormVisibleSimple = true;
+            },
+
             //添加
             add: function(){
                 this.$http.post('job/addjob',{"jobClassName":this.form.jobName,"jobGroupName":this.form.jobGroup,"cronExpression":this.form.cronExpression},{emulateJSON: true}).then(function(res){
                     this.loadData(this.currentPage, this.pagesize);
                     this.dialogFormVisible = false;
+                },function(){
+                    console.log('failed');
+                });
+            },
+
+            //添加
+            addSimple: function(){
+
+                this.$http.post('job/simple/addjob',{"jobName":this.form.jobName,"jobClassName":this.form.jobClassName,"jobGroupName":this.form.jobGroupName,"jobTime":this.form.jobTime,"jobTimes":this.form.jobTimes},{emulateJSON: true}).then(function(res){
+                    this.loadData(this.currentPage, this.pagesize);
+                    this.dialogFormVisibleSimple = false;
                 },function(){
                     console.log('failed');
                 });

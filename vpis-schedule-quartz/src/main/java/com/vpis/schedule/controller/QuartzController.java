@@ -42,6 +42,18 @@ public class QuartzController {
         addJob(jobClassName, jobGroupName, cronExpression);
     }
 
+
+
+    @PostMapping(value = "/simple/addjob")
+    public void addSimplejob(@RequestParam(value = "jobName") String jobName,
+                             @RequestParam(value = "jobClassName") String jobClassName,
+                             @RequestParam(value = "jobGroupName") String jobGroupName,
+                             @RequestParam(value = "jobTime") Integer jobTime,
+                             @RequestParam(value = "jobTimes") Integer jobTimes) throws Exception {
+
+        quartzService.addJob(getClass(jobClassName).getClass(), jobName,jobGroupName,jobTime,jobTimes);
+    }
+
     public void addJob(String jobClassName, String jobGroupName, String cronExpression) throws Exception {
 
         // 启动调度器  
@@ -117,6 +129,11 @@ public class QuartzController {
     @PostMapping(value = "/deletejob")
     public void deletejob(@RequestParam(value = "jobClassName") String jobClassName, @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
         jobdelete(jobClassName, jobGroupName);
+    }
+
+    @PostMapping(value = "/testdeletejob")
+    public void tetstdeletejob(@RequestParam(value = "jobClassName") String jobClassName, @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+        jobdelete("TestJob", "TestJob");
     }
 
     public void jobdelete(String jobClassName, String jobGroupName) throws Exception {
