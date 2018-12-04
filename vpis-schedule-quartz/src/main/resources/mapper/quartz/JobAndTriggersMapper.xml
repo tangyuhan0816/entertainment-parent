@@ -19,7 +19,7 @@
     AND qrtz_triggers.TRIGGER_GROUP = qrtz_cron_triggers.TRIGGER_GROUP
   </select>
 
-<!--  <select id="getJobAndTriggerDetailsAndSimple" resultType="com.vpis.schedule.entity.JobAndTrigger">
+  <select id="getJobAndTriggerDetailsAndSimple" resultType="com.vpis.schedule.entity.JobAndTrigger">
     SELECT
       A.JOB_NAME,
       A.JOB_GROUP,
@@ -35,7 +35,7 @@
     QRTZ_TRIGGERS B ON A.JOB_NAME = B.JOB_NAME
     LEFT JOIN QRTZ_SIMPLE_TRIGGERS C ON B.TRIGGER_NAME = C.TRIGGER_NAME
     LEFT JOIN QRTZ_CRON_TRIGGERS D ON B.TRIGGER_NAME = D.TRIGGER_NAME
-  </select>-->
+  </select>
 
 
 </mapper>

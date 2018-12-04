@@ -9,9 +9,11 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -35,44 +37,6 @@ public class QuartzService {
     public void startScheduler() {
         try {
             scheduler.start();
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 增加一个job
-     *
-     * @param jobClass
-     *            任务实现类
-     * @param jobName
-     *            任务名称
-     * @param jobGroupName
-     *            任务组名
-     * @param jobTime
-     *            时间表达式 (这是每隔多少秒为一次任务)
-     * @param jobTimes
-     *            运行的次数 （<0:表示不限次数）
-     */
-    public void addJob(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime,
-                       int jobTimes) {
-        try {
-            // 任务名称和组构成任务key
-            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName)
-                    .build();
-            // 使用simpleTrigger规则
-            Trigger trigger = null;
-            if (jobTimes < 0) {
-                trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
-                        .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime))
-                        .startNow().build();
-            } else {
-                trigger = TriggerBuilder
-                        .newTrigger().withIdentity(jobName, jobGroupName).withSchedule(SimpleScheduleBuilder
-                                .repeatSecondlyForever(1).withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
-                        .startNow().build();
-            }
-            scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
@@ -258,12 +222,144 @@ public class QuartzService {
         return jobList;
     }
 
+
+    @Autowired
+    private SchedulerFactoryBean schedulerFactoryBean;
+    /****************************************************************JOB**************************************************************/
+
+
+    /**
+     * 增加一个job
+     *
+     * @param jobClass
+     *            任务实现类
+     * @param jobName
+     *            任务名称
+     * @param jobGroupName
+     *            任务组名
+     * @param jobTime
+     *            时间表达式 (这是每隔多少秒为一次任务)
+     * @param jobTimes
+     *            运行的次数 （<0:表示不限次数）
+     */
+    public void addJobSimple(Class<? extends QuartzJobBean> jobClass, String jobName, String jobGroupName, int jobTime,
+                             int jobTimes) {
+        try {
+            // 任务名称和组构成任务key
+            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroupName)
+                    .build();
+            // 使用simpleTrigger规则
+            Trigger trigger = null;
+            if (jobTimes < 0) {
+                trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName)
+                        .withSchedule(SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime))
+                        .startNow().build();
+            } else {
+                trigger = TriggerBuilder
+                        .newTrigger().withIdentity(jobName, jobGroupName).withSchedule(SimpleScheduleBuilder
+                                .repeatSecondlyForever(1).withIntervalInSeconds(jobTime).withRepeatCount(jobTimes))
+                        .startNow().build();
+            }
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addJob(String jobClassName, String jobGroupName, String cronExpression) throws Exception {
+
+        // 启动调度器
+        schedulerFactoryBean.getScheduler().start();
+
+        //构建job信息
+        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).build();
+
+        //表达式调度构建器(即任务执行的时间)
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+
+        //按新的cronExpression表达式构建一个新的trigger
+        CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(jobClassName, jobGroupName)
+                .withSchedule(scheduleBuilder).build();
+
+        try {
+            schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
+
+        } catch (SchedulerException e) {
+            System.out.println("创建定时任务失败" + e);
+            throw new Exception("创建定时任务失败");
+        }
+    }
+
+
+    public QuartzJobBean getClass(String classname) throws Exception {
+        Class<?> class1 = Class.forName(classname);
+        return (QuartzJobBean) class1.newInstance();
+    }
+
+
+    public void jobdelete(String jobClassName, String jobGroupName) throws Exception {
+        schedulerFactoryBean.getScheduler().pauseTrigger(TriggerKey.triggerKey(jobClassName, jobGroupName));
+        schedulerFactoryBean.getScheduler().unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroupName));
+        schedulerFactoryBean.getScheduler().deleteJob(JobKey.jobKey(jobClassName, jobGroupName));
+    }
+
+
+    public void jobrescheduleSimple(String jobName, String jobGroupName, int jobTime) throws Exception {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
+
+            SimpleScheduleBuilder simpleScheduleBuilder = SimpleScheduleBuilder.repeatSecondlyForever(1).withIntervalInSeconds(jobTime);
+
+            SimpleTrigger trigger = (SimpleTrigger) schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
+
+            // 按新的cronExpression表达式重新构建trigger
+            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(simpleScheduleBuilder).build();
+
+            // 按新的trigger重新设置job执行
+            schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey, trigger);
+        } catch (SchedulerException e) {
+            System.out.println("更新定时任务失败" + e);
+            throw new Exception("更新定时任务失败");
+        }
+    }
+
+
+    public void jobreschedule(String jobClassName, String jobGroupName, String cronExpression) throws Exception {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
+            // 表达式调度构建器
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+
+            CronTrigger trigger = (CronTrigger) schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
+
+            // 按新的cronExpression表达式重新构建trigger
+            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+
+            // 按新的trigger重新设置job执行
+            schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey, trigger);
+        } catch (SchedulerException e) {
+            System.out.println("更新定时任务失败" + e);
+            throw new Exception("更新定时任务失败");
+        }
+    }
+
+
+    public void jobresume(String jobClassName, String jobGroupName) throws Exception {
+        schedulerFactoryBean.getScheduler().resumeJob(JobKey.jobKey(jobClassName, jobGroupName));
+    }
+
+
+    public void jobPause(String jobClassName, String jobGroupName) throws Exception {
+        schedulerFactoryBean.getScheduler().pauseJob(JobKey.jobKey(jobClassName, jobGroupName));
+    }
+
     public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<JobAndTrigger> list = jobAndTriggersDao.getJobAndTriggerDetails();
+        List<JobAndTrigger> list = jobAndTriggersDao.getJobAndTriggerDetailsAndSimple();
         for(JobAndTrigger jobAndTrigger : list){
             if(Preconditions.isNotBlank(jobAndTrigger.getREPEAT_INTERVAL())){
-                jobAndTrigger.setCRON_EXPRESSION(jobAndTrigger.getREPEAT_INTERVAL().toString());
+                BigDecimal fen = new BigDecimal(jobAndTrigger.getREPEAT_INTERVAL()).divide(new BigDecimal("60000"),2, BigDecimal.ROUND_HALF_EVEN);
+                jobAndTrigger.setCRON_EXPRESSION(String.valueOf(fen) + "m");
             }
         }
         PageInfo<JobAndTrigger> page = new PageInfo<JobAndTrigger>(list);

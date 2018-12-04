@@ -4,6 +4,14 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+/**
+ *  @Author: Yuhan.Tang
+ *  @ClassName: TestJob
+ *  @package: com.vpis.schedule.job
+ *  @Date: Created in 2018/12/4 下午1:30
+ *  @email yuhan.tang@magicwindow.cn
+ *  @Description: 测试JOB
+ */
 public class TestJob extends QuartzJobBean{
 
     @Override

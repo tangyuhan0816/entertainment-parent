@@ -70,7 +70,7 @@
 
             <el-table-column
                     prop="cron_EXPRESSION"
-                    label="表达式或间隔秒"
+                    label="表达式或间隔分钟"
                     sortable>
             </el-table-column>
 
@@ -303,24 +303,43 @@
                 console.log(row)
                 this.updateFormVisible = true;
                 this.updateform.jobName = row.job_CLASS_NAME;
+                this.updateform.jobClassName = row.job_NAME;
                 this.updateform.jobGroup = row.job_GROUP;
+                this.updateform.timeZoneId = row.time_ZONE_ID;
             },
 
             //更新任务
-            update: function(){
-                this.$http.post
-                ('job/reschedulejob',
-                    {"jobClassName":this.updateform.jobName,
-                        "jobGroupName":this.updateform.jobGroup,
-                        "cronExpression":this.updateform.cronExpression
-                    },{emulateJSON: true}
-                ).then(function(res){
-                    this.loadData(this.currentPage, this.pagesize);
-                    this.updateFormVisible = false;
-                },function(){
-                    console.log('failed');
-                });
+            update: function() {
+                if (this.updateform.timeZoneId === null) {
+                    this.$http.post
+                    ("job/simple/reschedulejob",
+                        {
+                            "jobName": this.updateform.jobClassName,
+                            "jobGroupName": this.updateform.jobGroup,
+                            "jobTime": this.updateform.cronExpression
+                        }, {emulateJSON: true}
+                    ).then(function (res) {
+                        this.loadData(this.currentPage, this.pagesize);
+                        this.updateFormVisible = false;
+                    }, function () {
+                        console.log('failed');
+                    });
+                } else {
 
+                    this.$http.post
+                    ("job/reschedulejob",
+                        {
+                            "jobClassName": this.updateform.jobName,
+                            "jobGroupName": this.updateform.jobGroup,
+                            "cronExpression": this.updateform.cronExpression
+                        }, {emulateJSON: true}
+                    ).then(function (res) {
+                        this.loadData(this.currentPage, this.pagesize);
+                        this.updateFormVisible = false;
+                    }, function () {
+                        console.log('failed');
+                    });
+                }
             },
 
             //每页显示数据量变更

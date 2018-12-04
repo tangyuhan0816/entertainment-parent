@@ -14,7 +14,15 @@ import java.util.List;
  */
 public interface JobAndTriggersDao {
 
+    /**
+     * 仅查询复杂(Cron)Job
+     * @return
+     */
     List<JobAndTrigger> getJobAndTriggerDetails();
 
-//    List<JobAndTrigger> getJobAndTriggerDetailsAndSimple();
+    /**
+     * 查询包含Simple类型的Job
+     * @return
+     */
+    List<JobAndTrigger> getJobAndTriggerDetailsAndSimple();
 }
