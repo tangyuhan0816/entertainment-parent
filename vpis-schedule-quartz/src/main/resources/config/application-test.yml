@@ -41,19 +41,6 @@ spring:
   application:
       name: quartz-cluster-node-first
   redis:
-    host: 193.112.97.60
-    port: 6379
-    password: 123456
-    lettuce:
-      pool:
-        min-idle: 5
-        max-wait: 10000
-        max-idle: 25
-        max-active: 8
-      shutdown-timeout: 10000
-    timeout: 10000
-    database: 0
-
 
 
 ## 该配置节点为独立的节点。这个配置放在spring的节点下，导致配置无法被识别
