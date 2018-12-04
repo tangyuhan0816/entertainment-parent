@@ -2,7 +2,7 @@ spring:
   profiles: prod
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://servet.mysql.yunstou.com:3306/vsprodb?Unicode=true&amp;characterEncoding=UTF-8
+    url: jdbc:mysql://servet.mysql.yunstou.com:3306/vsprodb?Unicode=true&amp;characterEncoding=UTF-8&useSSL=false
     username: yundao
     password: yundaoProd2020.!
     jmx-enabled: true
@@ -38,7 +38,7 @@ spring:
 server.port: 15060
 #
 jwt:
-  sign_key: 783546576b45c9f2c8f41cb99d195d3e
+  sign_key: 7y3546576u45n9s2t8f41ob99u195d3e
   expire_time: 1800
 
 shiro:
