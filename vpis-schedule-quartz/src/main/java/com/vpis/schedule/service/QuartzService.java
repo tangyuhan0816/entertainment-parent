@@ -2,6 +2,7 @@ package com.vpis.schedule.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.vpis.common.utils.Preconditions;
 import com.vpis.schedule.dao.quartz.JobAndTriggersDao;
 import com.vpis.schedule.entity.JobAndTrigger;
 import org.quartz.*;
@@ -260,6 +261,11 @@ public class QuartzService {
     public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<JobAndTrigger> list = jobAndTriggersDao.getJobAndTriggerDetails();
+        for(JobAndTrigger jobAndTrigger : list){
+            if(Preconditions.isNotBlank(jobAndTrigger.getREPEAT_INTERVAL())){
+                jobAndTrigger.setCRON_EXPRESSION(jobAndTrigger.getREPEAT_INTERVAL().toString());
+            }
+        }
         PageInfo<JobAndTrigger> page = new PageInfo<JobAndTrigger>(list);
         return page;
     }

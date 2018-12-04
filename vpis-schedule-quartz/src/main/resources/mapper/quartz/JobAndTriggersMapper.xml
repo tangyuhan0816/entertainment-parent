@@ -18,4 +18,24 @@
     AND qrtz_triggers.TRIGGER_NAME = qrtz_cron_triggers.TRIGGER_NAME
     AND qrtz_triggers.TRIGGER_GROUP = qrtz_cron_triggers.TRIGGER_GROUP
   </select>
+
+<!--  <select id="getJobAndTriggerDetailsAndSimple" resultType="com.vpis.schedule.entity.JobAndTrigger">
+    SELECT
+      A.JOB_NAME,
+      A.JOB_GROUP,
+      A.JOB_CLASS_NAME,
+      B.TRIGGER_NAME,
+      B.TRIGGER_GROUP,
+      D.CRON_EXPRESSION,
+      D.TIME_ZONE_ID,
+      C.REPEAT_COUNT,
+      C.REPEAT_INTERVAL
+    FROM
+    QRTZ_JOB_DETAILS A INNER JOIN
+    QRTZ_TRIGGERS B ON A.JOB_NAME = B.JOB_NAME
+    LEFT JOIN QRTZ_SIMPLE_TRIGGERS C ON B.TRIGGER_NAME = C.TRIGGER_NAME
+    LEFT JOIN QRTZ_CRON_TRIGGERS D ON B.TRIGGER_NAME = D.TRIGGER_NAME
+  </select>-->
+
+
 </mapper>
