@@ -3,8 +3,8 @@ spring:
   datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: jdbc:mysql://servet.mysql.yunstou.com:3306/vsprodb?Unicode=true&amp;characterEncoding=UTF-8
-    username: root
-    password: X315134.y
+    username: yundao
+    password: yundaoProd2020.!
     jmx-enabled: true
     initialSize: 5
     maxActive: 100
