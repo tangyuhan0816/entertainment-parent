@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseContent handlBusinessException(BusinessException ex) {
-        logger.error(ex.getMessage(),ex);
+        logger.error("业务异常 BusinessException:{}", ex.getMessage());
         String message = ex.getCode();
         return ResponseContent.buildFail(ResponseContent.BUSINESS_EXCEPTION_CODE,message);
     }
