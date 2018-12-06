@@ -6,7 +6,9 @@ import com.vpis.asset.bean.base.BaseBean;
 import com.vpis.common.entity.house.House;
 import lombok.Data;
 
+import javax.persistence.Transient;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *  @Author: Yuhan.Tang
@@ -42,6 +44,10 @@ public class ShoppingBean extends BaseBean{
     @JSONField(name = "banner_url")
     @JsonProperty("banner_url")
     private String bannerUrl;
+
+    @JSONField(name = "create_date")
+    @JsonProperty("create_date")
+    private Date createDate;
 
 //    @Override
 //    public int hashCode(){

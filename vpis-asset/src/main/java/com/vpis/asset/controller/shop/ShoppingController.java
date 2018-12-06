@@ -123,8 +123,8 @@ public class ShoppingController extends BaseController {
 
     /***************************************************************************************************************/
 
-//    @ApiOperation(value = "新增商品 ，Owner: Huan.Liu")
-    @RequestMapping(path = "/insert", method = {RequestMethod.POST})
+//    @ApiOperation(value = "新增商品 ，Owner: yuhan.tang")
+    @RequestMapping(path = "/save", method = {RequestMethod.POST})
     public ResponseContent insertShop(@RequestParam(name = "house_id") Long houseId,
                                       @RequestParam(name = "product_count") Integer productCount) {
         try {
@@ -138,7 +138,7 @@ public class ShoppingController extends BaseController {
     }
 
 
-//    @ApiOperation(value = "查询购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "查询购物车 ，Owner: yuhan.tang")
     @RequestMapping(path = "/findList", method = {RequestMethod.POST})
     public ResponseContent findAll() {
         try {
@@ -151,7 +151,7 @@ public class ShoppingController extends BaseController {
         }
     }
 
-//    @ApiOperation(value = "删除购物车 ，Owner: Huan.Liu")
+//    @ApiOperation(value = "删除购物车 ，Owner: yuhan.tang")
     @RequestMapping(path = "/del", method = {RequestMethod.POST})
     public ResponseContent delShop(@RequestParam(name = "ids")List<Long> houseIds) {
         try {

@@ -10,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  *  @Author: Yuhan.Tang
@@ -33,41 +34,48 @@ public class ShoppingService {
 
     private static final String SHOPPING_KEY = "SHOPPING_CARD:USER_";
 
-    public Set<ShoppingBean> saveShop(Long houseId, Long userId, Integer productCount){
+    public List<ShoppingBean> saveShop(Long houseId, Long userId, Integer productCount){
 
         ShoppingBean bean = buildBean(houseId,productCount);
 
-        Set<ShoppingBean> shoppings = redisTemplateJackson.opsForSet().members(getShoppingKey(userId));
+        List<ShoppingBean> shoppings = redisTemplateJackson.opsForList().range(getShoppingKey(userId), 0,-1);
 
+        Boolean isSave = Boolean.TRUE;
         if(Preconditions.isNotBlank(shoppings)){
-            for(ShoppingBean shoppingBean : shoppings){
+            for(int i = 0;i < shoppings.size(); i++){
+                ShoppingBean shoppingBean = shoppings.get(i);
                 if(shoppingBean.getHouseId().equals(bean.getHouseId())){
-                    redisTemplateJackson.opsForSet().remove(getShoppingKey(userId), shoppingBean);
                     bean.setProductCount(shoppingBean.getProductCount() + bean.getProductCount());
+                    redisTemplateJackson.opsForList().set(getShoppingKey(userId), i, bean);
+                    isSave = Boolean.FALSE;
                     break;
                 }
             }
         }
-        redisTemplateJackson.opsForSet().add(getShoppingKey(userId), bean);
+
+        if(isSave){
+            redisTemplateJackson.opsForList().rightPush(getShoppingKey(userId), bean);
+        }
 
         return findAll(userId);
     }
 
-    public Set<ShoppingBean> delShop(List<Long> houseIds, Long userId){
-        Set<ShoppingBean> shoppings = redisTemplateJackson.opsForSet().members(getShoppingKey(userId));
+    public List<ShoppingBean> delShop(List<Long> houseIds, Long userId){
+        List<ShoppingBean> shoppings = redisTemplateJackson.opsForList().range(getShoppingKey(userId), 0,-1);
 
         if(Preconditions.isNotBlank(shoppings)){
-            for(ShoppingBean shoppingBean : shoppings){
-                if(houseIds.contains(shoppingBean.getHouseId())){
-                    redisTemplateJackson.opsForSet().remove(getShoppingKey(userId), shoppingBean);
+
+            for(int i = 0; i < shoppings.size(); i++){
+                if(houseIds.contains(shoppings.get(i).getHouseId())){
+                    redisTemplateJackson.opsForList().remove(getShoppingKey(userId),-1,shoppings.get(i));
                 }
             }
         }
         return findAll(userId);
     }
 
-    public Set<ShoppingBean> findAll(Long userId){
-        return redisTemplateJackson.opsForSet().members(getShoppingKey(userId));
+    public List<ShoppingBean> findAll(Long userId){
+        return redisTemplateJackson.opsForList().range(getShoppingKey(userId), 0, -1);
     }
 
     private ShoppingBean buildBean(Long houseId,Integer productCount){
@@ -82,6 +90,7 @@ public class ShoppingService {
         bean.setPersonNumber(house.getPersonNum());
         bean.setPrice(house.getPrice());
         bean.setProductCount(productCount);
+        bean.setCreateDate(new Date());
         return bean;
     }
 

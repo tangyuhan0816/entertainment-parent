@@ -63,7 +63,7 @@ public class RedisConfig {
         template.setValueSerializer(jackson2JsonRedisSerializer);
         template.afterPropertiesSet();
 
-        // Long类型不可以会出现异常信息;
+        //Long类型不可以会出现异常信息;
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         template.setKeySerializer(redisSerializer);
         template.setHashKeySerializer(redisSerializer);
