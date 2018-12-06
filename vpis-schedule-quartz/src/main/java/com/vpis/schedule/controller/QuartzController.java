@@ -3,6 +3,7 @@ package com.vpis.schedule.controller;
 import com.github.pagehelper.PageInfo;
 import com.vpis.schedule.entity.JobAndTrigger;
 import com.vpis.schedule.service.QuartzService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.Map;
  *  @email yuhan.tang@magicwindow.cn
  *  @Description: 
  */
+@Slf4j
 @RestController
 @RequestMapping(value="/job")
 public class QuartzController {
@@ -29,6 +31,7 @@ public class QuartzController {
     public void addjob(@RequestParam(value = "jobClassName") String jobClassName,
                        @RequestParam(value = "jobGroupName") String jobGroupName,
                        @RequestParam(value = "cronExpression") String cronExpression) throws Exception {
+        log.info("addjob jobClassName:{},jobGroupName:{},cronExpression{}",jobClassName,jobGroupName,cronExpression);
         quartzService.addJob(jobClassName, jobGroupName, cronExpression);
     }
 
@@ -40,19 +43,23 @@ public class QuartzController {
                              @RequestParam(value = "jobGroupName") String jobGroupName,
                              @RequestParam(value = "jobTime") Integer jobTime,
                              @RequestParam(value = "jobTimes") Integer jobTimes) throws Exception {
-
+        log.info("simple/addjob jobName:{},jobClassName:{},jobGroupName:{},jobTime:{},jobTimes:{}",jobName,jobClassName,jobGroupName,jobTime,jobTimes);
         quartzService.addJobSimple(quartzService.getClass(jobClassName).getClass(), jobName,jobGroupName,jobTime,jobTimes);
     }
 
 
     @PostMapping(value = "/pausejob")
-    public void pausejob(@RequestParam(value = "jobClassName") String jobClassName, @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+    public void pausejob(@RequestParam(value = "jobClassName") String jobClassName,
+                         @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+        log.info("暂停Job pausejob jobClassName:{},jobGroupName:{}",jobClassName,jobGroupName);
         quartzService.jobPause(jobClassName, jobGroupName);
     }
 
 
     @PostMapping(value = "/resumejob")
-    public void resumejob(@RequestParam(value = "jobClassName") String jobClassName, @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+    public void resumejob(@RequestParam(value = "jobClassName") String jobClassName,
+                          @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+        log.info("恢复Job resumejob jobClassName:{},jobGroupName:{}",jobClassName,jobGroupName);
         quartzService.jobresume(jobClassName, jobGroupName);
     }
 
@@ -61,6 +68,7 @@ public class QuartzController {
     public void rescheduleJob(@RequestParam(value = "jobClassName") String jobClassName,
                               @RequestParam(value = "jobGroupName") String jobGroupName,
                               @RequestParam(value = "cronExpression") String cronExpression) throws Exception {
+        log.info("修改Job reschedulejob jobClassName:{},jobGroupName:{}，cronExpression:{}",jobClassName,jobGroupName,cronExpression);
         quartzService.jobreschedule(jobClassName, jobGroupName, cronExpression);
     }
 
@@ -68,12 +76,15 @@ public class QuartzController {
     public void rescheduleJobSimple(@RequestParam(value = "jobName") String jobName,
                               @RequestParam(value = "jobGroupName") String jobGroupName,
                               @RequestParam(value = "jobTime") int jobTime) throws Exception {
+        log.info("修改simpleJob simple/reschedulejob jobName:{},jobGroupName:{},jobTime:{}",jobName,jobGroupName,jobTime);
         quartzService.jobrescheduleSimple(jobName, jobGroupName, jobTime);
     }
 
 
     @PostMapping(value = "/deletejob")
-    public void deletejob(@RequestParam(value = "jobClassName") String jobClassName, @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+    public void deletejob(@RequestParam(value = "jobClassName") String jobClassName,
+                          @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
+        log.info("修改Job deletejob jobClassName:{},jobGroupName:{}",jobClassName,jobGroupName);
         quartzService.jobdelete(jobClassName, jobGroupName);
     }
 
