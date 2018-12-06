@@ -67,10 +67,10 @@ qiniu:
   bucket:
     image:
       name: yundao-image-test
-      domain: http://phchhnlcc.bkt.clouddn.com/
+      domain: http://image-test.yunstou.com/
     video:
       name: yundao-video-test
-      domain: http://phchf9afi.bkt.clouddn.com/
+      domain: http://image-test.yunstou.com/
 
 api:
   aliyun:

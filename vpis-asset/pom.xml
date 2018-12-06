@@ -62,7 +62,7 @@
       <version>1.7</version>
     </dependency>
 
-    <!-- 基础组件-->
+    <!-- 基础组件  2-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>

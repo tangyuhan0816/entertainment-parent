@@ -28,64 +28,26 @@ import java.util.UUID;
 @Component
 public class QiNiuUtils {
 
-    private static String accessKey;
-
-    private static String secretKey;
-
-    private static String bucketImageName;
-
-    private static String bucketVideoName;
-
-    private static String domainImageName;
-
-    private static String domainVideoName;
-
     @Value("${qiniu.access_key}")
-    private void setAccessKey(String iaccessKey) {
-        accessKey = iaccessKey;
-    }
+    private String accessKey;
 
     @Value("${qiniu.secret_key}")
-    private void setSecretKey(String isecretKey) {
-        secretKey = isecretKey;
-    }
+    private String secretKey;
 
     @Value("${qiniu.bucket.image.name}")
-    private void setBucketImageName(String ibucketImageName) {
-        bucketImageName = ibucketImageName;
-    }
-
-    @Value("${qiniu.bucket.image.domain}")
-    private void setDomainImageName(String idomainImageName) {
-        domainImageName = idomainImageName;
-    }
+    private String bucketImageName;
 
     @Value("${qiniu.bucket.video.name}")
-    private void setBucketVideoName(String ibucketVideoName) {
-        bucketVideoName = ibucketVideoName;
-    }
+    private String bucketVideoName;
+
+    @Value("${qiniu.bucket.image.domain}")
+    private String domainImageName;
 
     @Value("${qiniu.bucket.video.domain}")
-    private void setDomainVideoName(String idomainVideoName) {
-        domainVideoName = idomainVideoName;
-    }
+    private String domainVideoName;
 
-    public String uploadImage(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        String extName = getExtensionName(fileName);
-        String resourceName = "vpis_image_" + UUID.randomUUID().toString().replaceAll("-", "") + "." + extName;
-        return upload(file, resourceName, Boolean.TRUE);
-    }
-
-    public String uploadVideo(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename();
-        String extName = getExtensionName(fileName);
-        String resourceName = "vpis_video_" + UUID.randomUUID().toString().replaceAll("-", "") + "." + extName;
-        return upload(file, resourceName, Boolean.FALSE);
-    }
-
-    private String upload(MultipartFile file, String resourceName, Boolean isImage) throws IOException {
-
+    public String upload(MultipartFile file, Boolean isImage) throws IOException {
+        byte[] uploadBytes = file.getBytes();
         Configuration cfg = new Configuration(Zone.zone0());
         UploadManager uploadManager = new UploadManager(cfg);
 
@@ -100,7 +62,10 @@ public class QiNiuUtils {
             upToken = auth.uploadToken(bucketVideoName);
         }
 
-        byte[] uploadBytes = file.getBytes();
+        String fileName = file.getOriginalFilename();
+        String extName = getExtensionName(fileName);
+        String resourceName = UUID.randomUUID().toString().replaceAll("-", "") + "." + extName;
+
         Response response = uploadManager.put(uploadBytes, resourceName, upToken);
 
         //解析上传成功的结果
