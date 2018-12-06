@@ -1,11 +1,9 @@
 package com.vpis.asset.service.sys;
 
-import com.vpis.asset.bean.sys.RegisterBean;
 import com.vpis.asset.config.RedisOperation;
 import com.vpis.asset.config.YunpianSmsSender;
 import com.vpis.asset.utils.AccountValidatorUtil;
 import com.vpis.asset.utils.StringUtil;
-import com.vpis.common.entity.sys.TbUser;
 import com.vpis.common.exception.STException;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
