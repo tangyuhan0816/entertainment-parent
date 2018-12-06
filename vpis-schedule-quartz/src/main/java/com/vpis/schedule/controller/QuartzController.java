@@ -74,17 +74,18 @@ public class QuartzController {
 
     @PostMapping(value = "/simple/reschedulejob")
     public void rescheduleJobSimple(@RequestParam(value = "jobName") String jobName,
-                              @RequestParam(value = "jobGroupName") String jobGroupName,
-                              @RequestParam(value = "jobTime") int jobTime) throws Exception {
-        log.info("修改simpleJob simple/reschedulejob jobName:{},jobGroupName:{},jobTime:{}",jobName,jobGroupName,jobTime);
-        quartzService.jobrescheduleSimple(jobName, jobGroupName, jobTime);
+                                      @RequestParam(value = "jobGroupName") String jobGroupName,
+                                      @RequestParam(value = "jobTime") int jobTime,
+                                      @RequestParam(value = "jobTimes") int jobTimes) throws Exception {
+        log.info("修改simpleJob simple/reschedulejob jobName:{},jobGroupName:{},jobTime:{},jobTimes:{}",jobName,jobGroupName,jobTime,jobTimes);
+        quartzService.jobrescheduleSimple(jobName, jobGroupName, jobTime, jobTimes);
     }
 
 
     @PostMapping(value = "/deletejob")
     public void deletejob(@RequestParam(value = "jobClassName") String jobClassName,
                           @RequestParam(value = "jobGroupName") String jobGroupName) throws Exception {
-        log.info("修改Job deletejob jobClassName:{},jobGroupName:{}",jobClassName,jobGroupName);
+        log.info("删除Job deletejob jobClassName:{},jobGroupName:{}",jobClassName,jobGroupName);
         quartzService.jobdelete(jobClassName, jobGroupName);
     }
 

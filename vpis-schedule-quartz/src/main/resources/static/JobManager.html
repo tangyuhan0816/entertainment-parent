@@ -173,6 +173,22 @@
         </div>
     </el-dialog>
 
+    <el-dialog title="修改Simple任务" :visible.sync="updateFormVisibleSimple">
+        <el-form :model="updateform">
+            <el-form-item label="时间表达式" label-width="120px" style="width:75%">
+                <el-input v-model="updateform.jobTime" auto-complete="off"></el-input>
+            </el-form-item>
+
+            <el-form-item label="运行的次数" label-width="120px" style="width:75%">
+                <el-input v-model="updateform.jobTimes" auto-complete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="updateFormVisibleSimple = false">取 消</el-button>
+            <el-button type="primary" @click="updateSimple">确 定</el-button>
+        </div>
+    </el-dialog>
+
 </div>
 
 <footer align="center">
@@ -208,6 +224,9 @@
 
             //修改对话框默认可见性
             updateFormVisible: false,
+
+            //修改对话框默认可见性
+            updateFormVisibleSimple: false,
 
             //提交的表单
             form: {
@@ -300,46 +319,60 @@
 
             //更新
             handleUpdate: function(index, row){
-                console.log(row)
-                this.updateFormVisible = true;
+                if(row.time_ZONE_ID == null){
+                    this.updateFormVisibleSimple = true;
+                }else{
+                    this.updateFormVisible = true;
+                }
                 this.updateform.jobName = row.job_CLASS_NAME;
                 this.updateform.jobClassName = row.job_NAME;
                 this.updateform.jobGroup = row.job_GROUP;
-                this.updateform.timeZoneId = row.time_ZONE_ID;
+
             },
 
             //更新任务
             update: function() {
-                if (this.updateform.timeZoneId === null) {
-                    this.$http.post
-                    ("job/simple/reschedulejob",
-                        {
-                            "jobName": this.updateform.jobClassName,
-                            "jobGroupName": this.updateform.jobGroup,
-                            "jobTime": this.updateform.cronExpression
-                        }, {emulateJSON: true}
-                    ).then(function (res) {
-                        this.loadData(this.currentPage, this.pagesize);
-                        this.updateFormVisible = false;
-                    }, function () {
-                        console.log('failed');
-                    });
-                } else {
+                this.$http.post
+                ("job/reschedulejob",
+                    {
+                        "jobClassName": this.updateform.jobName,
+                        "jobGroupName": this.updateform.jobGroup,
+                        "cronExpression": this.updateform.cronExpression
+                    }, {emulateJSON: true}
+                ).then(function (res) {
+                    this.loadData(this.currentPage, this.pagesize);
+                    this.updateFormVisible = false;
+                }, function () {
+                    console.log('failed');
+                });
+            },
 
-                    this.$http.post
-                    ("job/reschedulejob",
-                        {
-                            "jobClassName": this.updateform.jobName,
-                            "jobGroupName": this.updateform.jobGroup,
-                            "cronExpression": this.updateform.cronExpression
-                        }, {emulateJSON: true}
-                    ).then(function (res) {
-                        this.loadData(this.currentPage, this.pagesize);
-                        this.updateFormVisible = false;
-                    }, function () {
-                        console.log('failed');
-                    });
-                }
+
+            //更新
+            handleUpdateSimple: function(index, row){
+                console.log(row)
+                this.updateFormVisibleSimple = true;
+                this.updateform.jobName = row.job_CLASS_NAME;
+                this.updateform.jobClassName = row.job_NAME;
+                this.updateform.jobGroup = row.job_GROUP;
+            },
+
+            //更新任务
+            updateSimple: function() {
+                this.$http.post
+                ("job/simple/reschedulejob",
+                    {
+                        "jobName": this.updateform.jobClassName,
+                        "jobGroupName": this.updateform.jobGroup,
+                        "jobTime": this.updateform.jobTime,
+                        "jobTimes": this.updateform.jobTimes,
+                    }, {emulateJSON: true}
+                ).then(function (res) {
+                    this.loadData(this.currentPage, this.pagesize);
+                    this.updateFormVisibleSimple = false;
+                }, function () {
+                    console.log('failed');
+                });
             },
 
             //每页显示数据量变更

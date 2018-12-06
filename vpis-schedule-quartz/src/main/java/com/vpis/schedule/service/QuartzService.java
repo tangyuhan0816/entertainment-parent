@@ -304,7 +304,7 @@ public class QuartzService {
     }
 
 
-    public void jobrescheduleSimple(String jobName, String jobGroupName, int jobTime) throws Exception {
+    public void jobrescheduleSimple(String jobName, String jobGroupName, int jobTime, int jobTimes) throws Exception {
         try {
             TriggerKey triggerKey = TriggerKey.triggerKey(jobName, jobGroupName);
 
@@ -312,8 +312,13 @@ public class QuartzService {
 
             SimpleTrigger trigger = (SimpleTrigger) schedulerFactoryBean.getScheduler().getTrigger(triggerKey);
 
-            // 按新的cronExpression表达式重新构建trigger
-            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(simpleScheduleBuilder).build();
+            // 按新的jobTime表达式重新构建trigger
+            if(jobTimes < 0){
+                trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(simpleScheduleBuilder).build();
+            }else {
+                trigger = TriggerBuilder.newTrigger().withIdentity(jobName, jobGroupName).withSchedule(
+                        simpleScheduleBuilder.withRepeatCount(jobTimes)).build();
+            }
 
             // 按新的trigger重新设置job执行
             schedulerFactoryBean.getScheduler().rescheduleJob(triggerKey, trigger);
