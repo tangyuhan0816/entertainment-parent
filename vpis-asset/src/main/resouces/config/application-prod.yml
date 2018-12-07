@@ -55,6 +55,8 @@ sms:
     registerSaveInfo: 【云导信息】验证码%s，视投用户，您正在进行APP注册操作[验证码请勿泄露或告知他人]
     loginSaveInfo: 【云导信息】您的验证码是%s，十分钟内有效，请勿告知他人以免泄漏。
 
+test.smscode: 888123
+
 qiniu:
   access_key: Qc0J2KJ2D1RaXlSNOMcs0Y2ACeWE0AnTnRxg69DS
   secret_key: fzOzfMVAQM137YQFgIv6iuTUK7qIB2nKIYThXrgW

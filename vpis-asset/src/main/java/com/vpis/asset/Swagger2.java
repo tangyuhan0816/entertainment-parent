@@ -37,14 +37,14 @@ import java.util.List;
 @EnableSwagger2
 public class Swagger2 {
 
-    @Value("${spring.profiles}")
-    private String profiles;
-
     @Autowired
     private SysUserService sysUserService;
 
     @Autowired
     private JwtService jwtService;
+
+    @Value("${spring.profiles}")
+    private String profile;
 
     @Bean
     public Docket createRestApi(){
@@ -64,6 +64,9 @@ public class Swagger2 {
         pars.add(tokenPar.build());
         Predicate<String> pathSelectors = PathSelectors.any();
 
+        if (profile.contains("prod")) {
+            pathSelectors = PathSelectors.none();
+        }
 
         Predicate<RequestHandler> predicate = new Predicate<RequestHandler>() {
 

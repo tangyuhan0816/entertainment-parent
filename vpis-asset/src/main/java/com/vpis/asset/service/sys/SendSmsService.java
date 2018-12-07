@@ -36,6 +36,9 @@ public class SendSmsService {
     @Value("${test.smscode}")
     private String testCode;
 
+    @Value("${spring.profiles}")
+    private String profile;
+
     /**
      * 短信发送等待时间(单位：秒)
      */
@@ -80,7 +83,7 @@ public class SendSmsService {
      * @return
      */
     public void checkVerifyCode(String smsCode,String phone,String vKey){
-        if(!testCode.equals(smsCode)) {
+        if(!testCode.equals(smsCode) && !profile.contains("prod")) {
             String mobile = "+" + phone;
             String code = redisOperation.getVerifyCode(mobile, vKey);
             if (Preconditions.isBlank(smsCode)) {
