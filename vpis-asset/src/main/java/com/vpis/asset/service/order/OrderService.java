@@ -4,8 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.vpis.asset.bean.order.OrderBean;
 import com.vpis.asset.bean.order.OrderItemBean;
 import com.vpis.asset.bean.vo.HouseVo;
+import com.vpis.asset.bean.vo.OrderItemHouseVo;
 import com.vpis.asset.bean.vo.OrderVo;
 import com.vpis.asset.dao.order.OrderDao;
+import com.vpis.asset.dao.order.OrderItemDao;
 import com.vpis.asset.repository.order.OrderItemRepository;
 import com.vpis.asset.repository.order.OrderRepository;
 import com.vpis.asset.service.house.HouseService;
@@ -28,6 +30,8 @@ import com.vpis.common.utils.DateUtils;
 import com.vpis.common.utils.OrderUtil;
 import com.vpis.common.utils.Preconditions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,6 +66,9 @@ public class OrderService {
 
     @Autowired
     private OrderDao orderDao;
+
+    @Autowired
+    private OrderItemDao orderItemDao;
 
     @Autowired
     private MouldsService mouldsService;
@@ -271,42 +278,22 @@ public class OrderService {
      * @param pageNumber
      */
     public PageableResponse<OrderVo> findOrderByList(Long userId, Integer pageNumber, Integer pageSize, Integer orderStatus){
-        PageableResponse<OrderVo> response = orderDao.findOrderList(userId, pageNumber, pageSize, orderStatus);
+
+        Page<Order> page = orderRepository.findByUserIdAndOrderStatusAndDeletedIsFalseOrderByCreateDateTimeDesc(userId, orderStatus, PageRequest.of(pageNumber, pageSize));
+
+        PageableResponse<OrderVo> response = new PageableResponse<>();
 
         List<OrderVo> result = new ArrayList<>();
 
-        List<OrderVo> param = response.getList();
-
-        if(Preconditions.isNotBlank(param)) {
-
-            Map<Long, List<OrderVo>> maps = param.stream().filter(distinctByKey(OrderVo::getId)).collect(Collectors.groupingBy(o -> o.getId()));
-
-            for (Map.Entry<Long, List<OrderVo>> entry : maps.entrySet()) {
-                List<OrderVo> value = entry.getValue();
-
-                OrderVo vo = new OrderVo();
-
-                Integer sumCount = 0;
-
-                BigDecimal sumAount = BigDecimal.ZERO;
-
-                for (OrderVo orderVo : value) {
-
-                    sumCount += orderVo.getProductCount();
-
-                    sumAount = sumAount.add(orderVo.getOrderAmountTotal());
-                }
-
-                vo.setId(value.get(0).getId());
-
-                vo.setHouseName(value.get(0).getHouseName());
-
-                vo.setOrderAmountTotal(sumAount);
-
-                vo.setProductCount(sumCount);
-
-                result.add(vo);
-            }
+        for(Order order : page.getContent()){
+            List<OrderItemHouseVo> orderHouse = orderItemDao.findPage(order.getId());
+            OrderVo vo = new OrderVo();
+            vo.setHouses(orderHouse);
+            vo.setOrderStatus(order.getOrderStatus());
+            vo.setId(order.getId());
+            vo.setOrderAmountTotal(order.getOrderAmountTotal());
+            vo.setOrderNo(order.getOrderNo());
+            result.add(vo);
         }
 
         if(Preconditions.isNotBlank(result)){
@@ -314,6 +301,9 @@ public class OrderService {
             response.setList(result);
         }
 
+        response.setTotalCount(page.getTotalElements());
+
+        response.setTotalPages(page.getTotalPages());
         return response;
     }
 

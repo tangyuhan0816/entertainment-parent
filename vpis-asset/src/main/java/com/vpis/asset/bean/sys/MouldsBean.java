@@ -48,4 +48,9 @@ public class MouldsBean {
     @JsonProperty("picture_url")
     private String pictureUrl;
 
+    @ApiModelProperty(value = "对应MouldCodeType枚举类")
+    @JSONField(name = "mould_code")
+    @JsonProperty("mould_code")
+    private Integer mouldCode;
+
 }
