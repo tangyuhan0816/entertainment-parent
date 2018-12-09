@@ -296,10 +296,7 @@ public class OrderService {
             result.add(vo);
         }
 
-        if(Preconditions.isNotBlank(result)){
-
-            response.setList(result);
-        }
+        response.setList(result);
 
         response.setTotalCount(page.getTotalElements());
 
