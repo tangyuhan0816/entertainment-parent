@@ -304,9 +304,20 @@ public class OrderService {
         return response;
     }
 
-    public static <T> java.util.function.Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
-        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    /**
+     * 二次支付
+     * @param orderNo
+     * @return
+     */
+    public PayResponse payAgen(String orderNo){
+        Order order = orderRepository.findByOrderNoAndDeletedIsFalse(orderNo);
+        if(Preconditions.isBlank(order)){
+            throw new STException("order not found");
+        }
+        if(Preconditions.isBlank(order.getPaymentConfigInfo())){
+            throw new STException("该订单未发起支付");
+        }
+        return JSONObject.parseObject(order.getPaymentConfigInfo(), PayResponse.class);
     }
 
     public BigDecimal findAmountByOrderNo(String orderNo){

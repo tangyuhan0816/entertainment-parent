@@ -100,6 +100,8 @@
                     <include>**/*.yml</include>
                     <include>**/*.properties</include>
                     <include>**/*.html</include>
+                    <include>**/*.js</include>
+                    <include>**/*.css</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
