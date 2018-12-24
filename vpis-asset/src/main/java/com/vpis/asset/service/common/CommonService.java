@@ -182,6 +182,11 @@ public class CommonService {
 
         JSONObject result = JSONObject.parseObject(response);
 
+        if(Preconditions.isBlank(result) || result.getInteger("count") > 0){
+
+            throw new STException("定位失败");
+        }
+
         areaCode = result.getJSONArray("pois").getJSONObject(0).getString("adcode");
 
         if (Preconditions.isBlank(areaCode)) {
