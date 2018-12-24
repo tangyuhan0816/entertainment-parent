@@ -199,32 +199,32 @@ public class CommonService {
     }
 
     public String positioning(String lat,String log) throws HttpServiceException, InterruptedException {
-        String areaCode = null;
+//        String areaCode = null;
 
-        Integer count = 0;
+//        Integer count = 0;
+//
+//        do {
+//
+//            try {
+//
+//                count++;
+//
+//                areaCode = getGaodeAreaByLatAndLog(lat, log);
+//
+//            } catch (Exception e) {
+//
+//                Thread.sleep(50);
+//
+//                logger.error(e.getMessage(),e);
+//
+//                if(MAX_RETRY.equals(count)){
+//
+//                    throw e;
+//                }
+//            }
+//        } while (areaCode == null && count < MAX_RETRY);
 
-        do {
-
-            try {
-
-                count++;
-
-                areaCode = getGaodeAreaByLatAndLog(lat, log);
-
-            } catch (Exception e) {
-
-                Thread.sleep(50);
-
-                logger.error(e.getMessage(),e);
-
-                if(MAX_RETRY.equals(count)){
-
-                    throw e;
-                }
-            }
-        } while (areaCode == null && count < MAX_RETRY);
-
-        return areaCode;
+        return getGaodeAreaByLatAndLog(lat, log);
     }
 
     class MyUpTask implements Runnable{
