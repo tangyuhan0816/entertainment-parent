@@ -75,6 +75,9 @@ qiniu:
 api:
   aliyun:
     gps: http://gc.ditu.aliyun.com/regeocoding?l=%s,%s&type=010
+  gaode:
+    key: 3b7c6d9b0d398e18783106e0b8671397
+    poi: https://restapi.amap.com/v3/place/around?key=%s&location=%s,%s8&radius=1000&offset=%s&page=%s&extensions=all
 
 wechat:
   mpAppId: wx49388eb65c74a6e3

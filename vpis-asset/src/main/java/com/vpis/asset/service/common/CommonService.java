@@ -10,6 +10,13 @@ import com.vpis.common.exception.STException;
 import com.vpis.common.utils.AsyncHttpUtils;
 import com.vpis.common.utils.Preconditions;
 import com.vpis.common.utils.ResponseContent;
+import io.netty.handler.codec.http.DefaultHttpHeaders;
+import io.netty.handler.codec.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +25,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.*;
 
@@ -43,6 +55,12 @@ public class CommonService {
 
     @Value("${api.aliyun.gps}")
     private String aliyunGpsHost;
+
+    @Value("${api.gaode.poi}")
+    private String gaodeGpsHost;
+
+    @Value("${api.gaode.key}")
+    private String gaodeGpsKey;
 
     private static final Integer POOL_SIZE = 3;
 
@@ -89,7 +107,7 @@ public class CommonService {
      * @throws STException
      * @throws HttpServiceException
      */
-    private String getAreaByLatAndLog(String lat,String log) throws STException, HttpServiceException {
+    private String getAliyunAreaByLatAndLog(String lat,String log) throws STException, HttpServiceException {
         String areaCode = null;
 
         logger.info("根据经纬度获取所在地 positioning ======> {},{}", lat, log);
@@ -121,6 +139,60 @@ public class CommonService {
         return areaCode;
     }
 
+
+    /**
+     * 根据经纬度获取所在地
+     * @param lat
+     * @param log
+     * @return
+     * @throws STException
+     * @throws HttpServiceException
+     */
+    private String getGaodeAreaByLatAndLog(String lat,String log) throws STException, HttpServiceException {
+        String areaCode = null;
+
+        logger.info("根据经纬度获取所在地 positioning ======> {},{}", lat, log);
+
+        String url = String.format(gaodeGpsHost,gaodeGpsKey, lat, log, 1, 1);
+
+        //Creates CloseableHttpClient instance with default configuration.
+        CloseableHttpClient httpCilent = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("https://restapi.amap.com/v3/place/around?location=121.466065,31.210378&radius=1000&offset=1&page=1&extensions=all&key=3b7c6d9b0d398e18783106e0b8671397");
+        String response = null;
+        try {
+            HttpResponse httpResponse = httpCilent.execute(httpGet);
+            response = EntityUtils.toString(httpResponse.getEntity());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                httpCilent.close();//释放资源
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (Preconditions.isBlank(response)) {
+
+            throw new BusinessException("获取定位失败");
+
+        }
+
+        logger.info("根据经纬度获取所在地，返回参数 positioning ======> {}", response);
+
+        JSONObject result = JSONObject.parseObject(response);
+
+        areaCode = result.getJSONArray("pois").getJSONObject(0).getString("adcode");
+
+        if (Preconditions.isBlank(areaCode)) {
+
+            throw new STException("定位失败");
+
+        }
+
+        return areaCode;
+    }
+
     public String positioning(String lat,String log) throws HttpServiceException, InterruptedException {
         String areaCode = null;
 
@@ -132,7 +204,7 @@ public class CommonService {
 
                 count++;
 
-                areaCode = getAreaByLatAndLog(lat, log);
+                areaCode = getGaodeAreaByLatAndLog(lat, log);
 
             } catch (Exception e) {
 
