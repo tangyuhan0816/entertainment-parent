@@ -157,7 +157,7 @@ public class CommonService {
 
         //Creates CloseableHttpClient instance with default configuration.
         CloseableHttpClient httpCilent = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("https://restapi.amap.com/v3/place/around?location=121.466065,31.210378&radius=1000&offset=1&page=1&extensions=all&key=3b7c6d9b0d398e18783106e0b8671397");
+        HttpGet httpGet = new HttpGet(url);
         String response = null;
         try {
             HttpResponse httpResponse = httpCilent.execute(httpGet);
