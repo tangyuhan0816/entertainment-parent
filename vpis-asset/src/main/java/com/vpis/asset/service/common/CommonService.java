@@ -182,7 +182,7 @@ public class CommonService {
 
         JSONObject result = JSONObject.parseObject(response);
 
-        if(Preconditions.isBlank(result) || result.getInteger("count") > 0){
+        if(Preconditions.isBlank(result) || result.getInteger("count") < 1){
 
             throw new STException("定位失败");
         }
