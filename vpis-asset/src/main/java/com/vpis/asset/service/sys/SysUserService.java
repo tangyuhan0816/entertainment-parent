@@ -115,7 +115,7 @@ public class SysUserService {
         }
 
         //查询管理员
-        TbUser adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.ADMIN_USER);
+        TbUser adminUser = tbUserRepository.findByAgentAreaAndUserTypeAndDeletedIsFalse(registerBean.getAgentArea(), UserTypeEnum.AGENT_USER);
 
         if(Preconditions.isBlank(adminUser)){
 

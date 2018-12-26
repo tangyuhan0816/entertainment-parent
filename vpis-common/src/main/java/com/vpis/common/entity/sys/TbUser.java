@@ -143,5 +143,5 @@ public class TbUser extends BaseEntity{
     @JSONField(name = "address")
     @JsonProperty("address")
     @Column(name = "address")
-    private Date address;
+    private String address;
 }
