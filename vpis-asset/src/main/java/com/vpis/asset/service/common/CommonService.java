@@ -247,7 +247,7 @@ public class CommonService {
                 QiNiuUtils qiNiuUtils = BeanContext.getApplicationContext().getBean(QiNiuUtils.class);
                 RedisTemplate redisTemplate = BeanContext.getApplicationContext().getBean("redisTemplate", RedisTemplate.class);
                 String url;
-                logger.info("文件名:{}，大小:{}KB，key:{} =========> 上传中。。。。",file.getOriginalFilename(),file.getSize()/1024, key);
+                logger.info("文件名 =========> 上传中。。。。");
                 if(1 == type){
                     url = qiNiuUtils.upload(file,Boolean.TRUE);
                 } else {
